@@ -58,13 +58,13 @@ public class MenuGame {
         addMenuButton(continuePlay);
     }
     private void createBackGround(){
-        Image backgroundImage=new Image("/UI/background2.png",1070,515,false,true);
+        Image backgroundImage=new Image("/Image/Background/background2.png",1070,515,false,true);
         BackgroundImage  background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,null);
         mainPane.setBackground(new Background(background));
 
     }
     private  void createLogo(){
-        ImageView logo = new ImageView("/UI/logo3.png");
+        ImageView logo = new ImageView("/Image/Logo/logo3.png");
         logo.setLayoutX(200);
         logo.setLayoutY(100);
         logo.setOnMouseEntered(new EventHandler<MouseEvent>() {
