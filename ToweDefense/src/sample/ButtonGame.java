@@ -17,6 +17,7 @@ public class ButtonGame extends Button {
 
     private final  String BUTTON_PRESS_STYLE= "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
     private final  String BUTTON_FREE_STYLE= "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
+
     public ButtonGame(String text){
         setText(text);
         setButtonFont();
@@ -74,4 +75,5 @@ public class ButtonGame extends Button {
             }
         });
     }
+
 }
