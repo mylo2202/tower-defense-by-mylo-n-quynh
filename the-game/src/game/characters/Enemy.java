@@ -4,7 +4,6 @@ import game.characters.Entity;
 
 public class Enemy extends Entity
 {
-    private final int size = 1;                 // Graphical size of enemy entities
     private int hitPoints;                      // How Strong enemy is
     private int moveSpeed;                      // How fast enemy moves
     private int reward;                         // Gold reward for enemy's death
@@ -52,15 +51,15 @@ public class Enemy extends Entity
         this.reward = reward;
     }
 
-//    public boolean isDead()
-//    {
-//        return isDead;
-//    }
-//
-//    public boolean reachedGoal()
-//    {
-//        return reachedGoal;
-//    }
+    public boolean isDead()
+    {
+        return isDead;
+    }
+
+    public boolean reachedGoal()
+    {
+        return reachedGoal;
+    }
 
     //enemy move method goes here
 
