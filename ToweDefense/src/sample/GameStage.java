@@ -11,7 +11,7 @@ public class GameStage {
     public static final int HEIGHT = 515;
     public static final int WIDTH = 1010;
 
-    private AnchorPane gamePane;
+    private MyBorderPane gamePane;
     private Scene gameScene;
     private Stage gameStage;
     private Stage menuStage;
@@ -21,8 +21,8 @@ public class GameStage {
 
     }
     private void intitLizeStage(){
-        //menuButton = new ArrayList<MyButton>();
-        gamePane=new AnchorPane();
+
+        gamePane=new MyBorderPane();
         gameScene=new Scene(gamePane,WIDTH,HEIGHT);
         gameStage=new Stage();
         gameStage.setScene(gameScene);

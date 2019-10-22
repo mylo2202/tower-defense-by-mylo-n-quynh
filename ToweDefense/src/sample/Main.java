@@ -7,8 +7,8 @@ public class Main extends Application {
     @Override
     public void start(Stage gameStage) {
         try{
-            MenuGame menuGame=new MenuGame();
-            gameStage =menuGame.getMainStage();
+            MenuGame menuGame = new MenuGame();
+            gameStage = menuGame.getMainStage();
             gameStage.setTitle("Tower Defense");
             gameStage.show();
         }

@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
@@ -9,9 +11,6 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.event.EventHandler;
 
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MenuGame {
     public static final int HEIGHT = 515;
@@ -21,16 +20,18 @@ public class MenuGame {
     public static final  int BUTTON_Y= 190;
 
     public static final int LOGO_X = 185;
-    public static final int LOGO_Y =50;
+    public static final int LOGO_Y =60;
 
-    List<ButtonGame> menuButton;
-    private AnchorPane mainPane;
+
+    private MyBorderPane mainPane;
     private Scene mainScene;
     private Stage mainStage;
 
     public MenuGame(){
-        menuButton = new ArrayList<ButtonGame>();
-        mainPane=new AnchorPane();
+
+        mainPane=new MyBorderPane();
+        mainPane.setPadding(new Insets(10, 10, 10, 10));
+        mainPane.setAreasCenter();
         mainScene=new Scene(mainPane,WIDTH,HEIGHT);
         mainStage=new Stage();
         mainStage.setScene(mainScene);
@@ -38,12 +39,9 @@ public class MenuGame {
         createBackGround();
         createLogo();
     }
-    private void addMenuButton(ButtonGame button){
+    private void addMenuButton(MyButton button){
 
-        button.setLayoutX(BUTTON_X);
-        button.setLayoutY(BUTTON_Y  + menuButton.size()*100);
-        menuButton.add(button);
-        mainPane.getChildren().add(button);
+        mainPane.addButton(button);
     }
     public Stage getMainStage(){
         return mainStage;
@@ -52,9 +50,10 @@ public class MenuGame {
         createPlayButton();
         createContinueButton();
         createQuitButton();
+
     }
     public void createPlayButton(){
-        ButtonGame newPlay = new ButtonGame("NEW GAME");
+        MyButton newPlay = new MyButton("NEW GAME");
         addMenuButton(newPlay);
         newPlay.setOnAction(actionEvent -> {
             GameStage gameViewManger= new GameStage();
@@ -62,14 +61,14 @@ public class MenuGame {
         });
     }
     public void createQuitButton(){
-        ButtonGame quit = new ButtonGame("QUIT");
+        MyButton quit = new MyButton("QUIT");
         addMenuButton(quit);
         quit.setOnAction(actionEvent -> {
             mainStage.close();
         });
     }
     public void createContinueButton(){
-        ButtonGame continuePlay = new ButtonGame("CONTINUE");
+        MyButton continuePlay = new MyButton("CONTINUE");
         addMenuButton(continuePlay);
     }
     private void createBackGround(){
@@ -80,8 +79,7 @@ public class MenuGame {
     }
     private  void createLogo(){
         ImageView logo = new ImageView("/Image/Logo/logo3.png");
-        logo.setLayoutX(LOGO_X);
-        logo.setLayoutY(LOGO_Y);
+
         logo.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -94,7 +92,11 @@ public class MenuGame {
                 logo.setEffect(null);
             }
         });
-        mainPane.getChildren().add(logo);
+
+        mainPane.setTop(logo);
+
+        BorderPane.setMargin(logo, new Insets(LOGO_Y, 10, 10, 10));
+        BorderPane.setAlignment(logo, Pos.CENTER);
     }
 
 
