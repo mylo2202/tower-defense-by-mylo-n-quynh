@@ -1,6 +1,10 @@
 package game.characters;
 
-public abstract class Entity
+import game.characters.*;
+
+//should this class be abstract?
+
+public abstract class GameEntity extends GameField
 {
     //methods for getting coordinates and sizes go here
     private int posX;
@@ -8,9 +12,9 @@ public abstract class Entity
     private int width;
     private int height;
 
-    public Entity() {};
+    public GameEntity() {};
 
-    Entity(int posX, int posY, int width, int height)
+    GameEntity(int posX, int posY, int width, int height)
     {
         this.posX = posX;
         this.posY = posY;

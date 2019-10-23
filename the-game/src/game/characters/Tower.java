@@ -1,8 +1,8 @@
 package game.characters;
 
-import game.characters.Entity;
+import game.characters.*;
 
-public class Tower extends Entity
+public abstract class Tower extends GameTile
 {
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
     private double attackSpeed;                     // Delayed time for each attack
@@ -93,6 +93,11 @@ public class Tower extends Entity
     public void setSellPrice(int sellPrice)
     {
         this.sellPrice = sellPrice;
+    }
+
+    public void upgradeTower()
+    {
+        this.towerLevel++;
     }
 
     //attack method maybe goes here

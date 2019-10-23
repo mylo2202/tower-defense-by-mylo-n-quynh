@@ -1,8 +1,8 @@
 package game.characters;
 
-import game.characters.Entity;
+import game.characters.*;
 
-public class Enemy extends Entity
+public abstract class Enemy extends GameEntity
 {
     private int hitPoints;                      // How Strong enemy is
     private int moveSpeed;                      // How fast enemy moves

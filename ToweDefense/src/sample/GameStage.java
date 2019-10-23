@@ -8,8 +8,8 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class GameStage {
-    public static final int HEIGHT = 515;
-    public static final int WIDTH = 1010;
+    private static final int HEIGHT = 960;
+    private static final int WIDTH = 1280;
 
     private MyBorderPane gamePane;
     private Scene gameScene;
