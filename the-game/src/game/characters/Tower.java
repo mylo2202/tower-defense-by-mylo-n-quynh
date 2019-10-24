@@ -11,6 +11,7 @@ public abstract class Tower extends GameTile
     private int buildCost;                          // Cost for building
     private int upgradeCost;                        // Cost for upgrading
     private int sellPrice;                          // Gold gained for selling
+    private Enemy attackTarget;
 
     public Tower(int posX, int posY, int width, int height)
     {
@@ -98,6 +99,16 @@ public abstract class Tower extends GameTile
     public void upgradeTower()
     {
         this.towerLevel++;
+    }
+
+    public Enemy getAttackTarget()
+    {
+        return attackTarget;
+    }
+
+    public void setAttackTarget(Enemy attackTarget)
+    {
+        this.attackTarget = attackTarget;
     }
 
     //attack method maybe goes here

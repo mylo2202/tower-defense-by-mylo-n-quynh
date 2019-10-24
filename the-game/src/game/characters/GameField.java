@@ -1,5 +1,6 @@
 package game.characters;
 
+import game.*;
 import game.characters.*;
 
 abstract class GameField extends GameStage
