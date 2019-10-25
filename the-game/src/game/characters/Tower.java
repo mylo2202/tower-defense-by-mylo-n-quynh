@@ -1,8 +1,8 @@
 package game.characters;
 
-import game.characters.Entity;
+import game.characters.*;
 
-public class Tower extends Entity
+public abstract class Tower extends GameTile
 {
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
     private double attackSpeed;                     // Delayed time for each attack
@@ -11,6 +11,7 @@ public class Tower extends Entity
     private int buildCost;                          // Cost for building
     private int upgradeCost;                        // Cost for upgrading
     private int sellPrice;                          // Gold gained for selling
+    private Enemy attackTarget;
 
     public Tower(int posX, int posY, int width, int height)
     {
@@ -93,6 +94,21 @@ public class Tower extends Entity
     public void setSellPrice(int sellPrice)
     {
         this.sellPrice = sellPrice;
+    }
+
+    public void upgradeTower()
+    {
+        this.towerLevel++;
+    }
+
+    public Enemy getAttackTarget()
+    {
+        return attackTarget;
+    }
+
+    public void setAttackTarget(Enemy attackTarget)
+    {
+        this.attackTarget = attackTarget;
     }
 
     //attack method maybe goes here
