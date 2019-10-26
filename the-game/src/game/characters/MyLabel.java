@@ -13,18 +13,18 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class MyLabel extends Label {
-    public static final String FONT_PATH="/src/UI/Font/kenvector_future.ttf";
-    public static final String BACKGROUND_IMAGE="/Image/UI/green_button06.png";
+    public static final String FONT_PATH="src/UI/Font/kenvector_future.ttf";
+    public static final String BACKGROUND_IMAGE="Image/UI/green_button13.png";
 
     public MyLabel(String text){
-        setPrefWidth(256);
-        setPrefHeight(256);
+        setPrefWidth(190);
+        setPrefHeight(49);
         setAlignment(Pos.CENTER);
         setText(text);
         setWrapText(true);
         setLabelFont();
-        BackgroundImage backgroundImage=new BackgroundImage(new Image(BACKGROUND_IMAGE,256,256,false,true),
-                BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,null);
+        BackgroundImage backgroundImage=new BackgroundImage(new Image(BACKGROUND_IMAGE,190,49,false,true),
+                BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         setBackground(new Background(backgroundImage));
     }
     private void setLabelFont(){

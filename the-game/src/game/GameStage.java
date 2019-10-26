@@ -32,7 +32,7 @@ public class GameStage {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
     };
 
-    private MyBorderPane gamePane;
+    private AnchorPane gamePane;
     private Scene gameScene;
     private Stage gameStage;
     private Stage menuStage;
@@ -43,7 +43,7 @@ public class GameStage {
     }
     private void initialiseStage(){
 
-        gamePane=new MyBorderPane();
+        gamePane=new AnchorPane();
 
         gameScene=new Scene(gamePane, WIDTH, HEIGHT);
         gameStage=new Stage();
@@ -57,7 +57,8 @@ public class GameStage {
     public void createNewGame(Stage menuStage){
         this.menuStage=menuStage;
         this.menuStage.hide();
-        createLabel();
+        //createLabel();
+        createButton();
         tileMap();
         gameStage.setTitle("Tower Defense");
         gameStage.show();
@@ -81,14 +82,34 @@ public class GameStage {
         }
 
     }
-    public void createLabel(){
-
-
-        MyLabel  label = new MyLabel("My Label");
-        
-        label.setLayoutX(768);
-        label.setLayoutY(256);
-        gamePane.addLabel(label);
+    public void labelChoose(){
+        ImageView i=new ImageView("/Image/UI/green_button13.png");
+        MyLabel label=new MyLabel("Choose Tower");
+        label.setLayoutX(800);
+        label.setLayoutY(64);
+        gamePane.getChildren().add(Label);
     }
+    public void createLabel(){
+        labelChoose();
+    }
+    public void createButton(){
+        buttonStart();
+    }
+    public void buttonStart(){
+        String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
+        MyButton Start= new MyButton("START",49,190,url);
+        Start.setLayoutX(800);
+        Start.setLayoutY(640);
+        Start.setOnAction(actionEvent -> {
+            /*Enemy e =new Enemy("/Image/Enemy/towerDefense_tile246.png");
+            e.setLayoutX(0);
+            e.setLayoutY(64);;
+            e.enemyMove();
+            gamePane.getChildren().add(e.getEnemy());*/
+        });
+
+        gamePane.getChildren().add(Start);
+    }
+
 
 }
