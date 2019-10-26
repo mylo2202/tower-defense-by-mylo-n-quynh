@@ -24,18 +24,18 @@ public class GameStage {
     private  AnimationTimer gameTimer;
 
     private int[][] grid ={
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-            { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0},
-            { 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            { 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-            { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
+            { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0,0,0,0,0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0,0,0,0,0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0,0,0,0,0},
+            { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0,0,0,0,0},
+            { 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
+            { 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
+            { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0,0,0,0,0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0,0,0,0,0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0,0,0,0,0},
+            { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0,0,0,0,0},
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0}
     };
 
     private AnchorPane gamePane;
@@ -43,13 +43,20 @@ public class GameStage {
     private Stage gameStage;
     private Stage menuStage;
     private Label Label;
-    private ImageView a;
+    private GameSubScene panelScene;
 
-
+    public void ShowSubScene(GameSubScene subScene){
+        if(panelScene!= null){
+            panelScene.moveSubScene();
+        }
+        subScene.moveSubScene();
+        panelScene=subScene;
+    }
 
     public GameStage(){
         initialiseStage();
         createMouseListeners();
+
     }
 
     private void createMouseListeners() {
@@ -80,6 +87,7 @@ public class GameStage {
         this.menuStage.hide();
         createLabel();
         tileMap();
+        createSubScene();
         createEnemy();
         createButton();
        // createGameLoop();
@@ -96,7 +104,7 @@ public class GameStage {
     {
         for(int i = 0; i < 12; i++)
         {
-            for(int j = 0; j < 12; j++)
+            for(int j = 0; j < 16; j++)
             {
                 Image image =new Image("/Image/Map/" + grid[i][j] +  ".png",64,64,false,true);
                 ImageView imageView =new ImageView(image);
@@ -107,11 +115,15 @@ public class GameStage {
         }
 
     }
+    public void createSubScene(){
+        createChooseSubSence();
+
+    }
     public void createLabel(){
 
         Label label = new Label("My Label");
-        label.setLayoutX(500);
-        label.setLayoutY(256);
+        label.setLayoutX(768);
+        label.setLayoutY(0);
         gamePane.getChildren().add(label);
     }
     public void createEnemy(){
@@ -134,13 +146,13 @@ public class GameStage {
 
     }
     public void createButton(){
-        buttonStart();
-        createTowr1();
+      //  buttonStart();
+      //  createTowr1();
 
     }
     public void buttonStart(){
         String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
-        MyButton Start= new MyButton("START",49,190,url);
+        MyButton Start= new MyButton("START",45,190,url);
         Start.setLayoutX(800);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
@@ -163,5 +175,15 @@ public class GameStage {
         Tower1.setLayoutX(768);
         Tower1.setLayoutY(64);
         gamePane.getChildren().add(Tower1);
+    }
+    private void createChooseSubSence() {
+        panelScene= new GameSubScene();
+        gamePane.getChildren().add(panelScene);
+        panelScene.moveSubScene();
+        /*InforLabel chooseSubSceneLabel= new InforLabel("CHOOSE");
+        chooseSubSceneLabel.setLayoutX(700);
+        chooseSubSceneLabel.setLayoutY(50);
+        panelScene.getAnchorePane().getChildren().add(chooseSubSceneLabel);
+*/
     }
 }

@@ -32,17 +32,12 @@ public class MyButton extends Button {
 
     }
 
-    public void setBUTTON_FREE_STYLE(String url) {
-        this.BUTTON_FREE_STYLE = url;
-    }
-
-
     public void setButtonFont(){
         try{
 
-            setFont(Font.loadFont(new FileInputStream(FONT_PATH),23));
+            setFont(Font.loadFont(new FileInputStream(FONT_PATH),22));
         } catch (FileNotFoundException e){
-            setFont(Font.font("Mongoose", 23));
+            setFont(Font.font("Mongoose", 21));
         }
     }
     private void setButtonPressStyle(){
