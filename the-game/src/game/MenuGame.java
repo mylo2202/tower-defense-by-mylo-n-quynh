@@ -1,5 +1,6 @@
 package game;
 
+import game.characters.MyLabel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -34,10 +35,12 @@ public class MenuGame {
         mainPane.setAreasCenter();
         mainScene=new Scene(mainPane,WIDTH,HEIGHT);
         mainStage=new Stage();
+        mainStage.setResizable(false);
         mainStage.setScene(mainScene);
         createButton();
         createBackGround();
         createLogo();
+        createLabel();
     }
     private void addMenuButton(MyButton button){
 
@@ -56,8 +59,8 @@ public class MenuGame {
         MyButton newPlay = new MyButton("NEW GAME");
         addMenuButton(newPlay);
         newPlay.setOnAction(actionEvent -> {
-            GameStage gameViewManger= new GameStage();
-            gameViewManger.createNewGame(mainStage);
+            GameStage playGame= new GameStage();
+           playGame.createNewGame(mainStage);
         });
     }
     public void createQuitButton(){
@@ -89,6 +92,14 @@ public class MenuGame {
         BorderPane.setAlignment(logo, Pos.CENTER);
     }
 
+    public void createLabel(){
 
+
+        MyLabel label = new MyLabel("My Label");
+
+        label.setLayoutX(10);
+        label.setLayoutY(10);
+        mainPane.addLabel(label);
+    }
 
 }

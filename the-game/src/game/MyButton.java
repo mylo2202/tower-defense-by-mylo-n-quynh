@@ -3,10 +3,8 @@ package game;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import javafx.event.EventHandler;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.control.Button;
 

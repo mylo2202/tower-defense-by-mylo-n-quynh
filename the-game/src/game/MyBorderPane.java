@@ -1,7 +1,9 @@
 package game;
 
+import game.characters.MyLabel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -19,6 +21,9 @@ public class MyBorderPane extends BorderPane {
     public void addButton(MyButton button){
         vBox.getChildren().add(button);
 
+    }
+    public  void  addLabel(MyLabel label){
+        vBox.getChildren().add(label);
     }
     public void setAreasCenter(){
         setCenter(vBox);
