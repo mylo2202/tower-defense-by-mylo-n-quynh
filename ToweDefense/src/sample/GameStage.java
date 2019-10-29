@@ -146,7 +146,7 @@ public class GameStage {
 
     }
     public void createButton(){
-      //  buttonStart();
+        buttonStart();
       //  createTowr1();
 
     }
