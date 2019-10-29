@@ -1,6 +1,5 @@
 package game;
 
-import game.characters.MyLabel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -54,8 +53,8 @@ public class MenuGame {
 
     }
     public void createPlayButton(){
-        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
-        MyButton newPlay = new MyButton("NEW GAME",49,190,url);
+        String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
+        MyButton newPlay = new MyButton("NEW GAME",45,190,url);
 
         addMenuButton(newPlay);
         newPlay.setOnAction(actionEvent -> {
@@ -64,8 +63,8 @@ public class MenuGame {
         });
     }
     public void createQuitButton(){
-        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
-        MyButton quit = new MyButton("QUIT",49,190,url);
+        String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
+        MyButton quit = new MyButton("QUIT",45,190,url);
 
         addMenuButton(quit);
         quit.setOnAction(actionEvent -> {
@@ -73,8 +72,8 @@ public class MenuGame {
         });
     }
     public void createContinueButton(){
-        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
-        MyButton continuePlay = new MyButton("CONTINUE",49,190,url);
+        String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
+        MyButton continuePlay = new MyButton("CONTINUE",45,190,url);
 
         addMenuButton(continuePlay);
     }
