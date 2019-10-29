@@ -34,6 +34,7 @@ public class MenuGame {
         mainPane.setAreasCenter();
         mainScene=new Scene(mainPane,WIDTH,HEIGHT);
         mainStage=new Stage();
+        mainStage.setResizable(false);
         mainStage.setScene(mainScene);
         createButton();
         createBackGround();
