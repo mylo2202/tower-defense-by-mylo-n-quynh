@@ -53,7 +53,9 @@ public class MenuGame {
 
     }
     public void createPlayButton(){
-        MyButton newPlay = new MyButton("NEW GAME");
+        String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
+        MyButton newPlay = new MyButton("NEW GAME",45,190,url);
+
         addMenuButton(newPlay);
         newPlay.setOnAction(actionEvent -> {
             GameStage gameViewManger= new GameStage();
@@ -61,14 +63,18 @@ public class MenuGame {
         });
     }
     public void createQuitButton(){
-        MyButton quit = new MyButton("QUIT");
+        String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
+        MyButton quit = new MyButton("QUIT",45,190,url);
+
         addMenuButton(quit);
         quit.setOnAction(actionEvent -> {
             mainStage.close();
         });
     }
     public void createContinueButton(){
-        MyButton continuePlay = new MyButton("CONTINUE");
+        String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
+        MyButton continuePlay = new MyButton("CONTINUE",45,190,url);
+
         addMenuButton(continuePlay);
     }
     private void createBackGround(){

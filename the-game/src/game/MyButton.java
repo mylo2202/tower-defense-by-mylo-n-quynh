@@ -14,18 +14,27 @@ import javafx.scene.control.Button;
 public class MyButton extends Button {
     private final String FONT_PATH="/src/Image/UI/kenvector_future.ttf";
 
-    private final String BUTTON_PRESS_STYLE= "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
-    private final String BUTTON_FREE_STYLE= "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
-
-    public MyButton (String text){
+    private String BUTTON_PRESS_STYLE;
+    private String BUTTON_FREE_STYLE;
+    private int h;
+    private int w;
+    public MyButton (String text,int h,int w, String url){
+        BUTTON_PRESS_STYLE = url;
+        BUTTON_FREE_STYLE = url;
         setText(text);
         setButtonFont();
         setStyle(BUTTON_FREE_STYLE);
-        setPrefHeight(49);
-        setPrefWidth(190);
+        setPrefHeight(h );
+        setPrefWidth(w);
         intitButtonListener();
 
     }
+
+    public void setBUTTON_FREE_STYLE(String url) {
+        this.BUTTON_FREE_STYLE = url;
+    }
+
+
     public void setButtonFont(){
         try{
 
@@ -36,28 +45,45 @@ public class MyButton extends Button {
     }
     private void setButtonPressStyle(){
         setStyle(BUTTON_PRESS_STYLE);
-        setPrefHeight(49);
+        setPrefHeight(h);
 
         setLayoutY(getLayoutY()+2);
     }
     private void setButtonReleasedStyle(){
         setStyle(BUTTON_FREE_STYLE);
-        setPrefHeight(49);
+        setPrefHeight(h);
         setLayoutY(getLayoutY()-2);
     }
     private void intitButtonListener(){
-        setOnMousePressed(mouseEvent -> {
-            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                setButtonPressStyle();
+        setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                    setButtonPressStyle();
+                }
             }
         });
-        setOnMouseReleased(mouseEvent -> {
-            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                setButtonReleasedStyle();
+        setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                    setButtonReleasedStyle();
+                }
             }
         });
-        setOnMouseEntered(mouseEvent -> setEffect(new DropShadow()));
-        setOnMouseExited(mouseEvent -> setEffect(null));
+        setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                setEffect(new DropShadow());
+            }
+        });
+        setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                setEffect(null);
+            }
+        });
     }
+
 
 }

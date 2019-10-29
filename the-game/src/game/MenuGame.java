@@ -1,5 +1,6 @@
 package game;
 
+import game.characters.MyLabel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -54,7 +55,9 @@ public class MenuGame {
 
     }
     public void createPlayButton(){
-        MyButton newPlay = new MyButton("NEW GAME");
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
+        MyButton newPlay = new MyButton("NEW GAME",49,190,url);
+
         addMenuButton(newPlay);
         newPlay.setOnAction(actionEvent -> {
             GameStage gameViewManger= new GameStage();
@@ -62,14 +65,18 @@ public class MenuGame {
         });
     }
     public void createQuitButton(){
-        MyButton quit = new MyButton("QUIT");
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
+        MyButton quit = new MyButton("QUIT",49,190,url);
+
         addMenuButton(quit);
         quit.setOnAction(actionEvent -> {
             mainStage.close();
         });
     }
     public void createContinueButton(){
-        MyButton continuePlay = new MyButton("CONTINUE");
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
+        MyButton continuePlay = new MyButton("CONTINUE",49,190,url);
+
         addMenuButton(continuePlay);
     }
     private void createBackGround(){
@@ -81,8 +88,18 @@ public class MenuGame {
     private  void createLogo(){
         ImageView logo = new ImageView("/Image/Logo/logo3.png");
 
-        logo.setOnMouseEntered(mouseEvent -> logo.setEffect(new DropShadow()));
-        logo.setOnMouseExited(mouseEvent -> logo.setEffect(null));
+        logo.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                logo.setEffect(new DropShadow());
+            }
+        });
+        logo.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                logo.setEffect(null);
+            }
+        });
 
         mainPane.setTop(logo);
 
