@@ -14,7 +14,7 @@ import  javafx.scene.control.Button;
 
 
 public class MyButton extends Button {
-    private final String FONT_PATH="/src/Image/UI/kenvector_future.ttf";
+    private final String FONT_PATH="src/Image/UI/AutourOne-Regular.otf";
 
     private String BUTTON_PRESS_STYLE;//= "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
     private String BUTTON_FREE_STYLE;//= "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
@@ -35,7 +35,7 @@ public class MyButton extends Button {
     public void setButtonFont(){
         try{
 
-            setFont(Font.loadFont(new FileInputStream(FONT_PATH),22));
+            setFont(Font.loadFont(new FileInputStream(FONT_PATH),23));
         } catch (FileNotFoundException e){
             setFont(Font.font("Mongoose", 21));
         }
@@ -51,6 +51,7 @@ public class MyButton extends Button {
         setPrefHeight(h);
         setLayoutY(getLayoutY()-2);
     }
+
     private void intitButtonListener(){
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -77,9 +78,11 @@ public class MyButton extends Button {
         setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+
                 setEffect(null);
             }
         });
+
     }
 
 }
