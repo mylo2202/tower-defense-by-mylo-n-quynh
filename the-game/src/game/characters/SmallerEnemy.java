@@ -5,16 +5,18 @@ import javafx.scene.image.ImageView;
 
 public class SmallerEnemy extends Enemy
 {
-    public SmallerEnemy(int posX, int posY)
+    private String smallerSkin= "/Image/Enemy/smallerEnemy.png";
+
+    public SmallerEnemy(String smallerSkin)
     {
-        super(posX, posY);
+        super(smallerSkin);
 
         setHitPoints(100);
         setMoveSpeed(200);
         setReward(50);
     }
 
-    public ImageView loadSkin(){
+    public ImageView loadSmallerSkin(){
         Image image = new Image("/Image/Enemy/smallerEnemy.png",64,64 ,false,true);
         return new ImageView(image);
     }

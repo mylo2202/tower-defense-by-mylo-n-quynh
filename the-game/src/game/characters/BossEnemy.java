@@ -5,16 +5,18 @@ import javafx.scene.image.ImageView;
 
 public class BossEnemy extends Enemy
 {
-    public BossEnemy(int posX, int posY)
+    private String bossSkin= "/Image/Enemy/bossEnemy.png";
+
+    public BossEnemy(String bossSkin)
     {
-        super(posX, posY);
+        super(bossSkin);
 
         setHitPoints(1600);
         setMoveSpeed(25);
         setReward(350);
     }
 
-    public ImageView loadSkin(){
+    public ImageView loadBossSkin(){
         Image image = new Image("/Image/Enemy/bossEnemy.png",64,64 ,false,true);
         return new ImageView(image);
     }

@@ -5,9 +5,11 @@ import javafx.scene.image.ImageView;
 
 public class TankerEnemy extends Enemy
 {
-    public TankerEnemy(int posX, int posY)
+    private String tankerSkin= "/Image/Enemy/tankerEnemy.png";
+
+    public TankerEnemy(String tankerSkin)
     {
-        super(posX, posY);
+        super(tankerSkin);
 
         setHitPoints(600);
         setMoveSpeed(50);

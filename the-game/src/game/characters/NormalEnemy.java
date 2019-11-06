@@ -5,9 +5,11 @@ import javafx.scene.image.ImageView;
 
 public class NormalEnemy extends Enemy
 {
-    public NormalEnemy(int posX, int posY)
+    private String normalSkin= "/Image/Enemy/normalEnemy.png";
+
+    public NormalEnemy(String normalSkin)
     {
-        super(posX, posY);
+        super(normalSkin);
 
         setHitPoints(200);
         setMoveSpeed(100);
