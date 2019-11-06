@@ -1,21 +1,17 @@
 package game;
 
+import game.characters.Enemy;
+import game.characters.NormalEnemy;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.scene.text.Font;
 
-import java.security.PrivateKey;
 
 
 public class GameStage {
@@ -24,18 +20,18 @@ public class GameStage {
     private  AnimationTimer gameTimer;
 
     private int[][] grid ={
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
-            { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0,0,0,0,0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0,0,0,0,0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0,0,0,0,0},
-            { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0,0,0,0,0},
-            { 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
-            { 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
-            { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0,0,0,0,0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0,0,0,0,0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0,0,0,0,0},
-            { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0,0,0,0,0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0}
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 },
+            { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5,0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5,0 },
+            { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,0 },
+            { 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 },
+            { 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 },
+            { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5,0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5,0 },
+            { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 }
     };
 
     private AnchorPane gamePane;
@@ -43,31 +39,23 @@ public class GameStage {
     private Stage gameStage;
     private Stage menuStage;
 
-  //  private GameSubScene panelScene;
+
 
     private MyLabel pointLabel;
     private MyLabel Money;
     private int point;
     private ImageView [] lifes;
     private int life=4;
-    private Enemy e;
-    private boolean play=false;
 
-    /*public void ShowSubScene(GameSubScene subScene){
-        if(panelScene!= null){
-            panelScene.moveSubScene();
-        }
-        subScene.moveSubScene();
-        panelScene=subScene;
-    }*/
+    private boolean play;//=false;
+    private GameField draft;
 
     public GameStage(){
         initialiseStage();
-        createMouseListeners();
-
+       // createMouseListeners();
     }
 
-    private void createMouseListeners() {
+    /*private void createMouseListeners() {
         gameScene.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -80,13 +68,13 @@ public class GameStage {
 
             }
         });
-    }
+    }*/
 
     private void initialiseStage(){
         gamePane=new AnchorPane();
         gameScene=new Scene(gamePane, WIDTH, HEIGHT);
         gameStage=new Stage();
-        gameStage.setResizable(true);
+        gameStage.setResizable(false);
         gameStage.setScene(gameScene);
 
     }
@@ -95,13 +83,11 @@ public class GameStage {
         this.menuStage.hide();
 
         tileMap();
-        // createSubScene();
         createPanelControl();
-        createEnemy();
-        createButton();
+
+        play=true;
         createGameLoop();
-
-
+        createButton();
         gameStage.setTitle("Tower Defense");
         gameStage.show();
     }
@@ -128,81 +114,52 @@ public class GameStage {
         gamePane.getChildren().add(panel);
 
     }
-    /*public void createSubScene(){
-        createChooseSubScene();
 
-    }*/
-    public void createLabel(){
-
-        Label label = new Label("My Label");
-        label.setLayoutX(768);
-        label.setLayoutY(0);
-        gamePane.getChildren().add(label);
-    }
-    public void createEnemy(){
-        e =new Enemy("/Image/Enemy/towerDefense_tile246.png");
-        e.setLayoutX(-32);
-        e.setLayoutY(64);;
-
-        if(e.getPosX()< 10 && e.getPosY()==608) removeLife();
-
-    }
-    public void enemyMove(){
-
-
-
-    }
     private void createGameLoop(){
         {
-            gameTimer = new AnimationTimer() {
-                @Override
-                public void handle(long now) {
+            /*Enemy e = new Enemy();
+            e.getEnemy().setLayoutX(0);
+            e.getEnemy().setLayoutY(64);*/
+            NormalEnemy e = new NormalEnemy(0,64,64,64,5);
+            e.loadEnemy();
+            gamePane.getChildren().add(e.getEnemy());
+            if(play==true){
+                gameTimer = new AnimationTimer() {
+                    @Override
+                    public void handle(long now) {
+                       e.enemyMove();
+                    }
 
-                    e.enemyMove();
-                }
-            };
-            gameTimer.start();
+
+                };
+                gameTimer.start();
+            }
+
+
         }
+
+
     }
     public void createButton(){
         buttonStart();
-        buttonTower1();
-        /*buttonToer2();
-        buttonTower3();
-        buttonTowr4();*/
-
 
     }
+
     public void buttonStart(){
         String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
         MyButton Start= new MyButton("START",45,190,url);
         Start.setLayoutX(800);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
-
-            play= true;
+            NormalEnemy e = new NormalEnemy(0,64,64,64,5);
+            e.loadEnemy();
+            e.enemyMove();
+            gamePane.getChildren().add(e.getEnemy());
         });
-
         gamePane.getChildren().add(Start);
 
     }
-    public void buttonTower1(){
-        String url="-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/Tower/TowerDefense_tile203.png');";
-        MyButton Tower1 =new MyButton("  ",64,64, url);
-        Tower1.setOnAction(actionEvent -> {
 
-        });
-        Tower1.setLayoutX(788);
-        Tower1.setLayoutY(190);
-        gamePane.getChildren().add(Tower1);
-    }
-   /* private void createChooseSubSence() {
-        panelScene= new GameSubScene();
-        gamePane.getChildren().add(panelScene);
-        panelScene.moveSubScene();
-
-
-    }*/
     private void createPanelControl(){
         pointLabel=new MyLabel("POINT : 00");
         pointLabel.setLayoutX(768 +32);
@@ -228,4 +185,5 @@ public class GameStage {
             gameTimer.stop();
         }
     }
+
 }

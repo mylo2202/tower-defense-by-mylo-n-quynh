@@ -2,15 +2,18 @@ package game.characters;
 
 import game.characters.*;
 
+import javax.swing.text.html.ImageView;
+
 //should this class be abstract?
 
-public abstract class GameEntity extends GameField
+public abstract class GameEntity
 {
     //methods for getting coordinates and sizes go here
     private int posX;
     private int posY;
     private int width;
     private int height;
+   // private ImageView;
 
     public GameEntity() {};
 
@@ -62,5 +65,5 @@ public abstract class GameEntity extends GameField
         this.height = height;
     }
 
-    //movement methods maybe go here
+
 }

@@ -7,8 +7,8 @@ public class BossEnemy extends Enemy {
     {
         super(posX, posY, width, height);
 
-        setHitpoints(1600);
-        setMovespeed(25);
+        setHitPoints(1600);
+        setMoveSpeed(25);
         setReward(350);
     }
 }

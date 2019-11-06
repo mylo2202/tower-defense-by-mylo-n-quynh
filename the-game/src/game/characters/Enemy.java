@@ -1,6 +1,11 @@
 package game.characters;
 
 import game.characters.*;
+import javafx.animation.PathTransition;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.util.Duration;
 
 public abstract class Enemy extends GameEntity
 {
@@ -10,33 +15,33 @@ public abstract class Enemy extends GameEntity
     private boolean isDead;                     // Triggering flag for enemy's death and removal
     private boolean reachedGoal;                // Check for enemy reaching the goal alive and removal if it does
 
-    public Enemy(int posX, int posY, int width, int height) //int hitPoints, int moveSpeed, int reward)
+    public Enemy(int posX, int posY, int width, int height) //int hitPoints, , int reward)
     {
         super(posX, posY, width, height);
 
 //        this.hitPoints = hitPoints;
-//        this.moveSpeed = moveSpeed;
+        this.moveSpeed = moveSpeed;
 //        this.reward = reward;
         isDead = false;
         reachedGoal = false;
     }
 
-    public int getHitpoints()
+    public int getHitPoints()
     {
         return hitPoints;
     }
 
-    public void setHitpoints(int hitPoints)
+    public void setHitPoints(int hitPoints)
     {
         this.hitPoints = hitPoints;
     }
 
-    public int getMovespeed()
+    public int getMoveSpeed()
     {
         return moveSpeed;
     }
 
-    public void setMovespeed(int moveSpeed)
+    public void setMoveSpeed(int moveSpeed)
     {
         this.moveSpeed = moveSpeed;
     }
@@ -61,7 +66,10 @@ public abstract class Enemy extends GameEntity
         return reachedGoal;
     }
 
-    //enemy move method goes here
+    public void enemyMove(){
+
+
+    }
 
     public void takeDamage(int damage)      //reduces enemy's hit points and determines whether it is dead
     {
