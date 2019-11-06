@@ -1,23 +1,21 @@
 package game.characters;
 
-import game.characters.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class NormalEnemy extends Enemy
 {
-    public NormalEnemy(int posX, int posY, int width, int height)
+    public NormalEnemy(int posX, int posY)
     {
-        //there is serious problem with constructors here
-        //i'll leave it for the time being
-        //i mean, seriously, what the hell is this for??
-        //it is supposed that a super() method be written here
+        super(posX, posY);
 
-        super(posX, posY, width, height);
-
-        setHitpoints(200);
-        setMovespeed(100);
+        setHitPoints(200);
+        setMoveSpeed(100);
         setReward(50);
-
+        loadSkin();
     }
-
-
+    public ImageView loadSkin(){
+        Image image = new Image("/Image/Enemy/normalEnemy.png",64,64 ,false,true);
+        return new ImageView(image);
+    }
 }

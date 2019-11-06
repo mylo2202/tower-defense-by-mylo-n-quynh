@@ -34,6 +34,7 @@ public class MenuGame {
         mainPane.setAreasCenter();
         mainScene=new Scene(mainPane,WIDTH,HEIGHT);
         mainStage=new Stage();
+        mainStage.setResizable(false);
         mainStage.setScene(mainScene);
         createButton();
         createBackGround();
@@ -86,18 +87,8 @@ public class MenuGame {
     private  void createLogo(){
         ImageView logo = new ImageView("/Image/Logo/logo3.png");
 
-        logo.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                logo.setEffect(new DropShadow());
-            }
-        });
-        logo.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                logo.setEffect(null);
-            }
-        });
+        logo.setOnMouseEntered(mouseEvent -> logo.setEffect(new DropShadow()));
+        logo.setOnMouseExited(mouseEvent -> logo.setEffect(null));
 
         mainPane.setTop(logo);
 

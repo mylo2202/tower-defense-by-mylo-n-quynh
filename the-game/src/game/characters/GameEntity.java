@@ -9,17 +9,13 @@ public abstract class GameEntity extends GameField
     //methods for getting coordinates and sizes go here
     private int posX;
     private int posY;
-    private int width;
-    private int height;
 
-    public GameEntity() {};
+    public GameEntity() {}
 
-    GameEntity(int posX, int posY, int width, int height)
+    GameEntity(int posX, int posY)
     {
         this.posX = posX;
         this.posY = posY;
-        this.width = width;
-        this.height = height;
     }
 
     public final int getPosX()
@@ -42,25 +38,6 @@ public abstract class GameEntity extends GameField
         this.posY = posY;
     }
 
-    public final int getWidth()
-    {
-        return width;
-    }
-
-    public final void setWidth(int width)
-    {
-        this.width = width;
-    }
-
-    public final int getHeight()
-    {
-        return height;
-    }
-
-    public final void setHeight(int height)
-    {
-        this.height = height;
-    }
 
     //movement methods maybe go here
 }

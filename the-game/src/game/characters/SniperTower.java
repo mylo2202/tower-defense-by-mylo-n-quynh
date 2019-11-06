@@ -3,9 +3,9 @@ package game.characters;
 import game.characters.*;
 
 public class SniperTower extends Tower{
-    public SniperTower(int posX, int posY, int width, int height)
+    public SniperTower(int posX, int posY)
     {
-        super(posX, posY, width, height);
+        super(posX, posY);
 
         setAttackDamage(80);
         setAttackRange(200);
