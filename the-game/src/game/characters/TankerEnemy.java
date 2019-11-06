@@ -1,14 +1,21 @@
 package game.characters;
 
-import game.characters.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-public class TankerEnemy extends Enemy {
-    public TankerEnemy(int posX, int posY, int width, int height)
+public class TankerEnemy extends Enemy
+{
+    public TankerEnemy(int posX, int posY)
     {
-        super(posX, posY, width, height);
+        super(posX, posY);
 
-        setHitpoints(600);
-        setMovespeed(50);
+        setHitPoints(600);
+        setMoveSpeed(50);
         setReward(125);
+    }
+
+    public ImageView loadSkin(){
+        Image image = new Image("/Image/Enemy/tankerEnemy.png",64,64 ,false,true);
+        return new ImageView(image);
     }
 }

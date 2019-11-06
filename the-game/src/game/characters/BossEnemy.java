@@ -1,14 +1,21 @@
 package game.characters;
 
-import game.characters.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-public class BossEnemy extends Enemy {
-    public BossEnemy(int posX, int posY, int width, int height)
+public class BossEnemy extends Enemy
+{
+    public BossEnemy(int posX, int posY)
     {
-        super(posX, posY, width, height);
+        super(posX, posY);
 
-        setHitpoints(1600);
-        setMovespeed(25);
+        setHitPoints(1600);
+        setMoveSpeed(25);
         setReward(350);
+    }
+
+    public ImageView loadSkin(){
+        Image image = new Image("/Image/Enemy/bossEnemy.png",64,64 ,false,true);
+        return new ImageView(image);
     }
 }

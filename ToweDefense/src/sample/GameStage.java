@@ -42,15 +42,8 @@ public class GameStage {
     private Scene gameScene;
     private Stage gameStage;
     private Stage menuStage;
-
+    private Label Label;
     private GameSubScene panelScene;
-    private MyLabel pointLabel;
-    private MyLabel Money;
-    private int point;
-    private ImageView [] lifes;
-    private int life=4;
-    private Enemy e;
-    private boolean play=false;
 
     public void ShowSubScene(GameSubScene subScene){
         if(panelScene!= null){
@@ -92,13 +85,12 @@ public class GameStage {
     public void createNewGame(Stage menuStage){
         this.menuStage=menuStage;
         this.menuStage.hide();
-
+        createLabel();
         tileMap();
-       // createSubScene();
-        createPanelControl();
+        createSubScene();
         createEnemy();
         createButton();
-        createGameLoop();
+       // createGameLoop();
 
 
         gameStage.setTitle("Tower Defense");
@@ -112,7 +104,7 @@ public class GameStage {
     {
         for(int i = 0; i < 12; i++)
         {
-            for(int j = 0; j < 12; j++)
+            for(int j = 0; j < 16; j++)
             {
                 Image image =new Image("/Image/Map/" + grid[i][j] +  ".png",64,64,false,true);
                 ImageView imageView =new ImageView(image);
@@ -121,10 +113,6 @@ public class GameStage {
                 gamePane.getChildren().addAll(imageView);
             }
         }
-        ImageView panel =new ImageView("/Image/UI/green_panel.png");
-        panel.setLayoutX(768);
-        panel.setLayoutY(0);
-        gamePane.getChildren().add(panel);
 
     }
     public void createSubScene(){
@@ -139,11 +127,7 @@ public class GameStage {
         gamePane.getChildren().add(label);
     }
     public void createEnemy(){
-        e =new Enemy("/Image/Enemy/towerDefense_tile246.png");
-        e.setLayoutX(-32);
-        e.setLayoutY(64);;
 
-        if(e.getPosX()< 10 && e.getPosY()==608) removeLife();
 
     }
     public void enemyMove(){
@@ -152,24 +136,18 @@ public class GameStage {
 
     }
     private void createGameLoop(){
-         {
-            gameTimer = new AnimationTimer() {
-                @Override
-                public void handle(long now) {
+         gameTimer =new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                enemyMove();
+            }
+        };
+        gameTimer.start();
 
-                    e.enemyMove();
-                }
-            };
-            gameTimer.start();
-        }
     }
     public void createButton(){
         buttonStart();
-        buttonTower1();
-        /*buttonToer2();
-        buttonTower3();
-        buttonTowr4();*/
-
+      //  createTowr1();
 
     }
     public void buttonStart(){
@@ -178,53 +156,34 @@ public class GameStage {
         Start.setLayoutX(800);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
-
-            play= true;
+            Enemy e =new Enemy("/Image/Enemy/towerDefense_tile246.png");
+            e.setLayoutX(0);
+            e.setLayoutY(64);;
+            e.enemyMove();
+            gamePane.getChildren().add(e.getEnemy());
         });
 
         gamePane.getChildren().add(Start);
 
     }
-    public void buttonTower1(){
+    public void createTowr1(){
         String url="-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/Tower/TowerDefense_tile203.png');";
         MyButton Tower1 =new MyButton("  ",64,64, url);
         Tower1.setOnAction(actionEvent -> {
 
         });
-        Tower1.setLayoutX(788);
-        Tower1.setLayoutY(190);
+        Tower1.setLayoutX(768);
+        Tower1.setLayoutY(64);
         gamePane.getChildren().add(Tower1);
     }
     private void createChooseSubSence() {
         panelScene= new GameSubScene();
         gamePane.getChildren().add(panelScene);
         panelScene.moveSubScene();
-
-
-    }
-    private void createPanelControl(){
-        pointLabel=new MyLabel("POINT : 00");
-        pointLabel.setLayoutX(768 +32);
-        pointLabel.setLayoutY(64-32);
-        gamePane.getChildren().add(pointLabel);
-        lifes= new ImageView[4];
-        for (int i=0;i<4;++i){
-            lifes[i]= new ImageView("/Image/UI/heart1.png");
-            lifes[i].setLayoutX(768+43+(i*45));
-            lifes[i].setLayoutY(64+45+8-32);
-            gamePane.getChildren().add(lifes[i]);
-        }
-        Money =new MyLabel("MONEY : 0050");
-        Money.setLayoutX(768+32);
-        Money.setLayoutY(64+45+24);
-        gamePane.getChildren().add(Money);
-
-    }
-    public void removeLife(){
-        gamePane.getChildren().remove(lifes[ life ]);
-        life--;
-        if(life == 0 ) {
-            gameTimer.stop();
-        }
+        /*InforLabel chooseSubSceneLabel= new InforLabel("CHOOSE");
+        chooseSubSceneLabel.setLayoutX(700);
+        chooseSubSceneLabel.setLayoutY(50);
+        panelScene.getAnchorePane().getChildren().add(chooseSubSceneLabel);
+*/
     }
 }
