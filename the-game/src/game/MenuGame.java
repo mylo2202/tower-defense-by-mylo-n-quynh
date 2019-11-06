@@ -1,6 +1,5 @@
 package game;
 
-import game.characters.MyLabel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -88,18 +87,8 @@ public class MenuGame {
     private  void createLogo(){
         ImageView logo = new ImageView("/Image/Logo/logo3.png");
 
-        logo.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                logo.setEffect(new DropShadow());
-            }
-        });
-        logo.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                logo.setEffect(null);
-            }
-        });
+        logo.setOnMouseEntered(mouseEvent -> logo.setEffect(new DropShadow()));
+        logo.setOnMouseExited(mouseEvent -> logo.setEffect(null));
 
         mainPane.setTop(logo);
 

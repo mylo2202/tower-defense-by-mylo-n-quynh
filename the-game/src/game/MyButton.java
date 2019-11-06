@@ -12,7 +12,7 @@ import javafx.scene.control.Button;
 
 
 public class MyButton extends Button {
-    private final String FONT_PATH="/src/Image/UI/kenvector_future.ttf";
+    private final String FONT_PATH="src/Image/UI/kenvector_future.ttf";
 
     private String BUTTON_PRESS_STYLE;
     private String BUTTON_FREE_STYLE;
@@ -55,34 +55,18 @@ public class MyButton extends Button {
         setLayoutY(getLayoutY()-2);
     }
     private void intitButtonListener(){
-        setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                    setButtonPressStyle();
-                }
+        setOnMousePressed(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                setButtonPressStyle();
             }
         });
-        setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                    setButtonReleasedStyle();
-                }
+        setOnMouseReleased(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                setButtonReleasedStyle();
             }
         });
-        setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                setEffect(new DropShadow());
-            }
-        });
-        setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                setEffect(null);
-            }
-        });
+        setOnMouseEntered(mouseEvent -> setEffect(new DropShadow()));
+        setOnMouseExited(mouseEvent -> setEffect(null));
     }
 
 

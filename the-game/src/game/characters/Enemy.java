@@ -1,7 +1,5 @@
 package game.characters;
 
-import game.characters.*;
-
 public abstract class Enemy extends GameEntity
 {
     private int hitPoints;                      // How Strong enemy is
@@ -10,9 +8,9 @@ public abstract class Enemy extends GameEntity
     private boolean isDead;                     // Triggering flag for enemy's death and removal
     private boolean reachedGoal;                // Check for enemy reaching the goal alive and removal if it does
 
-    public Enemy(int posX, int posY, int width, int height) //int hitPoints, int moveSpeed, int reward)
+    public Enemy(int posX, int posY) //int hitPoints, int moveSpeed, int reward)
     {
-        super(posX, posY, width, height);
+        super(posX, posY);
 
 //        this.hitPoints = hitPoints;
 //        this.moveSpeed = moveSpeed;
@@ -21,22 +19,22 @@ public abstract class Enemy extends GameEntity
         reachedGoal = false;
     }
 
-    public int getHitpoints()
+    public int getHitPoints()
     {
         return hitPoints;
     }
 
-    public void setHitpoints(int hitPoints)
+    public void setHitPoints(int hitPoints)
     {
         this.hitPoints = hitPoints;
     }
 
-    public int getMovespeed()
+    public int getMoveSpeed()
     {
         return moveSpeed;
     }
 
-    public void setMovespeed(int moveSpeed)
+    public void setMoveSpeed(int moveSpeed)
     {
         this.moveSpeed = moveSpeed;
     }

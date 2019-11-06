@@ -6,9 +6,9 @@ import game.characters.*;
 //including Towers, Hills, and Roads
 
 abstract class GameTile extends GameEntity {
-    GameTile(int posX, int posY, int width, int height)
-    {
-        super(posX, posY, width, height);
+
+    public GameTile(int posX, int posY) {
+        super(posX, posY);
     }
 
     //any other methods? idk
