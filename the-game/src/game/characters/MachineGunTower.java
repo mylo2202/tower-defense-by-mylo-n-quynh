@@ -5,7 +5,7 @@ import game.characters.*;
 public class MachineGunTower extends Tower {
     public MachineGunTower(int posX, int posY)
     {
-        super(posX, posY);
+        super();
 
         setAttackDamage(5);
         setAttackRange(50);

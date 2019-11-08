@@ -1,10 +1,10 @@
-package game.characters;
+package game;
 
 import game.characters.*;
 
 //should this class be abstract?
 
-public abstract class GameEntity extends GameField
+public abstract class GameEntity
 {
     //methods for getting coordinates and sizes go here
     private int posX;

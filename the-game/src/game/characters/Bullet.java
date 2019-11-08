@@ -1,8 +1,9 @@
 package game.characters;
 
+import game.GameEntity;
 import game.characters.*;
 
-public class Bullet extends GameEntity{
+public class Bullet extends GameEntity {
     private int bulletDamage;
     private int bulletRange;
     private final int bulletSpeed = 1000;
