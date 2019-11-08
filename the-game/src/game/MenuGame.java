@@ -72,11 +72,6 @@ public class MenuGame {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            /*try {
-                gameStage.mapGrid();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
         });
     }
 

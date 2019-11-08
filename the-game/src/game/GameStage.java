@@ -22,20 +22,12 @@ public class GameStage {
     private int[][] grid = new int[15][20];
 
     public void mapGrid() throws IOException {
-        /*File gridFile = new File("src/game/mapGrid.txt");
-        FileReader reader = new FileReader(gridFile);
-        BufferedReader bufferedReader = new BufferedReader(reader);*/
         Scanner scanner = new Scanner(new File("src/game/mapGrid.txt"));
 
         for(int i = 0; i < 15; ++i)
         {
             for(int j = 0; j < 20; ++j)
-            {
-                //int n= reader.readInt();
                 this.grid[i][j] = scanner.nextInt();
-               // System.out.print(this.grid[i][j]);
-            }
-           // System.out.println();
         }
     }
 
