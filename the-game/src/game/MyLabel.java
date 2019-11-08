@@ -5,7 +5,6 @@ import javafx.scene.control.Label;
 import javafx.geometry.Insets;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.File;
 
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -16,7 +15,6 @@ import javafx.scene.text.Font;
 
 public class MyLabel extends Label {
     /*    private final String FONT_PATH="/src/Image/UI/kenvector_future.ttf";
-
         private String backgroundLabel;//= "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
         public MyLabel(String text, int h,int w,String url){
         }*/
@@ -32,9 +30,10 @@ public class MyLabel extends Label {
         BackgroundImage backgroundImage=new BackgroundImage(new Image(BACKGROUND_IMAGE,190,45,false,true),
                 BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         setBackground(new Background(backgroundImage));
-        setLabelFOnt();
+        setLabelFont();
     }
-    private void setLabelFOnt(){
+
+    private void setLabelFont(){
         try{
             setFont(Font.loadFont(new FileInputStream(FONT_PATH),18));
         } catch (FileNotFoundException e){

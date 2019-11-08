@@ -3,9 +3,9 @@ package game.characters;
 import game.characters.*;
 
 public class NormalTower extends Tower {
-    public NormalTower(int posX, int posY, int width, int height)
+    public NormalTower(int posX, int posY)
     {
-        super(posX, posY, width, height);
+        super(posX, posY);
 
         setAttackDamage(10);
         setAttackRange(100);

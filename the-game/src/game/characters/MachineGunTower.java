@@ -3,9 +3,9 @@ package game.characters;
 import game.characters.*;
 
 public class MachineGunTower extends Tower {
-    public MachineGunTower(int posX, int posY, int width, int height)
+    public MachineGunTower(int posX, int posY)
     {
-        super(posX, posY, width, height);
+        super(posX, posY);
 
         setAttackDamage(5);
         setAttackRange(50);

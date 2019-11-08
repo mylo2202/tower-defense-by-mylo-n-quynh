@@ -1,27 +1,23 @@
 package game.characters;
 
-import game.characters.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class TankerEnemy extends Enemy {
-    private  String URL="/Image/Enemy/tanker.png";
-    private ImageView skin;
+public class TankerEnemy extends Enemy
+{
+    private String tankerSkin= "/Image/Enemy/tankerEnemy.png";
 
-
-    public TankerEnemy(int posX, int posY, int width, int height)
+    public TankerEnemy(String tankerSkin)
     {
-        super(posX, posY, width, height);
+        super(tankerSkin);
 
-        setHitPoints(200);
-        setMoveSpeed(100);
-        setReward(50);
-        Image image =new Image(URL,64,64,false,true);
-        skin = new ImageView(image);
+        setHitPoints(600);
+        setMoveSpeed(50);
+        setReward(125);
     }
 
-    public ImageView getEnemy(){
-        return skin;
+    public ImageView loadSkin(){
+        Image image = new Image("/Image/Enemy/tankerEnemy.png",64,64 ,false,true);
+        return new ImageView(image);
     }
-
 }

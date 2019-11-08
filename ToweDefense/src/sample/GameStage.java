@@ -90,7 +90,7 @@ public class GameStage {
         createSubScene();
         createEnemy();
         createButton();
-        // createGameLoop();
+       // createGameLoop();
 
 
         gameStage.setTitle("Tower Defense");
@@ -136,7 +136,7 @@ public class GameStage {
 
     }
     private void createGameLoop(){
-        gameTimer =new AnimationTimer() {
+         gameTimer =new AnimationTimer() {
             @Override
             public void handle(long l) {
                 enemyMove();
@@ -147,7 +147,7 @@ public class GameStage {
     }
     public void createButton(){
         buttonStart();
-        //  createTowr1();
+      //  createTowr1();
 
     }
     public void buttonStart(){
