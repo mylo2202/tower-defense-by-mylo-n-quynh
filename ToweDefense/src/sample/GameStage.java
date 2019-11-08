@@ -87,7 +87,7 @@ public class GameStage {
         this.menuStage.hide();
         createLabel();
         tileMap();
-        createSubScene();
+
         createEnemy();
         createButton();
        // createGameLoop();
@@ -115,10 +115,7 @@ public class GameStage {
         }
 
     }
-    public void createSubScene(){
-        createChooseSubSence();
 
-    }
     public void createLabel(){
 
         Label label = new Label("My Label");
@@ -175,15 +172,5 @@ public class GameStage {
         Tower1.setLayoutX(768);
         Tower1.setLayoutY(64);
         gamePane.getChildren().add(Tower1);
-    }
-    private void createChooseSubSence() {
-        panelScene= new GameSubScene();
-        gamePane.getChildren().add(panelScene);
-        panelScene.moveSubScene();
-        /*InforLabel chooseSubSceneLabel= new InforLabel("CHOOSE");
-        chooseSubSceneLabel.setLayoutX(700);
-        chooseSubSceneLabel.setLayoutY(50);
-        panelScene.getAnchorePane().getChildren().add(chooseSubSceneLabel);
-*/
     }
 }

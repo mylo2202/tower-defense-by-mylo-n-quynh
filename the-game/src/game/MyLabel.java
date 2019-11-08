@@ -14,16 +14,13 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.text.Font;
 
 public class MyLabel extends Label {
-    /*    private final String FONT_PATH="/src/Image/UI/kenvector_future.ttf";
-        private String backgroundLabel;//= "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
-        public MyLabel(String text, int h,int w,String url){
-        }*/
+
     private static final String FONT_PATH="src/Image/UI/kenvector_future.ttf";
     private static final String BACKGROUND_IMAGE="/Image/UI/green_button13.png";
 
     public MyLabel(String text){
         setPrefWidth(190);
-        setPrefHeight(49);
+        setPrefHeight(45);
         setAlignment(Pos.CENTER_LEFT);
         setText(text);
         setPadding(new Insets(10,10,10,20) );

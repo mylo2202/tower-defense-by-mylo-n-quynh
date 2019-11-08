@@ -13,21 +13,11 @@ public class MyBorderPane extends BorderPane {
         this.vBox.setSpacing(50);
         this.vBox.setPadding(new Insets(5,5, 5,5));
         this.vBox.setAlignment(Pos.CENTER);
+        setCenter(vBox);
     }
 
     public void addButton(MyButton button){
         vBox.getChildren().add(button);
     }
 
-    public void setAreasCenter(){
-        setCenter(vBox);
-    }
-
-    public void setAreasLeft(){
-        setLeft(vBox);
-    }
-
-    public void setAreasRight(){
-        setRight(vBox);
-    }
 }

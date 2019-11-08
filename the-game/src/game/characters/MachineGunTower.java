@@ -1,7 +1,5 @@
 package game.characters;
 
-import game.characters.*;
-
 public class MachineGunTower extends Tower {
     public MachineGunTower(int posX, int posY)
     {
