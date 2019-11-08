@@ -1,5 +1,7 @@
 package game.characters;
 
+import game.GameStage;
+import game.GameStage.*;
 import javafx.animation.PathTransition;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -21,6 +23,7 @@ public abstract class Enemy extends ImageView
     private boolean isDead;                     // Triggering flag for enemy's death and removal
     private boolean reachedGoal;                // Check for enemy reaching the goal alive and removal if it does
 
+    private GameStage gameStage;
     private String enemySkin;
     private ImageView imageView;
     private int posX;
@@ -31,6 +34,10 @@ public abstract class Enemy extends ImageView
     }
     public int getPosY(){
         return posY;
+    }
+
+    public ImageView getEnemyView(){
+        return  imageView;
     }
 
     public Enemy(String enemySkin) //int hitPoints, int moveSpeed, int reward)
@@ -98,12 +105,13 @@ public abstract class Enemy extends ImageView
 //the following method is still crap and should be replaced by one that actually let enemies find their paths
     public void enemyMove(){
         imageView.setLayoutX(0);
-        imageView.setLayoutY(64);
+        imageView.setLayoutY(0);
         Path path= new Path();
         //Moving to the starting point
-        MoveTo moveTo = new MoveTo(0, 32);
+        MoveTo moveTo = new MoveTo(0, 1.5*gameStage.GRID_SIZE);
+        path.getElements().add(moveTo);
 
-        //Creating 1st line
+        /*//Creating 1st line
         LineTo line1 = new LineTo(664, 32);
 
         //Creating 2nd line
@@ -120,10 +128,10 @@ public abstract class Enemy extends ImageView
         LineTo line6 = new LineTo(664, 608);
 
         //Creating 5th line
-        LineTo line7 = new LineTo(-64, 608);
+        LineTo line7 = new LineTo(-64, 608);*/
 
-        path.getElements().add(moveTo);
-        path.getElements().addAll(line1, line2, line3, line4, line5,line6,line7);
+
+        //path.getElements().addAll(line1, line2, line3, line4, line5,line6,line7);
 
         //Creating a path transition
         PathTransition pathTransition = new PathTransition();
@@ -143,6 +151,8 @@ public abstract class Enemy extends ImageView
 
         //Playing the animation
         pathTransition.play();
+
+
 
     }
 }

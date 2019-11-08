@@ -1,43 +1,43 @@
 package game;
 
+import java.io.*;
+import java.util.Scanner;
+
 import game.characters.BossEnemy;
 import game.characters.Enemy;
 import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.scene.text.Font;
-
-import java.security.PrivateKey;
 
 public class GameStage {
-    private static final int HEIGHT = 768;
-    private static final int WIDTH = 1024;
+    private final int HEIGHT = 720;
+    private final int WIDTH = 1280;
+    public final int GRID_SIZE = 48;
     private AnimationTimer gameTimer;
 
-    private int[][] grid ={
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-            { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0},
-            { 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            { 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-            { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0},
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-    };
+    private int[][] grid = new int[15][20];
+
+    public void mapGrid() throws IOException {
+        /*File gridFile = new File("src/game/mapGrid.txt");
+        FileReader reader = new FileReader(gridFile);
+        BufferedReader bufferedReader = new BufferedReader(reader);*/
+        Scanner scanner = new Scanner(new File("src/game/mapGrid.txt"));
+
+        for(int i = 0; i < 15; ++i)
+        {
+            for(int j = 0; j < 20; ++j)
+            {
+                //int n= reader.readInt();
+                this.grid[i][j] = scanner.nextInt();
+               // System.out.print(this.grid[i][j]);
+            }
+           // System.out.println();
+        }
+    }
 
     private AnchorPane gamePane;
     private Scene gameScene;
@@ -52,14 +52,6 @@ public class GameStage {
     private int life=4;
     private Enemy e;
     private boolean play=false;
-
-    /*public void ShowSubScene(GameSubScene subScene){
-        if(panelScene!= null){
-            panelScene.moveSubScene();
-        }
-        subScene.moveSubScene();
-        panelScene=subScene;
-    }*/
 
     public GameStage(){
         initialiseStage();
@@ -85,67 +77,70 @@ public class GameStage {
         gameStage.setScene(gameScene);
     }
 
-    public void createNewGame(Stage menuStage){
+    public void createNewGame(Stage menuStage) throws IOException {
         this.menuStage=menuStage;
         this.menuStage.hide();
-        tileMap();
-        // createSubScene();
+
+        mapGrid();
+
+        drawMap();
+        drawPanel();
         createPanelControl();
-        createEnemy();
+        //createEnemy();
         createButton();
         createGameLoop();
         gameStage.setTitle("Tower Defense");
         gameStage.show();
+
+
     }
-
-
 
     public Stage getStage(){
         return gameStage;
     }
 
-    public void tileMap()
+    public void drawMap()
     {
-        for(int i = 0; i < 12; i++)
+        for(int i = 0; i < grid.length; i++)
         {
-            for(int j = 0; j < 12; j++)
+            for(int j = 0; j < grid[i].length; j++)
             {
-                Image image =new Image("/Image/Map/map" + grid[i][j] +  ".png",64,64,false,true);
-                ImageView imageView =new ImageView(image);
-                imageView.setLayoutX(j*64);
-                imageView.setLayoutY(i*64);
-                gamePane.getChildren().addAll(imageView);
+                Image mapGrid = new Image("/Image/Map/map" + grid[i][j] + ".png", GRID_SIZE, GRID_SIZE,false,true);
+                ImageView mapGridView =new ImageView(mapGrid);
+                mapGridView.setLayoutX(j*GRID_SIZE);
+                mapGridView.setLayoutY(i*GRID_SIZE);
+                gamePane.getChildren().addAll(mapGridView);
+                System.out.println(grid[i][j]);
             }
         }
-
-        ImageView panel = new ImageView("/Image/UI/green_panel.png");
-        panel.setLayoutX(768);
-        panel.setLayoutY(0);
-        gamePane.getChildren().add(panel);
     }
 
-     /*public void createSubScene(){
-        createChooseSubScene();
-    }*/
+    public void drawPanel()
+    {
+        Image panel = new Image("/Image/UI/green_panel.png", WIDTH - grid[0].length*GRID_SIZE, HEIGHT, false, true);
+        ImageView panelView = new ImageView(panel);
+        panelView.setLayoutX(grid[0].length*GRID_SIZE);
+        panelView.setLayoutY(0);
+        gamePane.getChildren().add(panelView);
+    }
 
     public void createLabel(){
 
         Label label = new Label("My Label");
-        label.setLayoutX(768);
+        label.setLayoutX(grid[0].length*GRID_SIZE);
         label.setLayoutY(0);
         gamePane.getChildren().add(label);
     }
 
-    public void createEnemy(){
+    /*public void createEnemy(){
         e = new BossEnemy("/Image/Enemy/bossEnemy.png");
         e.setLayoutX(-32);
         e.setLayoutY(64);;
 
-        if(e.getPosX()< 10 && e.getPosY()==608) removeLife();
+        if(e.getPosX()< 10 && e.getPosY() == 608) removeLife();
 
-    }
+    }*/
 
-    public void enemyMove() {}
 
     private void createGameLoop(){
         {
@@ -153,7 +148,7 @@ public class GameStage {
                 @Override
                 public void handle(long now) {
 
-                    e.enemyMove();
+
                 }
             };
             gameTimer.start();
@@ -162,15 +157,20 @@ public class GameStage {
 
     public void createButton(){
         buttonStart();
-        buttonNormalTower();
+       // buttonNormalTower();
     }
 
     public void buttonStart(){
         String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
         MyButton Start= new MyButton("START",49,190,url);
-        Start.setLayoutX(800);
+        Start.setLayoutX(grid[0].length*GRID_SIZE + (WIDTH - grid[0].length*GRID_SIZE)/2 - 95);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
+            Enemy e = new BossEnemy("/Image/Enemy/bossEnemy.png");
+            e.setLayoutX(0);
+            e.setLayoutY(64);
+            e.enemyMove();
+            gamePane.getChildren().add(e.getEnemyView());
             play = true;
         });
 
@@ -183,32 +183,26 @@ public class GameStage {
         Tower1.setOnAction(actionEvent -> {
 
         });
-        Tower1.setLayoutX(788);
-        Tower1.setLayoutY(190);
+        Tower1.setLayoutX(grid[0].length*GRID_SIZE + (WIDTH - grid[0].length*GRID_SIZE)/2 - 95);
+        Tower1.setLayoutY(196);
         gamePane.getChildren().add(Tower1);
     }
 
-    /* private void createChooseSubSence() {
-        panelScene= new GameSubScene();
-        gamePane.getChildren().add(panelScene);
-        panelScene.moveSubScene();
-    }*/
-
     private void createPanelControl(){
         pointLabel=new MyLabel("POINT : 00");
-        pointLabel.setLayoutX(768 +32);
-        pointLabel.setLayoutY(64-32);
+        pointLabel.setLayoutX(grid[0].length*GRID_SIZE + (WIDTH - grid[0].length*GRID_SIZE)/2 - 95);
+        pointLabel.setLayoutY(32);
         gamePane.getChildren().add(pointLabel);
         lifes= new ImageView[4];
-        for (int i=0;i<4;++i){
+        for (int i=0; i<4; ++i){
             lifes[i]= new ImageView("/Image/UI/heart1.png");
-            lifes[i].setLayoutX(768+43+(i*45));
-            lifes[i].setLayoutY(64+45+8-32);
+            lifes[i].setLayoutX(grid[0].length*GRID_SIZE + (WIDTH - grid[0].length*GRID_SIZE)/2 - 95 + (i*48));
+            lifes[i].setLayoutY(128);
             gamePane.getChildren().add(lifes[i]);
         }
         Money =new MyLabel("MONEY : 0050");
-        Money.setLayoutX(768+32);
-        Money.setLayoutY(64+45+24);
+        Money.setLayoutX(grid[0].length*GRID_SIZE + (WIDTH - grid[0].length*GRID_SIZE)/2 - 95);
+        Money.setLayoutY(256);
         gamePane.getChildren().add(Money);
     }
 
