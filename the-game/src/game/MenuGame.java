@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.event.EventHandler;
 
+import java.io.IOException;
+
 
 public class MenuGame {
     private static final int HEIGHT = 515;
@@ -64,8 +66,17 @@ public class MenuGame {
 
         addMenuButton(newPlay);
         newPlay.setOnAction(actionEvent -> {
-            GameStage gameViewManger= new GameStage();
-            gameViewManger.createNewGame(mainStage);
+            GameStage gameStage= new GameStage();
+            try {
+                gameStage.createNewGame(mainStage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            /*try {
+                gameStage.mapGrid();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
         });
     }
 

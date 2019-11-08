@@ -36,13 +36,13 @@ public class Enemy extends ImageView {
     }
     public void enemyMove(){
         imageView.setLayoutX(0);
-        imageView.setLayoutY(64);
+        imageView.setLayoutY(0);
         Path path= new Path();
         //Moving to the starting point
-        MoveTo moveTo = new MoveTo(0, 32);
+        MoveTo moveTo = new MoveTo(0, 64);
 
         //Creating 1st line
-        LineTo line1 = new LineTo(664, 32);
+        LineTo line1 = new LineTo(664, 64);
 
         //Creating 2nd line
         LineTo line2 = new LineTo(664,224);
