@@ -1,5 +1,6 @@
 package game.characters;
 
+import game.GameEntity;
 import game.GameStage;
 import game.GameStage.*;
 import javafx.animation.PathTransition;
@@ -15,7 +16,7 @@ import javafx.util.Duration;
 import javafx.animation.PathTransition;
 import javafx.application.Application;
 
-public abstract class Enemy extends ImageView
+public abstract class Enemy extends GameEntity
 {
     private int hitPoints;                      // How Strong enemy is
     private int moveSpeed;                      // How fast enemy moves
@@ -26,15 +27,7 @@ public abstract class Enemy extends ImageView
     private GameStage gameStage;
     private String enemySkin;
     private ImageView imageView;
-    private int posX;
-    private int posY;
 
-    private int getPosX(){
-        return posX;
-    }
-    private int getPosY(){
-        return posY;
-    }
 
     public ImageView getEnemyView(){
         return  imageView;
@@ -110,7 +103,8 @@ public abstract class Enemy extends ImageView
         imageView.setLayoutY(0);
         Path path= new Path();
         //Moving to the starting point
-        MoveTo moveTo = new MoveTo(0, 64);
+        MoveTo moveTo = new MoveTo(0, 1.5*0);
+        path.getElements().add(moveTo);
 
         //Creating 1st line
         LineTo line1 = new LineTo(664, 64);

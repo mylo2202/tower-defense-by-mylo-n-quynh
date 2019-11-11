@@ -13,9 +13,9 @@ public abstract class Tower extends GameTile
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
 
-    public Tower(int posX, int posY)
+    public Tower()
     {
-        super(posX, posY);
+        super();
 
 //        this.attackDamage = attackDamage;
 //        this.attackSpeed = attackSpeed;

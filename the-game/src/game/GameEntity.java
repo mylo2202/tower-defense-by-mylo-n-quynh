@@ -1,4 +1,4 @@
-package game.characters;
+package game;
 
 import game.characters.*;
 

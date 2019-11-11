@@ -5,7 +5,7 @@ import game.characters.*;
 public class SniperTower extends Tower{
     public SniperTower(int posX, int posY)
     {
-        super(posX, posY);
+        super();
 
         setAttackDamage(80);
         setAttackRange(200);
