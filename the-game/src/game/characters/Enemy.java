@@ -29,16 +29,18 @@ public abstract class Enemy extends ImageView
     private int posX;
     private int posY;
 
-    public int getPosX(){
+    private int getPosX(){
         return posX;
     }
-    public int getPosY(){
+    private int getPosY(){
         return posY;
     }
 
     public ImageView getEnemyView(){
         return  imageView;
     }
+
+    private int[][] road = new int[15][20];
 
     public Enemy(String enemySkin) //int hitPoints, int moveSpeed, int reward)
     {
@@ -108,11 +110,10 @@ public abstract class Enemy extends ImageView
         imageView.setLayoutY(0);
         Path path= new Path();
         //Moving to the starting point
-        MoveTo moveTo = new MoveTo(0, 1.5*gameStage.GRID_SIZE);
-        path.getElements().add(moveTo);
+        MoveTo moveTo = new MoveTo(0, 64);
 
-        /*//Creating 1st line
-        LineTo line1 = new LineTo(664, 32);
+        //Creating 1st line
+        LineTo line1 = new LineTo(664, 64);
 
         //Creating 2nd line
         LineTo line2 = new LineTo(664,224);
@@ -128,10 +129,10 @@ public abstract class Enemy extends ImageView
         LineTo line6 = new LineTo(664, 608);
 
         //Creating 5th line
-        LineTo line7 = new LineTo(-64, 608);*/
+        LineTo line7 = new LineTo(-64, 608);
 
-
-        //path.getElements().addAll(line1, line2, line3, line4, line5,line6,line7);
+        path.getElements().add(moveTo);
+        path.getElements().addAll(line1, line2, line3, line4, line5,line6,line7);
 
         //Creating a path transition
         PathTransition pathTransition = new PathTransition();
@@ -151,8 +152,5 @@ public abstract class Enemy extends ImageView
 
         //Playing the animation
         pathTransition.play();
-
-
-
     }
 }
