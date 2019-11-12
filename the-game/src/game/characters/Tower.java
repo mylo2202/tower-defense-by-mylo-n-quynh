@@ -1,8 +1,9 @@
 package game.characters;
 
+import game.GameStage;
 import game.characters.*;
 
-public abstract class Tower extends GameTile
+public abstract class Tower
 {
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
     private double attackSpeed;                     // Delayed time for each attack

@@ -3,12 +3,13 @@ package game.characters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
+
 public class BossEnemy extends Enemy
 {
     private String bossSkin= "/Image/Enemy/bossEnemy.png";
 
-    public BossEnemy(String bossSkin)
-    {
+    public BossEnemy(String bossSkin) throws IOException {
         super(bossSkin);
 
         setHitPoints(1600);

@@ -3,12 +3,13 @@ package game.characters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
+
 public class TankerEnemy extends Enemy
 {
     private String tankerSkin= "/Image/Enemy/tankerEnemy.png";
 
-    public TankerEnemy(String tankerSkin)
-    {
+    public TankerEnemy(String tankerSkin) throws IOException {
         super(tankerSkin);
 
         setHitPoints(600);

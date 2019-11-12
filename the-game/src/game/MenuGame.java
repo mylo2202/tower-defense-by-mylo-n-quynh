@@ -51,8 +51,9 @@ public class MenuGame {
 
         mainPane.addButton(newPlay);
         newPlay.setOnAction(actionEvent -> {
-            GameStage gameViewManger= new GameStage();
+            GameStage gameViewManger;
             try {
+                gameViewManger = new GameStage();
                 gameViewManger.createNewGame(mainStage);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -83,18 +84,8 @@ public class MenuGame {
     private  void createLogo(){
         ImageView logo = new ImageView("/Image/Logo/logo3.png");
 
-        logo.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                logo.setEffect(new DropShadow());
-            }
-        });
-        logo.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                logo.setEffect(null);
-            }
-        });
+        logo.setOnMouseEntered(mouseEvent -> logo.setEffect(new DropShadow()));
+        logo.setOnMouseExited(mouseEvent -> logo.setEffect(null));
 
         mainPane.setTop(logo);
 

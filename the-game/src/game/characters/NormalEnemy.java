@@ -3,12 +3,13 @@ package game.characters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
+
 public class NormalEnemy extends Enemy
 {
     private String normalSkin= "/Image/Enemy/normalEnemy.png";
 
-    public NormalEnemy(String normalSkin)
-    {
+    public NormalEnemy(String normalSkin) throws IOException {
         super(normalSkin);
 
         setHitPoints(200);
