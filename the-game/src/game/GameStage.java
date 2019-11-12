@@ -1,7 +1,8 @@
 package game;
 
 import java.io.*;
-import game.characters.TileMap;
+
+import game.characters.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -11,9 +12,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class GameStage {
-    private final int HEIGHT = 720;
-    private final int WIDTH = 1280;
-
     private AnimationTimer gameTimer;
 
     private AnchorPane gamePane;
@@ -25,11 +23,11 @@ public class GameStage {
     private MyLabel Money;
     private int point;
     private ImageView [] lifes;
-    private int life=4;
-    private TileMap map;
+    private int life = 4;
+    private TileMap map = new TileMap();
     private boolean play=false;
 
-    public GameStage(){
+    public GameStage() throws IOException {
         initialiseStage();
         createMouseListeners();
     }
@@ -46,7 +44,7 @@ public class GameStage {
     private void initialiseStage()
     {
         gamePane = new AnchorPane();
-        gameScene = new Scene(gamePane, WIDTH, HEIGHT);
+        gameScene = new Scene(gamePane, map.getSCREEN_WIDTH(), map.getSCREEN_HEIGHT());
         gameStage = new Stage();
         gameStage.setResizable(false);
         gameStage.setScene(gameScene);
@@ -76,7 +74,8 @@ public class GameStage {
 
     public void drawPanel()
     {
-        Image panel = new Image("/Image/UI/green_panel.png", WIDTH - map.getGrid()[0].length*map.getSize(), HEIGHT, false, true);
+        Image panel = new Image("/Image/UI/green_panel.png",
+                map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize(), map.getSCREEN_HEIGHT(), false, true);
         ImageView panelView = new ImageView(panel);
         panelView.setLayoutX(map.getGrid()[0].length*map.getSize());
         panelView.setLayoutY(0);
@@ -101,14 +100,20 @@ public class GameStage {
     public void buttonStart(){
         String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
         MyButton Start= new MyButton("START",45,190,url);
-        Start.setLayoutX(map.getGrid()[0].length*map.getSize() + (WIDTH - map.getGrid()[0].length*map.getSize())/2 - 95);
+        Start.setLayoutX(map.getGrid()[0].length*map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize())/2 - 95);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
-            /*Enemy e = new BossEnemy("/Image/Enemy/bossEnemy.png");
-            e.setLayoutX(0);
-            e.setLayoutY(64);
+            Enemy e = null;
+            try {
+                e = new BossEnemy("/Image/Enemy/bossEnemy.png");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            /*e.setLayoutX(0);
+            e.setLayoutY(64);*/
+            assert e != null;
             e.enemyMove();
-            gamePane.getChildren().add(e.getEnemyView());*/
+            gamePane.getChildren().add(e.getEnemyView());
             play = true;
         });
 
@@ -119,12 +124,12 @@ public class GameStage {
         lifes= new ImageView[4];
         for (int i=0; i<4; ++i){
             lifes[i]= new ImageView("/Image/UI/heart1.png");
-            lifes[i].setLayoutX(map.getGrid()[0].length*map.getSize() + (WIDTH - map.getGrid()[0].length*map.getSize())/2 - 95 + (i*48));
+            lifes[i].setLayoutX(map.getGrid()[0].length*map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize())/2 - 95 + (i*48));
             lifes[i].setLayoutY(128);
             gamePane.getChildren().add(lifes[i]);
         }
         Money =new MyLabel("MONEY : 0050");
-        Money.setLayoutX(map.getGrid()[0].length*map.getSize() + (WIDTH -map.getGrid()[0].length*map.getSize())/2 - 95);
+        Money.setLayoutX(map.getGrid()[0].length*map.getSize() + (map.getSCREEN_WIDTH() -map.getGrid()[0].length*map.getSize())/2 - 95);
         Money.setLayoutY(64);
         gamePane.getChildren().add(Money);
     }

@@ -9,12 +9,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 import javafx.animation.PathTransition;
 import javafx.application.Application;
+
+import java.io.IOException;
 
 public abstract class Enemy extends GameEntity
 {
@@ -28,12 +31,13 @@ public abstract class Enemy extends GameEntity
     private String enemySkin;
     private ImageView imageView;
 
+    private Road enemyRoad = new Road();
 
     public ImageView getEnemyView(){
         return  imageView;
     }
 
-    public Enemy(String enemySkin) //int hitPoints, int moveSpeed, int reward)
+    public Enemy(String enemySkin) throws IOException //int hitPoints, int moveSpeed, int reward)
     {
         Image t= new Image(enemySkin,64,64,false,true);
         imageView =new ImageView(t);
@@ -97,34 +101,21 @@ public abstract class Enemy extends GameEntity
     }
 //the following method is still crap and should be replaced by one that actually let enemies find their paths
     public void enemyMove(){
-        imageView.setLayoutX(0);
-        imageView.setLayoutY(0);
+        /*imageView.setLayoutX(0);
+        imageView.setLayoutY(0);*/
         Path path= new Path();
         //Moving to the starting point
-        MoveTo moveTo = new MoveTo(0, 1.5*0);
+        MoveTo moveTo = new MoveTo(enemyRoad.getSpawner().getX(), enemyRoad.getSpawner().getY());
         path.getElements().add(moveTo);
 
-        /*//Creating 1st line
-        LineTo line1 = new LineTo(664, 32);
+        for(int i = 0; i < enemyRoad.getRoad().size(); i++)
+        {
+            LineTo line = new LineTo(enemyRoad.getRoad().get(i).getX(), enemyRoad.getRoad().get(i).getY());
+            path.getElements().add(line);
+        }
 
-        //Creating 2nd line
-        LineTo line2 = new LineTo(664,224);
-
-        //Creating 3rd line
-        LineTo line3 = new LineTo(88,224);
-
-        //Creating 4th line
-        LineTo line4 = new LineTo(88, 420);
-
-        //Creating 5th line
-        LineTo line5 = new LineTo(664, 420);
-        LineTo line6 = new LineTo(664, 608);
-
-        //Creating 5th line
-        LineTo line7 = new LineTo(-64, 608);*/
-
-
-        //path.getElements().addAll(line1, line2, line3, line4, line5,line6,line7);
+        LineTo endLine = new LineTo(enemyRoad.getGoal().getX(), enemyRoad.getGoal().getY());
+        path.getElements().add(endLine);
 
         //Creating a path transition
         PathTransition pathTransition = new PathTransition();
@@ -144,8 +135,5 @@ public abstract class Enemy extends GameEntity
 
         //Playing the animation
         pathTransition.play();
-
-
-
     }
 }

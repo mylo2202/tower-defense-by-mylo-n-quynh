@@ -3,12 +3,13 @@ package game.characters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
+
 public class SmallerEnemy extends Enemy
 {
     private String smallerSkin= "/Image/Enemy/smallerEnemy.png";
 
-    public SmallerEnemy(String smallerSkin)
-    {
+    public SmallerEnemy(String smallerSkin) throws IOException {
         super(smallerSkin);
 
         setHitPoints(100);
