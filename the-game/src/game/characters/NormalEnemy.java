@@ -7,18 +7,13 @@ import java.io.IOException;
 
 public class NormalEnemy extends Enemy
 {
-    private String normalSkin= "/Image/Enemy/normalEnemy.png";
-
-    public NormalEnemy(String normalSkin) throws IOException {
-        super(normalSkin);
-
+    public NormalEnemy() throws IOException {
+        setEnemySkin("/Image/Enemy/normalEnemy.png");
+        setEnemyImage(new Image(this.getEnemySkin(), 64, 64, false, true));
+        setEnemyView(new ImageView(this.getEnemyImage()));
         setHitPoints(200);
         setMoveSpeed(100);
         setReward(50);
-        loadSkin();
-    }
-    public ImageView loadSkin(){
-        Image image = new Image("/Image/Enemy/normalEnemy.png",64,64 ,false,true);
-        return new ImageView(image);
+        setLevel(2);
     }
 }

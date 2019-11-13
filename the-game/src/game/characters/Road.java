@@ -1,6 +1,6 @@
 package game.characters;
 
-import game.GameStage;
+import game.TileMap;
 import javafx.geometry.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class Road extends TileMap {
         int pointerX = 0;
         int pointerY = 1;
 
-        while(pointerX != 11 && pointerY != 7)
+        while(pointerX != 11 || pointerY != 7)
         {
             if(getGrid()[pointerY][pointerX] == 50) pointerX++;
             if(getGrid()[pointerY][pointerX] == 51) pointerX--;
@@ -48,8 +48,12 @@ public class Road extends TileMap {
                 pointerY--;
             }
 
-            //System.out.print(pointerX + " " + pointerY + " " + getGrid()[pointerY][pointerX] + "\n");
+            //System.out.println(pointerX + " " + pointerY + " " + getGrid()[pointerY][pointerX]);
         }
+
+        /*for (Point2D point2D : road) {
+            System.out.println(point2D);
+        }*/
     }
 
     public Point2D getSpawner() {

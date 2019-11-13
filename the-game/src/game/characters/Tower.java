@@ -16,7 +16,7 @@ public abstract class Tower
 
     public Tower()
     {
-        super();
+        //super();
 
 //        this.attackDamage = attackDamage;
 //        this.attackSpeed = attackSpeed;

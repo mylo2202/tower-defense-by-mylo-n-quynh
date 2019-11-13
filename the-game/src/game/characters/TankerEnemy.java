@@ -7,18 +7,13 @@ import java.io.IOException;
 
 public class TankerEnemy extends Enemy
 {
-    private String tankerSkin= "/Image/Enemy/tankerEnemy.png";
-
-    public TankerEnemy(String tankerSkin) throws IOException {
-        super(tankerSkin);
-
-        setHitPoints(600);
+    public TankerEnemy() throws IOException {
+        setEnemySkin("/Image/Enemy/tankerEnemy.png");
+        setEnemyImage(new Image(this.getEnemySkin(), 64, 64, false, true));
+        setEnemyView(new ImageView(this.getEnemyImage()));
+        setHitPoints(1000);
         setMoveSpeed(50);
-        setReward(125);
-    }
-
-    public ImageView loadSkin(){
-        Image image = new Image("/Image/Enemy/tankerEnemy.png",64,64 ,false,true);
-        return new ImageView(image);
+        setReward(200);
+        setLevel(10);
     }
 }

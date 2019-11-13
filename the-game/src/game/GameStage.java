@@ -62,8 +62,7 @@ public class GameStage {
         map.drawMap(gamePane);
 
         createButton();
-        createGameLoop();
-
+        //createGameLoop();
         gameStage.setTitle("Tower Defense");
         gameStage.show();
     }
@@ -82,16 +81,29 @@ public class GameStage {
         gamePane.getChildren().add(panelView);
     }
 
-    private void createGameLoop(){
-        {
-            gameTimer = new AnimationTimer() {
-                @Override
-                public void handle(long now) {
-                }
-            };
-            gameTimer.start();
+    /*private void createGameLoop(){
+        Enemy e = null;
+        try {
+            e = new BossEnemy("/Image/Enemy/bossEnemy.png");
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-    }
+        assert e != null;
+        e.enemyMove();
+        gamePane.getChildren().add(e.getEnemyView());
+        gameTimer = new AnimationTimer() {
+            long timer = System.nanoTime();
+            public void handle(long now) {
+                if(now - timer > 1e9){
+
+
+                    System.out.println(e.getEnemyView().getTranslateX() + " " + e.getEnemyView().getTranslateY());
+                    timer = now;
+                }
+            }
+        };
+        gameTimer.start();
+    }*/
 
     public void createButton(){
         buttonStart();
@@ -103,24 +115,40 @@ public class GameStage {
         Start.setLayoutX(map.getGrid()[0].length*map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize())/2 - 95);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
-            Enemy e = null;
-            try {
-                e = new BossEnemy("/Image/Enemy/bossEnemy.png");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            /*e.setLayoutX(0);
-            e.setLayoutY(64);*/
-            assert e != null;
-            e.enemyMove();
-            gamePane.getChildren().add(e.getEnemyView());
+
+            //Enemy finalE = e;
+
+            gameTimer = new AnimationTimer() {
+                long timer = System.nanoTime();
+                @Override
+                public void handle(long now) {
+                    if(now - timer >= 1*1e9)
+                    {
+                        Enemy e = null;
+                        try {
+                            e = new SmallerEnemy();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        assert e != null;
+                        e.enemyMove();
+                        gamePane.getChildren().add(e.getEnemyView());
+
+                        /*System.out.println((finalE.getEnemyView().getTranslateX() + 32) + " " + (finalE
+                         .getEnemyView().getTranslateY() + 32));*/
+
+                        timer = now;
+                    }
+                }
+            };
+            gameTimer.start();
             play = true;
         });
 
         gamePane.getChildren().add(Start);
     }
 
-    private void createPanelControl(){
+    public void createPanelControl(){
         lifes= new ImageView[4];
         for (int i=0; i<4; ++i){
             lifes[i]= new ImageView("/Image/UI/heart1.png");
