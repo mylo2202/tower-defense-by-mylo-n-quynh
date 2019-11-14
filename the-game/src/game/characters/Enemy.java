@@ -1,21 +1,13 @@
 package game.characters;
 
 import game.GameEntity;
-import game.GameStage;
-import game.GameStage.*;
 import javafx.animation.PathTransition;
-import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
-import javafx.animation.PathTransition;
-import javafx.application.Application;
 
 import java.io.IOException;
 
@@ -51,8 +43,7 @@ public abstract class Enemy extends GameEntity
         this.enemyView = enemyView;
     }
 
-    public Enemy() throws IOException //int hitPoints, int moveSpeed, int reward)
-    {
+    public Enemy() throws IOException {
         isDead = false;
         reachedGoal = false;
     }
@@ -158,4 +149,7 @@ public abstract class Enemy extends GameEntity
         //Playing the animation
         pathTransition.play();
     }
+    /*public void remove(){
+        enemyImage.
+    }*/
 }

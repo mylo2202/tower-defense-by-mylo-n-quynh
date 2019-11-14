@@ -12,7 +12,7 @@ public class NormalEnemy extends Enemy
         setEnemyImage(new Image(this.getEnemySkin(), 64, 64, false, true));
         setEnemyView(new ImageView(this.getEnemyImage()));
         setHitPoints(200);
-        setMoveSpeed(100);
+        setMoveSpeed(80);
         setReward(50);
         setLevel(2);
     }

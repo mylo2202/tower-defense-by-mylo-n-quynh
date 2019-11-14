@@ -12,7 +12,7 @@ public class BossEnemy extends Enemy
         setEnemyImage(new Image(this.getEnemySkin(), 64, 64, false, true));
         setEnemyView(new ImageView(this.getEnemyImage()));
         setHitPoints(5000);
-        setMoveSpeed(25);
+        setMoveSpeed(20);
         setReward(1000);
         setLevel(50);
     }

@@ -12,7 +12,7 @@ public class SmallerEnemy extends Enemy
         setEnemyImage(new Image(this.getEnemySkin(), 64, 64, false, true));
         setEnemyView(new ImageView(this.getEnemyImage()));
         setHitPoints(100);
-        setMoveSpeed(200);
+        setMoveSpeed(160);
         setReward(25);
         setLevel(1);
     }

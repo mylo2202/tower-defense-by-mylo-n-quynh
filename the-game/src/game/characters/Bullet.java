@@ -5,14 +5,12 @@ import game.characters.*;
 
 public class Bullet extends GameEntity {
     private int bulletDamage;
-    private int bulletRange;
-    private final int bulletSpeed = 1000;
+    private final int bulletSpeed = 1280;
     private Enemy bulletTarget;
 
     public Bullet(Tower tower)
     {
         this.bulletDamage = tower.getAttackDamage();
-        this.bulletRange = tower.getAttackRange();
     }
 
     public int getBulletDamage()
@@ -23,16 +21,6 @@ public class Bullet extends GameEntity {
     public void setBulletDamage(int bulletDamage)
     {
         this.bulletDamage = bulletDamage;
-    }
-
-    public int getBulletRange()
-    {
-        return bulletRange;
-    }
-
-    public void setBulletRange(int bulletRange)
-    {
-        this.bulletRange = bulletRange;
     }
 
     public final int getBulletSpeed()

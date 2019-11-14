@@ -1,5 +1,6 @@
 package game;
 
+import game.drawers.MenuGame;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -12,7 +12,7 @@ public class TankerEnemy extends Enemy
         setEnemyImage(new Image(this.getEnemySkin(), 64, 64, false, true));
         setEnemyView(new ImageView(this.getEnemyImage()));
         setHitPoints(1000);
-        setMoveSpeed(50);
+        setMoveSpeed(40);
         setReward(200);
         setLevel(10);
     }

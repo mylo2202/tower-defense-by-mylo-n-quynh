@@ -1,7 +1,8 @@
 package game.characters;
 
-import game.GameStage;
-import game.characters.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 
 public abstract class Tower
 {
@@ -14,6 +15,10 @@ public abstract class Tower
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
 
+    protected String towerSkin;
+    protected Image towerImage;
+    protected ImageView towerView;
+
     public Tower()
     {
         //super();
@@ -25,6 +30,8 @@ public abstract class Tower
 //        this.buildCost = buildCost;
 //        this.upgradeCost = upgradeCost;
 //        this.sellPrice = sellPrice;
+
+        this.towerLevel = 1;
     }
 
     public int getAttackDamage()
@@ -110,6 +117,30 @@ public abstract class Tower
     public void setAttackTarget(Enemy attackTarget)
     {
         this.attackTarget = attackTarget;
+    }
+
+    public String getTowerSkin() {
+        return towerSkin;
+    }
+
+    public void setTowerSkin(String towerSkin) {
+        this.towerSkin = towerSkin;
+    }
+
+    public Image getTowerImage() {
+        return towerImage;
+    }
+
+    public void setTowerImage(Image towerImage) {
+        this.towerImage = towerImage;
+    }
+
+    public ImageView getTowerView() {
+        return towerView;
+    }
+
+    public void setTowerView(ImageView towerView) {
+        this.towerView = towerView;
     }
 
     //attack method maybe goes here

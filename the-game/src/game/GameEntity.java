@@ -2,42 +2,41 @@ package game;
 
 import game.characters.*;
 
+import java.util.ArrayList;
+
 //should this class be abstract?
 
-public abstract class GameEntity
+public class GameEntity
 {
-    //methods for getting coordinates and sizes go here
-    private int posX;
-    private int posY;
+    //methods for getting coordinates and sizes go here, maybe? or not?
+
+    private ArrayList<Enemy> enemyList = new ArrayList<>();
+    private ArrayList<Tower> towerList = new ArrayList<>();
+    private ArrayList<Bullet> bulletList = new ArrayList<>();
 
     public GameEntity() {}
 
-    GameEntity(int posX, int posY)
-    {
-        this.posX = posX;
-        this.posY = posY;
+    public ArrayList<Enemy> getEnemyList() {
+        return enemyList;
     }
 
-    public final int getPosX()
-    {
-        return posX;
+    public void setEnemyList(ArrayList<Enemy> enemyList) {
+        this.enemyList = enemyList;
     }
 
-    public final void setPosX(int posX)
-    {
-        this.posX = posX;
+    public ArrayList<Tower> getTowerList() {
+        return towerList;
     }
 
-    public final int getPosY()
-    {
-        return posY;
+    public void setTowerList(ArrayList<Tower> towerList) {
+        this.towerList = towerList;
     }
 
-    public final void setPosY(int posY)
-    {
-        this.posY = posY;
+    public ArrayList<Bullet> getBulletList() {
+        return bulletList;
     }
 
-
-    //movement methods maybe go here
+    public void setBulletList(ArrayList<Bullet> bulletList) {
+        this.bulletList = bulletList;
+    }
 }

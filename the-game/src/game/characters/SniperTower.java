@@ -1,48 +1,21 @@
 package game.characters;
 
-import game.characters.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class SniperTower extends Tower{
-    public SniperTower(int posX, int posY)
+    public SniperTower()
     {
-        super();
-
-        setAttackDamage(80);
-        setAttackRange(200);
-        setAttackSpeed(25);
-        setTowerLevel(1);
-        setBuildCost(300);
+        setTowerSkin("src/Image/Tower/sniperTower");
+        setTowerImage(new Image(this.getTowerSkin(), 80, 80, false, true));
+        setTowerView(new ImageView(this.getTowerImage()));
+        setAttackDamage(200);
+        setAttackRange(360);
+        setAttackSpeed(5);
+        setBuildCost(250);
         setUpgradeCost(250);
-        setSellPrice(150);
+        setSellPrice(125);
     }
 
-    public void setTower(int towerLevel) {
-        switch (towerLevel) {
-            case 1: {
-                setAttackDamage(80);
-                setAttackRange(200);
-                setAttackSpeed(25);
-            }
-
-            case 2: {
-                setAttackDamage(80);
-                setAttackRange(300);
-                setAttackSpeed(25);
-            }
-
-            case 3: {
-                setAttackDamage(160);
-                setAttackRange(300);
-                setAttackSpeed(25);
-            }
-
-            case 4: {
-                setAttackDamage(160);
-                setAttackRange(300);
-                setAttackSpeed(50);
-            }
-        }
-    }
-
-    //add a method that causes attacks splashes at and slows enemies at level 4 here
+    //upgrade tower method goes here
 }
