@@ -43,15 +43,8 @@ public class GameStage {
     private Stage gameStage;
     private Stage menuStage;
     private Label Label;
-    private GameSubScene panelScene;
 
-    public void ShowSubScene(GameSubScene subScene){
-        if(panelScene!= null){
-            panelScene.moveSubScene();
-        }
-        subScene.moveSubScene();
-        panelScene=subScene;
-    }
+
 
     public GameStage(){
         initialiseStage();
@@ -85,14 +78,9 @@ public class GameStage {
     public void createNewGame(Stage menuStage){
         this.menuStage=menuStage;
         this.menuStage.hide();
-        createLabel();
+
         tileMap();
-
-        createEnemy();
         createButton();
-       // createGameLoop();
-
-
         gameStage.setTitle("Tower Defense");
         gameStage.show();
     }
@@ -116,35 +104,9 @@ public class GameStage {
 
     }
 
-    public void createLabel(){
 
-        Label label = new Label("My Label");
-        label.setLayoutX(768);
-        label.setLayoutY(0);
-        gamePane.getChildren().add(label);
-    }
-    public void createEnemy(){
-
-
-    }
-    public void enemyMove(){
-
-
-
-    }
-    private void createGameLoop(){
-         gameTimer =new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                enemyMove();
-            }
-        };
-        gameTimer.start();
-
-    }
     public void createButton(){
         buttonStart();
-      //  createTowr1();
 
     }
     public void buttonStart(){
@@ -153,24 +115,11 @@ public class GameStage {
         Start.setLayoutX(800);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
-            Enemy e =new Enemy("/Image/Enemy/towerDefense_tile246.png");
-            e.setLayoutX(0);
-            e.setLayoutY(64);;
-            e.enemyMove();
-            gamePane.getChildren().add(e.getEnemy());
+
         });
 
         gamePane.getChildren().add(Start);
 
     }
-    public void createTowr1(){
-        String url="-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/Tower/TowerDefense_tile203.png');";
-        MyButton Tower1 =new MyButton("  ",64,64, url);
-        Tower1.setOnAction(actionEvent -> {
 
-        });
-        Tower1.setLayoutX(768);
-        Tower1.setLayoutY(64);
-        gamePane.getChildren().add(Tower1);
-    }
 }

@@ -1,9 +1,20 @@
 package game.characters;
 
+import game.GameEntity;
 import game.GameStage;
 import game.characters.*;
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
+import javafx.scene.Scene;
+import javafx.scene.effect.Light;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
-public abstract class Tower
+
+public abstract class Tower extends GameEntity
 {
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
     private double attackSpeed;                     // Delayed time for each attack
@@ -14,9 +25,13 @@ public abstract class Tower
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
 
+    protected String towerSkin;
+    protected Image towerImage;
+    protected ImageView towerView;
+
     public Tower()
     {
-        super();
+        //super();
 
 //        this.attackDamage = attackDamage;
 //        this.attackSpeed = attackSpeed;
@@ -25,6 +40,8 @@ public abstract class Tower
 //        this.buildCost = buildCost;
 //        this.upgradeCost = upgradeCost;
 //        this.sellPrice = sellPrice;
+
+        this.towerLevel = 1;
     }
 
     public int getAttackDamage()
@@ -112,5 +129,59 @@ public abstract class Tower
         this.attackTarget = attackTarget;
     }
 
-    //attack method maybe goes here
+    public String getTowerSkin() {
+        return towerSkin;
+    }
+
+    public void setTowerSkin(String towerSkin) {
+        this.towerSkin = towerSkin;
+    }
+
+    public Image getTowerImage() {
+        return towerImage;
+    }
+
+    public void setTowerImage(Image towerImage) {
+        this.towerImage = towerImage;
+    }
+
+    public ImageView getTowerView() {
+        return towerView;
+    }
+
+    public void setTowerView(ImageView towerView) {
+        this.towerView = towerView;
+    }
+
+
+    public void setTowerView() {
+        this.towerView = new ImageView(new Image("/Image/Tower/3.png"));
+        this.towerView.setTranslateX(super.getView().getTranslateX());
+        this.towerView.setTranslateY(super.getView().getTranslateY()+10);
+    }
+
+    public void setGun(ImageView imageView){
+        super.setView(imageView) ;
+    }
+    public ImageView getGun(){
+        return super.getView();
+    }
+
+    public void rotateLeft(){
+        super.getView().setRotate(super.getView().getRotate()-30);
+        super.setVelocity( new Point2D(Math.cos(Math.toRadians(getRotate())),Math.sin(Math.toRadians(getRotate()))));
+
+    }
+    public void rotateRight(){
+        super.getView().setRotate(super.getView().getRotate()+30);
+        super.setVelocity( new Point2D(Math.cos(Math.toRadians(getRotate())),Math.sin(Math.toRadians(getRotate()))));
+
+    }
+    public void setRotate(){
+        towerView.setRotate(0);
+    }
+    public void update(Point2D p){
+        towerView.setRotate(Math.toDegrees(Math.atan(p.getY()/p.getX())));
+
+    }
 }

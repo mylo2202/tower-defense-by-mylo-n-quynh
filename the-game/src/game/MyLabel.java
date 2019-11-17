@@ -15,7 +15,7 @@ import javafx.scene.text.Font;
 
 public class MyLabel extends Label {
 
-    private static final String FONT_PATH="src/Image/UI/kenvector_future.ttf";
+    private static final String FONT_PATH="src/Image/UI/AutourOne-Regular.otf";
     private static final String BACKGROUND_IMAGE="/Image/UI/green_button13.png";
 
     public MyLabel(String text){

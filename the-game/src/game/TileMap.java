@@ -1,6 +1,5 @@
-package game.characters;
+package game;
 
-import game.GameStage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -43,7 +42,6 @@ public class TileMap {
                 mapGridView.setLayoutX(j*GRID_SIZE);
                 mapGridView.setLayoutY(i*GRID_SIZE);
                 gamePane.getChildren().addAll(mapGridView);
-
             }
         }
     }
@@ -71,6 +69,7 @@ public class TileMap {
     public int [][] getGrid(){
         return grid;
     }
+
     public int getSize(){
         return GRID_SIZE;
     }

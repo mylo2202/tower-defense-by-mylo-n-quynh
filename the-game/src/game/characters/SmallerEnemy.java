@@ -7,18 +7,13 @@ import java.io.IOException;
 
 public class SmallerEnemy extends Enemy
 {
-    private String smallerSkin= "/Image/Enemy/smallerEnemy.png";
-
-    public SmallerEnemy(String smallerSkin) throws IOException {
-        super(smallerSkin);
-
+    public SmallerEnemy() throws IOException {
+        setEnemySkin("/Image/Enemy/smallerEnemy.png");
+        setEnemyImage(new Image(this.getEnemySkin(), 64, 64, false, true));
+        setEnemyView(new ImageView(this.getEnemyImage()));
         setHitPoints(100);
         setMoveSpeed(200);
-        setReward(50);
-    }
-
-    public ImageView loadSmallerSkin(){
-        Image image = new Image("/Image/Enemy/smallerEnemy.png",64,64 ,false,true);
-        return new ImageView(image);
+        setReward(25);
+        setLevel(1);
     }
 }

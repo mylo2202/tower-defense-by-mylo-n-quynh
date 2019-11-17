@@ -4,7 +4,9 @@ import game.GameEntity;
 import game.GameStage;
 import game.GameStage.*;
 import javafx.animation.PathTransition;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.effect.Light;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -26,24 +28,33 @@ public abstract class Enemy extends GameEntity
     private int reward;                         // Gold reward for enemy's death
     private boolean isDead;                     // Triggering flag for enemy's death and removal
     private boolean reachedGoal;                // Check for enemy reaching the goal alive and removal if it does
+    private int level;                          // How difficult to kill the enemy is
 
-    private GameStage gameStage;
-    private String enemySkin;
-    private ImageView imageView;
+    //private GameStage gameStage;
+    protected String enemySkin;
+    protected Image enemyImage;
+    protected ImageView enemyView;
 
     private Road enemyRoad = new Road();
 
-    public ImageView getEnemyView(){
-        return  imageView;
+    public Image getEnemyImage() {
+        return enemyImage;
     }
 
-    public Enemy(String enemySkin) throws IOException //int hitPoints, int moveSpeed, int reward)
+    public void setEnemyImage(Image enemyImage) {
+        this.enemyImage = enemyImage;
+    }
+
+    public ImageView getEnemyView(){
+        return  enemyView;
+    }
+
+    public void setEnemyView(ImageView enemyView) {
+        this.enemyView = enemyView;
+    }
+
+    public Enemy() throws IOException //int hitPoints, int moveSpeed, int reward)
     {
-        Image t= new Image(enemySkin,64,64,false,true);
-        imageView =new ImageView(t);
-//        this.hitPoints = hitPoints;
-//        this.moveSpeed = moveSpeed;
-//        this.reward = reward;
         isDead = false;
         reachedGoal = false;
     }
@@ -88,7 +99,21 @@ public abstract class Enemy extends GameEntity
         return reachedGoal;
     }
 
-    //enemy move method goes here
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getEnemySkin() {
+        return enemySkin;
+    }
+
+    public void setEnemySkin(String enemySkin) {
+        this.enemySkin = enemySkin;
+    }
 
     public void takeDamage(int damage)      //reduces enemy's hit points and determines whether it is dead
     {
@@ -99,10 +124,9 @@ public abstract class Enemy extends GameEntity
             reachedGoal = false;
         }
     }
-//the following method is still crap and should be replaced by one that actually let enemies find their paths
+
     public void enemyMove(){
-        /*imageView.setLayoutX(0);
-        imageView.setLayoutY(0);*/
+
         Path path= new Path();
         //Moving to the starting point
         MoveTo moveTo = new MoveTo(enemyRoad.getSpawner().getX(), enemyRoad.getSpawner().getY());
@@ -121,10 +145,10 @@ public abstract class Enemy extends GameEntity
         PathTransition pathTransition = new PathTransition();
 
         //Setting the duration of the path transition
-        pathTransition.setDuration(Duration.seconds(10));
+        pathTransition.setDuration(Duration.seconds(15));
 
         //Setting the node for the transition
-        pathTransition.setNode(imageView);
+        pathTransition.setNode(enemyView);
 
         //Setting the path
         pathTransition.setPath(path);
@@ -135,5 +159,11 @@ public abstract class Enemy extends GameEntity
 
         //Playing the animation
         pathTransition.play();
+    }
+    public Point2D getPos(){
+        return new Point2D(enemyView.getTranslateX(),enemyView.getTranslateY());
+    }
+    public Point2D geVelocity(){
+        return new Point2D(getEnemyView().getTranslateX(),getEnemyView().getTranslateY());
     }
 }
