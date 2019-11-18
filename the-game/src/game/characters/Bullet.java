@@ -5,7 +5,7 @@ import game.characters.*;
 
 public class Bullet extends GameEntity {
     private int bulletDamage;
-    private final int bulletSpeed = 1280;
+    private final int bulletSpeed = 2048;
     private Enemy bulletTarget;
 
     public Bullet(Tower tower)

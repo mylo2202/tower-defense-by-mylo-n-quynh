@@ -9,10 +9,10 @@ public class NormalEnemy extends Enemy
 {
     public NormalEnemy() throws IOException {
         setEnemySkin("/Image/Enemy/normalEnemy.png");
-        setEnemyImage(new Image(this.getEnemySkin(), 64, 64, false, true));
+        setEnemyImage(new Image(this.getEnemySkin(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
         setEnemyView(new ImageView(this.getEnemyImage()));
         setHitPoints(200);
-        setMoveSpeed(80);
+        setMoveDuration(20);
         setReward(50);
         setLevel(2);
     }

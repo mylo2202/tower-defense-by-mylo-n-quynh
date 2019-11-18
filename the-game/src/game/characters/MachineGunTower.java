@@ -3,16 +3,17 @@ package game.characters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
 
 public class MachineGunTower extends Tower {
-    public MachineGunTower()
+    public MachineGunTower() throws IOException
     {
-        setTowerSkin("src/Image/Tower/machineGunTower");
-        setTowerImage(new Image(this.getTowerSkin(), 80, 80, false, true));
+        setTowerSkin("/Image/Tower/machineGunTower.png");
+        setTowerImage(new Image(this.getTowerSkin(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         setTowerView(new ImageView(this.getTowerImage()));
         setAttackDamage(25);
         setAttackRange(120);
-        setAttackSpeed(40);
+        setAttackCooldown(250);
         setBuildCost(50);
         setUpgradeCost(50);
         setSellPrice(25);

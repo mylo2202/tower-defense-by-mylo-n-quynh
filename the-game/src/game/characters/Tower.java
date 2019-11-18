@@ -3,11 +3,13 @@ package game.characters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
+
 
 public abstract class Tower
 {
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
-    private double attackSpeed;                     // Delayed time for each attack
+    private double attackCooldown;                     // Delayed time for each attack
     private int attackRange;                        // Maximum range the tower can attack
     private int towerLevel;                         // The higher level the tower is the more effective it is
     private int buildCost;                          // Cost for building
@@ -19,18 +21,11 @@ public abstract class Tower
     protected Image towerImage;
     protected ImageView towerView;
 
-    public Tower()
-    {
-        //super();
+    private Hill towerHill = new Hill();
 
-//        this.attackDamage = attackDamage;
-//        this.attackSpeed = attackSpeed;
-//        this.attackRange = attackRange;
-//        this.towerLevel = towerLevel;
-//        this.buildCost = buildCost;
-//        this.upgradeCost = upgradeCost;
-//        this.sellPrice = sellPrice;
+    //platform image properties and methods maybe go here
 
+    public Tower() throws IOException {
         this.towerLevel = 1;
     }
 
@@ -44,14 +39,14 @@ public abstract class Tower
         this.attackDamage = attackDamage;
     }
 
-    public double getAttackSpeed()
+    public double getAttackCooldown()
     {
-        return attackSpeed;
+        return attackCooldown;
     }
 
-    public void setAttackSpeed(double attackSpeed)
+    public void setAttackCooldown(double attackCooldown)
     {
-        this.attackSpeed = attackSpeed;
+        this.attackCooldown = attackCooldown;
     }
 
     public int getAttackRange()
@@ -141,6 +136,15 @@ public abstract class Tower
 
     public void setTowerView(ImageView towerView) {
         this.towerView = towerView;
+    }
+
+    public Hill getTowerHill() {
+        return towerHill;
+    }
+
+    public void drawTower(int mapX, int mapY) throws IOException {
+        Tower tower = null;
+        tower = new NormalTower();
     }
 
     //attack method maybe goes here

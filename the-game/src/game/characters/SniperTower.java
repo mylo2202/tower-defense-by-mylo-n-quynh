@@ -3,15 +3,17 @@ package game.characters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
+
 public class SniperTower extends Tower{
-    public SniperTower()
+    public SniperTower() throws IOException
     {
-        setTowerSkin("src/Image/Tower/sniperTower");
-        setTowerImage(new Image(this.getTowerSkin(), 80, 80, false, true));
+        setTowerSkin("/Image/Tower/sniperTower.png");
+        setTowerImage(new Image(this.getTowerSkin(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         setTowerView(new ImageView(this.getTowerImage()));
         setAttackDamage(200);
         setAttackRange(360);
-        setAttackSpeed(5);
+        setAttackCooldown(2000);
         setBuildCost(250);
         setUpgradeCost(250);
         setSellPrice(125);

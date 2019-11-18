@@ -31,13 +31,15 @@ public class TileMap {
                 this.grid[i][j] = scanner.nextInt();
         }
     }
+
     public void drawMap(AnchorPane gamePane)
     {
         for(int i = 0; i < grid.length; i++)
         {
             for(int j = 0; j < grid[i].length; j++)
             {
-                Image mapGrid = new Image("/Image/Map/map" + grid[i][j] + ".png", GRID_SIZE, GRID_SIZE,false,true);
+                Image mapGrid = new Image("/Image/Map/map" + grid[i][j] + ".png", GRID_SIZE, GRID_SIZE,
+                        false,true);
                 ImageView mapGridView =new ImageView(mapGrid);
                 mapGridView.setLayoutX(j*GRID_SIZE);
                 mapGridView.setLayoutY(i*GRID_SIZE);

@@ -22,7 +22,6 @@ public class GameStage {
     private Label Label;
 
     private MyLabel Money;
-    private int point;
     private ImageView [] lifes;
     private int life = 4;
     private TileMap map = new TileMap();
@@ -66,6 +65,7 @@ public class GameStage {
 
         createButton();
         //createGameLoop();
+        createTower();
         gameStage.setTitle("Tower Defense");
         gameStage.show();
     }
@@ -84,9 +84,12 @@ public class GameStage {
         gamePane.getChildren().add(panelView);
     }
 
-    /*private void createGameLoop(){
-
-    }*/
+    private void createTower() throws IOException {
+        NormalTower normalTower = new NormalTower();
+        normalTower.getTowerView().setLayoutX(240);
+        normalTower.getTowerView().setLayoutY(320);
+        gamePane.getChildren().add(normalTower.getTowerView());
+    }
 
     public void createButton(){
         buttonStart();
@@ -98,31 +101,49 @@ public class GameStage {
         Start.setLayoutX(map.getGrid()[0].length*map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize())/2 - 95);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
-            Enemy e = null;
-            try {
-                e = new NormalEnemy();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            assert e != null;
-            e.enemyMove();
-            gamePane.getChildren().add(e.getEnemyView());
-            Enemy finalE = e;
-            finalE.enemyMove();
-            gameTimer = new AnimationTimer() {
+            gameTimer = new AnimationTimer()
+            {
+                int difficulty = 10;
                 long timer = System.nanoTime();
-                @Override
-                public void handle(long now) {
-                    if(now - timer >= 1*1e9)
-                    {
-                        System.out.println((finalE.getEnemyView().getTranslateX() + 32) + " " +
-                                (finalE.getEnemyView().getTranslateY() + 32));
-                        timer = now;
+                    @Override
+                    public void handle(long now) {
+                        Enemy enemy;
+                        if(now - timer >= 0.25*1e9)
+                        {
+                            if(difficulty > 0)
+                            {
+                                try {
+                                    //gameEntity.generateEnemy(enemy, 10);
+                                    gameEntity.getEnemyList().add(enemy = new SmallerEnemy());
+                                    assert false;
+                                    enemy.enemyMove();
+                                    gamePane.getChildren().add(enemy.getEnemyView());
+                                    difficulty -= enemy.getLevel();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            if(!gameEntity.getEnemyList().isEmpty())
+                            {
+                                System.out.println(gameEntity.getEnemyList().get(0).getEnemyView().getTranslateX() + " " + gameEntity.getEnemyList().get(0).getEnemyView().getTranslateY());
+
+                                for(int i = 0; i < gameEntity.getEnemyList().size(); i++)
+                                {
+                                    if(gameEntity.checkRemoveEnemy(i))
+                                    {
+                                        gamePane.getChildren().remove(gameEntity.getEnemyList().get(i).getEnemyView());
+                                        gameEntity.removeEnemy(i);
+                                    }
+                                }
+                            }
+                            timer = now;
+                        }
                     }
-                }
             };
             gameTimer.start();
             play = true;
+
         });
 
         gamePane.getChildren().add(Start);
