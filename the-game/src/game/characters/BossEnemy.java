@@ -9,11 +9,11 @@ public class BossEnemy extends Enemy
 {
     public BossEnemy() throws IOException {
         setEnemySkin("/Image/Enemy/bossEnemy.png");
-        setEnemyImage(new Image(this.getEnemySkin(), 64, 64, false, true));
+        setEnemyImage(new Image(this.getEnemySkin(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
         setEnemyView(new ImageView(this.getEnemyImage()));
         setHitPoints(5000);
-        setMoveSpeed(25);
-        setReward(1000);
+        setMoveDuration(80);
+        setReward(500);
         setLevel(50);
     }
 }

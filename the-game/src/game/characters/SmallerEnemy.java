@@ -9,10 +9,10 @@ public class SmallerEnemy extends Enemy
 {
     public SmallerEnemy() throws IOException {
         setEnemySkin("/Image/Enemy/smallerEnemy.png");
-        setEnemyImage(new Image(this.getEnemySkin(), 64, 64, false, true));
+        setEnemyImage(new Image(this.getEnemySkin(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
         setEnemyView(new ImageView(this.getEnemyImage()));
         setHitPoints(100);
-        setMoveSpeed(200);
+        setMoveDuration(10);
         setReward(25);
         setLevel(1);
     }

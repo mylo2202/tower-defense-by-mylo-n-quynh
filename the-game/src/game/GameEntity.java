@@ -1,80 +1,110 @@
 package game;
 
 import game.characters.*;
-import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 
 //should this class be abstract?
 
-public  class GameEntity
+public class GameEntity
 {
-    //methods for getting coordinates and sizes go here
-    private Point2D coordinate;
-  /*  private int posX;
-    private int posY;*/
-    private ImageView view = new ImageView();
-    private boolean alive =true;
-    private Point2D velocity= new Point2D(0,0);
+    //methods for getting coordinates and sizes go here, maybe? or not?
+
+    protected ArrayList<Enemy> enemyList;
+    protected ArrayList<Tower> towerList;
+    protected ArrayList<Bullet> bulletList;
+
     public GameEntity() {
-
+        enemyList = new ArrayList<>();
+        towerList = new ArrayList<>();
+        bulletList = new ArrayList<>();
     }
 
-    GameEntity(double posX, double posY)
+    public ArrayList<Enemy> getEnemyList() {
+        return enemyList;
+    }
+
+    public void setEnemyList(ArrayList<Enemy> enemyList) {
+        this.enemyList = enemyList;
+    }
+
+    public ArrayList<Tower> getTowerList() {
+        return towerList;
+    }
+
+    public void setTowerList(ArrayList<Tower> towerList) {
+        this.towerList = towerList;
+    }
+
+    public ArrayList<Bullet> getBulletList() {
+        return bulletList;
+    }
+
+    public void setBulletList(ArrayList<Bullet> bulletList) {
+        this.bulletList = bulletList;
+    }
+
+    public void generateEnemy(Enemy enemy, int difficulty) throws IOException {
+        Random random = new Random();
+        int difficultyScore = difficulty;
+        while(difficultyScore > 0)
+        {
+            int x = random.ints(1, 101).limit(1).findFirst().getAsInt();
+            System.out.println(x);
+            if(x >= 1 && x <= 30)
+            {
+                getEnemyList().add(enemy = new SmallerEnemy());
+                difficultyScore -= getEnemyList().get(getEnemyList().size() - 1).getLevel();
+            }
+            else if(x >= 31 && x <= 70)
+            {
+                if(difficultyScore >= 2)
+                {
+                    getEnemyList().add(enemy = new NormalEnemy());
+                    difficultyScore -= getEnemyList().get(getEnemyList().size() - 1).getLevel();
+                }
+            }
+            else if(x >= 71 && x <= 90)
+            {
+                if(difficultyScore >= 10)
+                {
+                    getEnemyList().add(enemy = new TankerEnemy());
+                    difficultyScore -= getEnemyList().get(getEnemyList().size() - 1).getLevel();
+                }
+            }
+            else if(x >= 91 && x <= 100)
+            {
+                if(difficultyScore >= 50)
+                {
+                    getEnemyList().add(enemy = new BossEnemy());
+                    difficultyScore -= getEnemyList().get(getEnemyList().size() - 1).getLevel();
+                }
+            }
+        }
+    }
+
+    public boolean checkRemoveEnemy(int i)
     {
-        coordinate= new Point2D(posX,posY);
-    }
-    GameEntity(ImageView View){
-        this.view=View;
+        if(!getEnemyList().isEmpty())
+        {
+            //System.out.println("dead = " + getEnemyList().get(i).isDead() + " goal = " + getEnemyList().get(i)
+            // .hasReachedGoal());
+            return getEnemyList().get(i).isDead() || getEnemyList().get(i).hasReachedGoal();
+            //System.out.println(getEnemyList());
+        }
+        return false;
     }
 
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-    public  boolean isDead(){
-        return !alive;
-    }
-   /* public final void setPosX(int posX)
+    public void removeEnemy(int i)
     {
-        this.posX = posX;
+        if(!getEnemyList().isEmpty())
+        {
+            if(checkRemoveEnemy(i))
+            {
+                getEnemyList().remove(getEnemyList().get(i));
+            }
+        }
     }
-*/
-    public Point2D getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(Point2D velocity) {
-        this.velocity = velocity;
-    }
-
-    /*public final void setPosY(int posY)
-    {
-        this.posY = posY;
-    }*/
-    public double getRotate(){
-        return view.getRotate();
-    }
-
-
-    public void update(){
-        view.setTranslateX(view.getTranslateX()+velocity.getX());
-        view.setTranslateY(view.getTranslateY()+velocity.getY());
-        System.out.println(velocity.getX()+"      "+velocity.getY());
-    }
-    public ImageView getView(){
-        return view;
-    }
-    public void setView(ImageView imageView){
-        view =imageView;
-    }
-    public  boolean isColliding(GameEntity other){
-        return getView().getBoundsInParent().intersects(other.getView().getBoundsInParent());
-    }
-
-    //movement methods maybe go here
 }

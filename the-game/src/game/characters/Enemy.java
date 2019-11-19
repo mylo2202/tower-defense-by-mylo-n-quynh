@@ -1,33 +1,24 @@
 package game.characters;
 
 import game.GameEntity;
-import game.GameStage;
-import game.GameStage.*;
+import javafx.animation.AnimationTimer;
 import javafx.animation.PathTransition;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
-import javafx.scene.effect.Light;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
-import javafx.animation.PathTransition;
-import javafx.application.Application;
 
 import java.io.IOException;
 
 public abstract class Enemy extends GameEntity
 {
     private int hitPoints;                      // How Strong enemy is
-    private int moveSpeed;                      // How fast enemy moves
+    private int moveDuration;                      // How fast enemy moves
     private int reward;                         // Gold reward for enemy's death
     private boolean isDead;                     // Triggering flag for enemy's death and removal
-    private boolean reachedGoal;                // Check for enemy reaching the goal alive and removal if it does
+    //private boolean reachedGoal;                // Check for enemy reaching the goal alive and removal if it does
     private int level;                          // How difficult to kill the enemy is
 
     //private GameStage gameStage;
@@ -51,12 +42,20 @@ public abstract class Enemy extends GameEntity
 
     public void setEnemyView(ImageView enemyView) {
         this.enemyView = enemyView;
+        this.enemyView.setTranslateX(enemyRoad.getSpawner().getX() - enemyRoad.getGRID_SIZE()/2);
+        this.enemyView.setTranslateY(enemyRoad.getSpawner().getY() - enemyRoad.getGRID_SIZE()/2);
     }
 
-    public Enemy() throws IOException //int hitPoints, int moveSpeed, int reward)
-    {
+    public Enemy() throws IOException {
         isDead = false;
-        reachedGoal = false;
+
+        //reachedGoal = false;
+
+        //getEnemyList().add(this);
+
+        /*System.out.println("enemyList.size() = " + enemyList.size());
+        System.out.println("isDead = " + isDead);
+        System.out.println("reachedGoal = " + reachedGoal);*/
     }
 
     public int getHitPoints()
@@ -69,14 +68,14 @@ public abstract class Enemy extends GameEntity
         this.hitPoints = hitPoints;
     }
 
-    public int getMoveSpeed()
+    public int getMoveDuration()
     {
-        return moveSpeed;
+        return moveDuration;
     }
 
-    public void setMoveSpeed(int moveSpeed)
+    public void setMoveDuration(int moveDuration)
     {
-        this.moveSpeed = moveSpeed;
+        this.moveDuration = moveDuration;
     }
 
     public int getReward()
@@ -94,9 +93,8 @@ public abstract class Enemy extends GameEntity
         return isDead;
     }
 
-    public boolean reachedGoal()
-    {
-        return reachedGoal;
+    public void setDead(boolean dead) {
+        isDead = dead;
     }
 
     public int getLevel() {
@@ -115,13 +113,29 @@ public abstract class Enemy extends GameEntity
         this.enemySkin = enemySkin;
     }
 
+    public Road getEnemyRoad() {
+        return enemyRoad;
+    }
+
+    public boolean hasReachedGoal()
+    {
+        if(this.getEnemyView().getTranslateX() + this.getEnemyRoad().getGRID_SIZE()/2 == this.getEnemyRoad().getGoal().getX() &&
+                this.getEnemyView().getTranslateY() + this.getEnemyRoad().getGRID_SIZE()/2 == this.getEnemyRoad().getGoal().getY())
+        {
+            //setReachedGoal(true);
+            return true;
+        }
+        return false;
+    }
+
     public void takeDamage(int damage)      //reduces enemy's hit points and determines whether it is dead
     {
         hitPoints -= damage;
         if (hitPoints <= 0)
         {
-            isDead = true;
-            reachedGoal = false;
+            setDead(true);
+            /*System.out.println("isDead = "  + isDead);
+            System.out.println("reachedGoal = " + reachedGoal);*/
         }
     }
 
@@ -145,7 +159,7 @@ public abstract class Enemy extends GameEntity
         PathTransition pathTransition = new PathTransition();
 
         //Setting the duration of the path transition
-        pathTransition.setDuration(Duration.seconds(15));
+        pathTransition.setDuration(Duration.seconds(this.moveDuration));
 
         //Setting the node for the transition
         pathTransition.setNode(enemyView);
@@ -159,11 +173,7 @@ public abstract class Enemy extends GameEntity
 
         //Playing the animation
         pathTransition.play();
-    }
-    public Point2D getPos(){
-        return new Point2D(enemyView.getTranslateX(),enemyView.getTranslateY());
-    }
-    public Point2D geVelocity(){
-        return new Point2D(getEnemyView().getTranslateX(),getEnemyView().getTranslateY());
+
+
     }
 }

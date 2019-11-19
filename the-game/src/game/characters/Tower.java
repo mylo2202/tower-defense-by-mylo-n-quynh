@@ -1,23 +1,16 @@
 package game.characters;
 
-import game.GameEntity;
-import game.GameStage;
-import game.characters.*;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.Cursor;
-import javafx.scene.ImageCursor;
-import javafx.scene.Scene;
-import javafx.scene.effect.Light;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+
+import java.io.IOException;
 
 
-public abstract class Tower extends GameEntity
+public abstract class Tower
 {
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
-    private double attackSpeed;                     // Delayed time for each attack
+    private double attackCooldown;                     // Delayed time for each attack
     private int attackRange;                        // Maximum range the tower can attack
     private int towerLevel;                         // The higher level the tower is the more effective it is
     private int buildCost;                          // Cost for building
@@ -25,23 +18,20 @@ public abstract class Tower extends GameEntity
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
 
-    protected String towerSkin;
+    protected String towerUrl;
     protected Image towerImage;
     protected ImageView towerView;
+    private  ImageView platform;
+    private Point2D pos;
 
-    public Tower()
-    {
-        //super();
+    private Hill towerHill = new Hill();
 
-//        this.attackDamage = attackDamage;
-//        this.attackSpeed = attackSpeed;
-//        this.attackRange = attackRange;
-//        this.towerLevel = towerLevel;
-//        this.buildCost = buildCost;
-//        this.upgradeCost = upgradeCost;
-//        this.sellPrice = sellPrice;
+    //platform image properties and methods maybe go here
 
+    public Tower() throws IOException {
         this.towerLevel = 1;
+        platform= new ImageView( new Image("/Image/Tower/platform.png",getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
+        pos = new Point2D(getPlatform().getTranslateX(),getPlatform().getTranslateY());
     }
 
     public int getAttackDamage()
@@ -54,14 +44,14 @@ public abstract class Tower extends GameEntity
         this.attackDamage = attackDamage;
     }
 
-    public double getAttackSpeed()
+    public double getAttackCooldown()
     {
-        return attackSpeed;
+        return attackCooldown;
     }
 
-    public void setAttackSpeed(double attackSpeed)
+    public void setAttackCooldown(double attackCooldown)
     {
-        this.attackSpeed = attackSpeed;
+        this.attackCooldown = attackCooldown;
     }
 
     public int getAttackRange()
@@ -129,12 +119,12 @@ public abstract class Tower extends GameEntity
         this.attackTarget = attackTarget;
     }
 
-    public String getTowerSkin() {
-        return towerSkin;
+    public String getTowerUrl() {
+        return towerUrl;
     }
 
-    public void setTowerSkin(String towerSkin) {
-        this.towerSkin = towerSkin;
+    public void setTowerUrl(String towerUrl) {
+        this.towerUrl = towerUrl;
     }
 
     public Image getTowerImage() {
@@ -153,35 +143,20 @@ public abstract class Tower extends GameEntity
         this.towerView = towerView;
     }
 
-
-    public void setTowerView() {
-        this.towerView = new ImageView(new Image("/Image/Tower/3.png"));
-        this.towerView.setTranslateX(super.getView().getTranslateX());
-        this.towerView.setTranslateY(super.getView().getTranslateY()+10);
+    public Hill getTowerHill() {
+        return towerHill;
     }
 
-    public void setGun(ImageView imageView){
-        super.setView(imageView) ;
-    }
-    public ImageView getGun(){
-        return super.getView();
+    public ImageView getPlatform() {
+        return platform;
     }
 
-    public void rotateLeft(){
-        super.getView().setRotate(super.getView().getRotate()-30);
-        super.setVelocity( new Point2D(Math.cos(Math.toRadians(getRotate())),Math.sin(Math.toRadians(getRotate()))));
+    public Point2D getPos() {
+        return pos;
+    }
 
+    public void setPos(Point2D pos) {
+        this.pos = pos;
     }
-    public void rotateRight(){
-        super.getView().setRotate(super.getView().getRotate()+30);
-        super.setVelocity( new Point2D(Math.cos(Math.toRadians(getRotate())),Math.sin(Math.toRadians(getRotate()))));
-
-    }
-    public void setRotate(){
-        towerView.setRotate(0);
-    }
-    public void update(Point2D p){
-        towerView.setRotate(Math.toDegrees(Math.atan(p.getY()/p.getX())));
-
-    }
+//attack method maybe goes here
 }
