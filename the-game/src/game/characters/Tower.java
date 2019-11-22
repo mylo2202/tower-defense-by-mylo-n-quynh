@@ -1,5 +1,6 @@
 package game.characters;
 
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -17,9 +18,11 @@ public abstract class Tower
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
 
-    protected String towerSkin;
+    protected String towerUrl;
     protected Image towerImage;
     protected ImageView towerView;
+    private  ImageView platform;
+    private Point2D pos;
 
     private Hill towerHill = new Hill();
 
@@ -27,6 +30,8 @@ public abstract class Tower
 
     public Tower() throws IOException {
         this.towerLevel = 1;
+        platform= new ImageView( new Image("/Image/Tower/platform.png",getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
+        pos = new Point2D(getPlatform().getTranslateX(),getPlatform().getTranslateY());
     }
 
     public int getAttackDamage()
@@ -114,12 +119,12 @@ public abstract class Tower
         this.attackTarget = attackTarget;
     }
 
-    public String getTowerSkin() {
-        return towerSkin;
+    public String getTowerUrl() {
+        return towerUrl;
     }
 
-    public void setTowerSkin(String towerSkin) {
-        this.towerSkin = towerSkin;
+    public void setTowerUrl(String towerUrl) {
+        this.towerUrl = towerUrl;
     }
 
     public Image getTowerImage() {
@@ -142,10 +147,16 @@ public abstract class Tower
         return towerHill;
     }
 
-    public void drawTower(int mapX, int mapY) throws IOException {
-        Tower tower = null;
-        tower = new NormalTower();
+    public ImageView getPlatform() {
+        return platform;
     }
 
-    //attack method maybe goes here
+    public Point2D getPos() {
+        return pos;
+    }
+
+    public void setPos(Point2D pos) {
+        this.pos = pos;
+    }
+//attack method maybe goes here
 }

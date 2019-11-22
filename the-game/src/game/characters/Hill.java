@@ -13,15 +13,11 @@ public class Hill extends TileMap {
         mapHill();
     }
 
-    public void mapHill()
-    {
-        for(int i = 0; i < getMAP_HEIGHT(); i++)
-        {
-            for(int j = 0; j < getMAP_WIDTH(); j++)
-            {
-                if(getGrid()[i][j] == 0)
-                {
-                    hill.add(new Point2D((j + 0.5)*GRID_SIZE, (i + 0.5)*GRID_SIZE));
+    public void mapHill() {
+        for (int i = 0; i < getMAP_HEIGHT(); i++) {
+            for (int j = 0; j < getMAP_WIDTH(); j++) {
+                if (getGrid()[i][j] == 0) {
+                    hill.add(new Point2D((j + 0.5) * GRID_SIZE, (i + 0.5) * GRID_SIZE));
                 }
             }
         }

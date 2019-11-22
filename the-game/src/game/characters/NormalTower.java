@@ -8,8 +8,8 @@ import java.io.IOException;
 public class NormalTower extends Tower {
     public NormalTower() throws IOException
     {
-        setTowerSkin("/Image/Tower/normalTower.png");
-        setTowerImage(new Image(this.getTowerSkin(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
+        setTowerUrl("/Image/Tower/normalTower.png");
+        setTowerImage(new Image(this.getTowerUrl(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         setTowerView(new ImageView(getTowerImage()));
         setAttackDamage(50);
         setAttackRange(200);

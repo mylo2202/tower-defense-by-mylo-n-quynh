@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class TileMap {
-    private int[][] grid;
     protected final int GRID_SIZE = 80;
     protected final int SCREEN_HEIGHT = 720;
     protected final int SCREEN_WIDTH = 1280;
     protected final int MAP_HEIGHT = 9;
     protected final int MAP_WIDTH = 12;
+    private int[][] grid;
 
 
     public TileMap() throws IOException {
@@ -25,24 +25,20 @@ public class TileMap {
     public void mapGrid() throws IOException {
         Scanner scanner = new Scanner(new File("src/game/mapGrid.txt"));
 
-        for(int i = 0; i < MAP_HEIGHT; ++i)
-        {
-            for(int j = 0; j < MAP_WIDTH; ++j)
+        for (int i = 0; i < MAP_HEIGHT; ++i) {
+            for (int j = 0; j < MAP_WIDTH; ++j)
                 this.grid[i][j] = scanner.nextInt();
         }
     }
 
-    public void drawMap(AnchorPane gamePane)
-    {
-        for(int i = 0; i < grid.length; i++)
-        {
-            for(int j = 0; j < grid[i].length; j++)
-            {
+    public void drawMap(AnchorPane gamePane) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
                 Image mapGrid = new Image("/Image/Map/map" + grid[i][j] + ".png", GRID_SIZE, GRID_SIZE,
-                        false,true);
-                ImageView mapGridView =new ImageView(mapGrid);
-                mapGridView.setLayoutX(j*GRID_SIZE);
-                mapGridView.setLayoutY(i*GRID_SIZE);
+                        false, true);
+                ImageView mapGridView = new ImageView(mapGrid);
+                mapGridView.setLayoutX(j * GRID_SIZE);
+                mapGridView.setLayoutY(i * GRID_SIZE);
                 gamePane.getChildren().addAll(mapGridView);
             }
         }
@@ -68,11 +64,11 @@ public class TileMap {
         return MAP_WIDTH;
     }
 
-    public int [][] getGrid(){
+    public int[][] getGrid() {
         return grid;
     }
 
-    public int getSize(){
+    public int getSize() {
         return GRID_SIZE;
     }
 }

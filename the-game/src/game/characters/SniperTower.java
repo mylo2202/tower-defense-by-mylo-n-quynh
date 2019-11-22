@@ -8,8 +8,8 @@ import java.io.IOException;
 public class SniperTower extends Tower{
     public SniperTower() throws IOException
     {
-        setTowerSkin("/Image/Tower/sniperTower.png");
-        setTowerImage(new Image(this.getTowerSkin(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
+        setTowerUrl("/Image/Tower/sniperTower.png");
+        setTowerImage(new Image(this.getTowerUrl(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         setTowerView(new ImageView(this.getTowerImage()));
         setAttackDamage(200);
         setAttackRange(360);
