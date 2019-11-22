@@ -8,7 +8,7 @@ import java.util.Random;
 
 //should this class be abstract?
 
-public class GameEntity
+public class GameField
 {
     //methods for getting coordinates and sizes go here, maybe? or not?
 
@@ -16,7 +16,7 @@ public class GameEntity
     protected ArrayList<Tower> towerList;
     protected ArrayList<Bullet> bulletList;
 
-    public GameEntity() {
+    public GameField() {
         enemyList = new ArrayList<>();
         towerList = new ArrayList<>();
         bulletList = new ArrayList<>();

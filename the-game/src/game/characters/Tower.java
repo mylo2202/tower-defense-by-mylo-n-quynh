@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 import java.io.IOException;
 
 
-public abstract class Tower
+public abstract class Tower implements GameEntity
 {
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
     private double attackCooldown;                     // Delayed time for each attack
@@ -17,10 +17,12 @@ public abstract class Tower
     private int upgradeCost;                        // Cost for upgrading
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
+    private final int RADIUS = 320;
+    //   protected List<Bullet> bullets= new ArrayList<>();
 
-    protected String towerUrl;
+    protected String imageUrl;
     protected Image towerImage;
-    protected ImageView towerView;
+    protected ImageView View;
     private  ImageView platform;
     private Point2D pos;
 
@@ -32,6 +34,10 @@ public abstract class Tower
         this.towerLevel = 1;
         platform= new ImageView( new Image("/Image/Tower/platform.png",getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         pos = new Point2D(getPlatform().getTranslateX(),getPlatform().getTranslateY());
+       /* bullets.forEach(bullet -> {
+            bullet.getView().setTranslateX(getPlatform().getTranslateX()+40);
+            bullet.getView().setTranslateY(getPlatform().getTranslateY()+40);
+        });*/
     }
 
     public int getAttackDamage()
@@ -119,12 +125,12 @@ public abstract class Tower
         this.attackTarget = attackTarget;
     }
 
-    public String getTowerUrl() {
-        return towerUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setTowerUrl(String towerUrl) {
-        this.towerUrl = towerUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Image getTowerImage() {
@@ -135,12 +141,12 @@ public abstract class Tower
         this.towerImage = towerImage;
     }
 
-    public ImageView getTowerView() {
-        return towerView;
+    public ImageView getView() {
+        return View;
     }
 
-    public void setTowerView(ImageView towerView) {
-        this.towerView = towerView;
+    public void setView(ImageView view) {
+        this.View = view;
     }
 
     public Hill getTowerHill() {
@@ -159,4 +165,31 @@ public abstract class Tower
         this.pos = pos;
     }
 //attack method maybe goes here
+public void update(Enemy enemy) {
+    double posEX = enemy.getView().getTranslateX();
+    double posEY = enemy.getView().getTranslateY();
+
+
+    double distance = enemy.distance(this);
+    if (posEY < getPos().getY() && distance <= RADIUS) {
+
+        getView().setRotate(-Math.toDegrees(Math.atan((posEX - getPos().getX())
+                / (posEY - getPos().getY()))));
+    }
+
+    if (posEY > getPos().getY() && distance <= RADIUS)
+        getView().setRotate(180 - Math.toDegrees(Math.atan((posEX - getPos().getX())
+                / (posEY - getPos().getY()))));
+    if (distance > RADIUS) {
+        getView().setRotate(0);
+    }
+            /*bullets.forEach(bullet -> {
+                bullet.setDirection(new Point2D(posEX -getPos().getX(),posEY - getPos().getY()));
+                bullet.update();
+            });*/
 }
+
+
+}
+
+

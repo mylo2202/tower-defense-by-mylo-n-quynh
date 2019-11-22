@@ -1,9 +1,11 @@
 package game.drawers;
 
 import game.Controller;
+import game.GameField;
+import game.characters.Bullet;
 import game.characters.Enemy;
 import game.characters.MachineGunTower;
-import game.characters.NormalEnemy;
+import game.characters.SmallerEnemy;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameStage {
-    ImageView machine = new ImageView(new Image("/Image/Tower/machineGunTower.png", 80, 80, false, true));
+
     private AnimationTimer gameTimer;
     private AnchorPane gamePane;
     private Scene gameScene;
@@ -31,8 +33,12 @@ public class GameStage {
     private TileMap map = new TileMap();
     private Controller controller;
     private List<MachineGunTower> machineGunTowers = new ArrayList<>();
+    private List<Bullet> bullets = new ArrayList<>();
     private double eventPosX, eventPosY;
     private double translateX, translateY;
+
+
+    private GameField gameField = new GameField();
 
     public GameStage() throws IOException {
         initialiseStage();
@@ -66,8 +72,8 @@ public class GameStage {
         createPanelControl();
         map.drawMap(gamePane);
         createButton();
-        creatTower();
-
+        //creatTower();
+        Tower();
         gameStage.setTitle("Tower Defense");
         gameStage.show();
     }
@@ -95,47 +101,74 @@ public class GameStage {
         Start.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
-            Enemy e = null;
-            try {
-                e = new NormalEnemy();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            assert e != null;
-            e.enemyMove();
-            gamePane.getChildren().add(e.getEnemyView());
-            Enemy finalE = e;
-            finalE.enemyMove();
+
             machineGunTowers.forEach(machineGunTower -> {
-                machineGunTower.setPos(new Point2D(machineGunTower.getTowerView().getTranslateX(), machineGunTower.getTowerView().getTranslateY()));
+                machineGunTower.setPos(new Point2D(machineGunTower.getView().getTranslateX(),
+                        machineGunTower.getView().getTranslateY()));
             });
 
+            //bullet.setDirection(new Point2D( -1,-1));
             gameTimer = new AnimationTimer() {
+                int difficulty = 10;
                 long timer = System.nanoTime();
-
+                long timer1 = System.nanoTime();
                 @Override
                 public void handle(long now) {
 
-                        /*System.out.println((finalE.getEnemyView().getTranslateX() + 32) + " " +
-                                (finalE.getEnemyView().getTranslateY() + 32));*/
-//System.out.println(x+"  "+y);
+                    Enemy enemy;
 
-                    double posEX = finalE.getEnemyView().getTranslateX();
-                    double posEY = finalE.getEnemyView().getTranslateY();
-                    //  System.out.println(-Math.toDegrees(Math.atan(x - xx / y - yy)));
+                    if (now - timer >= 0.25 * 1e9) {
+
+                        if (difficulty > 0) {
+                            try {
+                                //gameEntity.generateEnemy(enemy, 10);
+                                gameField.getEnemyList().add(enemy = new SmallerEnemy());
+                                assert false;
+                                enemy.enemyMove();
+
+                                gamePane.getChildren().add(enemy.getView());
+                                difficulty -= enemy.getLevel();
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (!gameField.getEnemyList().isEmpty()) {
+                            System.out.println(gameField.getEnemyList().get(0).getView().getTranslateX() + " " + gameField.getEnemyList().get(0).getView().getTranslateY());
+
+                            for (int i = 0; i < gameField.getEnemyList().size(); i++) {
+                                if (gameField.checkRemoveEnemy(i)) {
+                                    gamePane.getChildren().remove(gameField.getEnemyList().get(i).getView());
+                                    gameField.removeEnemy(i);
+                                }
+                            }
+                        }
+
+                        timer = now;
+                    }
+
+
                     machineGunTowers.forEach(machineGunTower -> {
-                        if (posEY < machineGunTower.getPos().getY()) {
+                        /*int index=0;
+                        for(int i = 0; i< gameField.getEnemyList().size(); i++){
+                            double distance = gameField.getEnemyList().get(i).distance(machineGunTower);
+                            if(distance <= 240) index=i;
 
-                            machineGunTower.getTowerView().setRotate(-Math.toDegrees(Math.atan((posEX - machineGunTower.getPos().getX()) / (posEY - machineGunTower.getPos().getY()))));
-                        } else
-                            machineGunTower.getTowerView().setRotate(180 - Math.toDegrees(Math.atan((posEX - machineGunTower.getPos().getX()) / (posEY - machineGunTower.getPos().getY()))));
+                        }*/
+                        machineGunTower.update(gameField.getEnemyList().get(0));
                     });
 
-                    timer = now;
-
+                    //   gameField.getBulletList().forEach(Bullet::update);
+                   /* gameField.getBulletList().forEach(bullet1 -> {
+                        bullet1.setDirection(new Point2D( 1,1));
+                        //new Point2D(posEX -machineGunTowers.get(0).getPos().getX(),posEY -machineGunTowers.get(0). getPos().getY())
+                        bullet1.update();
+                    });*/
                 }
             };
             gameTimer.start();
+
 
         });
 
@@ -157,7 +190,7 @@ public class GameStage {
     }
 
     public void removeLife() {
-        gamePane.getChildren().remove(lifes[life]);
+        gamePane.getChildren().remove(lifes[life - 1]);
         life--;
         if (life == 0) {
             gameTimer.stop();
@@ -165,10 +198,11 @@ public class GameStage {
     }
 
     public void creatTower() {
-
+        ImageView machine = new ImageView(new Image("/Image/Tower/machineGunTower.png", 80, 80, false, true));
         machine.setLayoutX(1015);
         machine.setLayoutY(200);
-        gamePane.getChildren().add(machine);
+
+        gamePane.getChildren().addAll(machine);
         machine.setOnMousePressed(mouseEvent -> {
             MachineGunTower machineGunTower = null;
             try {
@@ -176,11 +210,10 @@ public class GameStage {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            /*machineGunTower.getView().setTranslateX(1015);
-            machineGunTower.getView().setTranslateY(200);*/
             machineGunTowers.add(machineGunTower);
-            gamePane.getChildren().addAll(machineGunTower.getTowerView());
-            buildTower();
+
+            gamePane.getChildren().addAll(machineGunTower.getView());
+            // buildTower();
         });
 
 
@@ -231,11 +264,28 @@ public class GameStage {
                 translateX = event.getSceneX();
                 translateY = event.getSceneY();
 
+
             }
         };
-        machineGunTowers.get(machineGunTowers.size() - 1).getTowerView().setOnMousePressed(PressedEventHandler);
-        machineGunTowers.get(machineGunTowers.size() - 1).getTowerView().setOnMouseDragged(DraggedEventHandler);
-        machineGunTowers.get(machineGunTowers.size() - 1).getTowerView().setOnMouseReleased(ExitEventHandler);
+        machineGunTowers.get(machineGunTowers.size() - 1).getView().setOnMousePressed(PressedEventHandler);
+        machineGunTowers.get(machineGunTowers.size() - 1).getView().setOnMouseDragged(DraggedEventHandler);
+        machineGunTowers.get(machineGunTowers.size() - 1).getView().setOnMouseReleased(ExitEventHandler);
 
     }
+
+    public void Tower() {
+
+        MachineGunTower machineGunTower = null;
+        try {
+            machineGunTower = new MachineGunTower();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        machineGunTowers.add(machineGunTower);
+        machineGunTower.getView().setTranslateY(160d);
+        machineGunTower.getView().setTranslateX(320);
+        gamePane.getChildren().addAll(machineGunTower.getView());
+    }
+
+
 }

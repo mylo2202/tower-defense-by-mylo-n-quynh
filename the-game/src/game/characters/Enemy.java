@@ -1,7 +1,5 @@
 package game.characters;
 
-import game.GameEntity;
-import javafx.animation.AnimationTimer;
 import javafx.animation.PathTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,7 +10,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 
-public abstract class Enemy extends GameEntity
+public abstract class Enemy implements GameEntity
 {
     private int hitPoints;                      // How Strong enemy is
     private int moveDuration;                      // How fast enemy moves
@@ -22,9 +20,9 @@ public abstract class Enemy extends GameEntity
     private int level;                          // How difficult to kill the enemy is
 
     //private GameStage gameStage;
-    protected String enemySkin;
+    protected String imageUrl;
     protected Image enemyImage;
-    protected ImageView enemyView;
+    protected ImageView View;
 
     private Road enemyRoad = new Road();
 
@@ -36,14 +34,14 @@ public abstract class Enemy extends GameEntity
         this.enemyImage = enemyImage;
     }
 
-    public ImageView getEnemyView(){
-        return  enemyView;
+    public ImageView getView() {
+        return View;
     }
 
-    public void setEnemyView(ImageView enemyView) {
-        this.enemyView = enemyView;
-        this.enemyView.setTranslateX(enemyRoad.getSpawner().getX() - enemyRoad.getGRID_SIZE()/2);
-        this.enemyView.setTranslateY(enemyRoad.getSpawner().getY() - enemyRoad.getGRID_SIZE()/2);
+    public void setView(ImageView view) {
+        this.View = view;
+        this.View.setTranslateX(enemyRoad.getSpawner().getX() - enemyRoad.getGRID_SIZE() / 2);
+        this.View.setTranslateY(enemyRoad.getSpawner().getY() - enemyRoad.getGRID_SIZE() / 2);
     }
 
     public Enemy() throws IOException {
@@ -105,12 +103,12 @@ public abstract class Enemy extends GameEntity
         this.level = level;
     }
 
-    public String getEnemySkin() {
-        return enemySkin;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setEnemySkin(String enemySkin) {
-        this.enemySkin = enemySkin;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Road getEnemyRoad() {
@@ -119,13 +117,9 @@ public abstract class Enemy extends GameEntity
 
     public boolean hasReachedGoal()
     {
-        if(this.getEnemyView().getTranslateX() + this.getEnemyRoad().getGRID_SIZE()/2 == this.getEnemyRoad().getGoal().getX() &&
-                this.getEnemyView().getTranslateY() + this.getEnemyRoad().getGRID_SIZE()/2 == this.getEnemyRoad().getGoal().getY())
-        {
-            //setReachedGoal(true);
-            return true;
-        }
-        return false;
+        //setReachedGoal(true);
+        return this.getView().getTranslateX() + this.getEnemyRoad().getGRID_SIZE() / 2 == this.getEnemyRoad().getGoal().getX() &&
+                this.getView().getTranslateY() + this.getEnemyRoad().getGRID_SIZE() / 2 == this.getEnemyRoad().getGoal().getY();
     }
 
     public void takeDamage(int damage)      //reduces enemy's hit points and determines whether it is dead
@@ -146,10 +140,11 @@ public abstract class Enemy extends GameEntity
         MoveTo moveTo = new MoveTo(enemyRoad.getSpawner().getX(), enemyRoad.getSpawner().getY());
         path.getElements().add(moveTo);
 
-        for(int i = 0; i < enemyRoad.getRoad().size(); i++)
-        {
+        for(int i = 0; i < enemyRoad.getRoad().size(); i++) {
             LineTo line = new LineTo(enemyRoad.getRoad().get(i).getX(), enemyRoad.getRoad().get(i).getY());
-            path.getElements().add(line);
+
+
+            path.getElements().addAll(line);
         }
 
         LineTo endLine = new LineTo(enemyRoad.getGoal().getX(), enemyRoad.getGoal().getY());
@@ -162,7 +157,7 @@ public abstract class Enemy extends GameEntity
         pathTransition.setDuration(Duration.seconds(this.moveDuration));
 
         //Setting the node for the transition
-        pathTransition.setNode(enemyView);
+        pathTransition.setNode(View);
 
         //Setting the path
         pathTransition.setPath(path);
@@ -175,5 +170,14 @@ public abstract class Enemy extends GameEntity
         pathTransition.play();
 
 
+    }
+
+    public double distance(Tower tower) {
+        double posEX = getView().getTranslateX();
+        double posEY = getView().getTranslateY();
+
+        double distance = Math.sqrt(Math.pow(posEX - tower.getPos().getX(), 2) +
+                Math.pow(posEY - tower.getPos().getY(), 2));
+        return distance;
     }
 }
