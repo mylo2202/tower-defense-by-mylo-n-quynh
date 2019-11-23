@@ -1,5 +1,4 @@
 package game.characters;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -24,6 +23,4 @@ public class MachineGunTower extends Tower {
    /* public void addBullet(Bullet bullet){
         bullets.add(bullet);
     }*/
-
-    //upgrade tower method goes here
 }

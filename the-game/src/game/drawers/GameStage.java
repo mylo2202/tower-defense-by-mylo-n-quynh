@@ -9,6 +9,8 @@ import game.characters.SmallerEnemy;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +30,14 @@ public class GameStage {
     private Stage gameStage;
     private Stage menuStage;
     private MyLabel Money;
+    EventHandler<MouseEvent> MouseReleased = new EventHandler<MouseEvent>() {
+
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            gameScene.setCursor(Cursor.DEFAULT);
+        }
+
+    };
     private ImageView[] lifes;
     private int life = 4;
     private TileMap map = new TileMap();
@@ -36,6 +46,7 @@ public class GameStage {
     private List<Bullet> bullets = new ArrayList<>();
     private double eventPosX, eventPosY;
     private double translateX, translateY;
+    Image hammer = new Image("/Image/Tower/Hammer.png");
 
 
     private GameField gameField = new GameField();
@@ -63,20 +74,7 @@ public class GameStage {
         gameStage.setScene(gameScene);
     }
 
-    public void createNewGame(Stage menuStage) throws IOException {
-        this.menuStage = menuStage;
-        this.menuStage.hide();
-
-        map = new TileMap();
-        drawPanel();
-        createPanelControl();
-        map.drawMap(gamePane);
-        createButton();
-        //creatTower();
-        Tower();
-        gameStage.setTitle("Tower Defense");
-        gameStage.show();
-    }
+    private int money = 50;
 
     public Stage getStage() {
         return gameStage;
@@ -91,8 +89,35 @@ public class GameStage {
         gamePane.getChildren().add(panelView);
     }
 
+    private boolean build = false;
+
+    public void createNewGame(Stage menuStage) throws IOException {
+        this.menuStage = menuStage;
+        this.menuStage.hide();
+
+        map = new TileMap();
+        drawPanel();
+        createPanelControl();
+        map.drawMap(gamePane);
+        createButton();
+
+        gameStage.setTitle("Tower Defense");
+        gameStage.show();
+    }
+
     public void createButton() {
         buttonStart();
+        machineTowerButton();
+        normalTowerButton();
+        sniperTowerButton();
+    }
+
+    public void removeLife() {
+        gamePane.getChildren().remove(lifes[life - 1]);
+        life--;
+        if (life == 0) {
+            gameTimer.stop();
+        }
     }
 
     public void buttonStart() {
@@ -145,6 +170,7 @@ public class GameStage {
                             }
                         }
 
+
                         timer = now;
                     }
 
@@ -167,6 +193,7 @@ public class GameStage {
                     });*/
                 }
             };
+
             gameTimer.start();
 
 
@@ -183,109 +210,116 @@ public class GameStage {
             lifes[i].setLayoutY(128);
             gamePane.getChildren().add(lifes[i]);
         }
-        Money = new MyLabel("MONEY : 0050");
+        Money = new MyLabel("MONEY : " + money);
         Money.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
         Money.setLayoutY(64);
         gamePane.getChildren().add(Money);
     }
 
-    public void removeLife() {
-        gamePane.getChildren().remove(lifes[life - 1]);
-        life--;
-        if (life == 0) {
-            gameTimer.stop();
-        }
+    public EventHandler buildMachineTower() throws IOException {
+        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+            MachineGunTower machineGunTower = new MachineGunTower();
+
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (build == true && money >= machineGunTower.getBuildCost()) {
+                    eventPosX = mouseEvent.getSceneX();
+                    eventPosY = mouseEvent.getSceneY();
+
+                    int i = (int) eventPosY / map.getGRID_SIZE();
+                    int j = (int) eventPosX / map.getGRID_SIZE();
+
+                    if (i < 12 && j < 12 && map.getGrid()[i][j] == 0) {
+                        machineGunTowers.add(machineGunTower);
+                        machineGunTower.getView().setTranslateX(j * map.getGRID_SIZE());
+                        machineGunTower.getView().setTranslateY(i * map.getGRID_SIZE());
+                        gamePane.getChildren().add(machineGunTower.getView());
+                        money = money - machineGunTower.getBuildCost();
+                        String setTextMoney = "MONEY : ";
+                        if (money < 10) setTextMoney = setTextMoney + "0";
+                        Money.setText(setTextMoney + money);
+                    }
+                }
+                build = false;
+            }
+
+        };
+        return eventHandler;
     }
 
-    public void creatTower() {
-        ImageView machine = new ImageView(new Image("/Image/Tower/machineGunTower.png", 80, 80, false, true));
+    public EventHandler buildSniperTower() {
+        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            }
+        };
+        return eventHandler;
+    }
+
+    public EventHandler buildNormalTower() {
+        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+            }
+        };
+        return eventHandler;
+    }
+
+    public void machineTowerButton() {
+
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/machineGunTowerButton.png');";
+        MyButton machine = new MyButton("", 64, 64, url);
         machine.setLayoutX(1015);
         machine.setLayoutY(200);
+        gamePane.getChildren().add(machine);
 
-        gamePane.getChildren().addAll(machine);
-        machine.setOnMousePressed(mouseEvent -> {
-            MachineGunTower machineGunTower = null;
+        machine.setOnAction(actionEvent -> {
+            build = true;
+            gameScene.setCursor(new ImageCursor(hammer));
             try {
-                machineGunTower = new MachineGunTower();
+                gameScene.setOnMouseClicked(buildMachineTower());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            machineGunTowers.add(machineGunTower);
+            gameScene.setOnMouseReleased(MouseReleased);
 
-            gamePane.getChildren().addAll(machineGunTower.getView());
-            // buildTower();
         });
 
+    }
+
+    public void normalTowerButton() {
+
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/normalTowerButton.png');";
+        MyButton normal = new MyButton("", 64, 64, url);
+        normal.setLayoutX(1089);
+        normal.setLayoutY(200);
+        gamePane.getChildren().add(normal);
+
+        normal.setOnAction(actionEvent -> {
+            build = true;
+            gameScene.setCursor(new ImageCursor(hammer));
+            gameScene.setOnMouseClicked(buildNormalTower());
+            gameScene.setOnMouseReleased(MouseReleased);
+
+        });
 
     }
 
-    public void buildTower() {
-        EventHandler<MouseEvent> PressedEventHandler;
-        EventHandler<MouseEvent> DraggedEventHandler;
-        EventHandler<MouseEvent> ExitEventHandler;
+    public void sniperTowerButton() {
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/sniperTowerButton.png');";
+        MyButton Sniper = new MyButton("", 64, 64, url);
+        Sniper.setLayoutX(1163);
+        Sniper.setLayoutY(200);
+        gamePane.getChildren().add(Sniper);
 
-        final boolean[] t = new boolean[1];
-        t[0] = false;
-        PressedEventHandler = new EventHandler<MouseEvent>() {
+        Sniper.setOnAction(actionEvent -> {
+            build = true;
+            gameScene.setCursor(new ImageCursor(hammer));
+            gameScene.setOnMouseClicked(buildSniperTower());
+            gameScene.setOnMouseReleased(MouseReleased);
 
-            @Override
-            public void handle(MouseEvent event) {
-
-                eventPosX = event.getSceneX();
-                eventPosY = event.getSceneY();
-                translateX = ((ImageView) (event.getSource())).getTranslateX();
-                translateY = ((ImageView) (event.getSource())).getTranslateY();
-            }
-        };
-
-        DraggedEventHandler = new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                if (t[0] == false) {
-                    double offsetX = event.getSceneX() - eventPosX;
-                    double offsetY = event.getSceneY() - eventPosY;
-                    double newTranslateX = translateX + offsetX;
-                    double newTranslateY = translateY + offsetY;
-
-                    ((ImageView) (event.getSource())).setTranslateX(newTranslateX);
-                    ((ImageView) (event.getSource())).setTranslateY(newTranslateY);
-                }
-                // System.out.println(newTranslateX+"  "+newTranslateY);
-            }
-        };
-
-        ExitEventHandler = new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                t[0] = true;
-
-                translateX = event.getSceneX();
-                translateY = event.getSceneY();
-
-
-            }
-        };
-        machineGunTowers.get(machineGunTowers.size() - 1).getView().setOnMousePressed(PressedEventHandler);
-        machineGunTowers.get(machineGunTowers.size() - 1).getView().setOnMouseDragged(DraggedEventHandler);
-        machineGunTowers.get(machineGunTowers.size() - 1).getView().setOnMouseReleased(ExitEventHandler);
+        });
 
     }
-
-    public void Tower() {
-
-        MachineGunTower machineGunTower = null;
-        try {
-            machineGunTower = new MachineGunTower();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        machineGunTowers.add(machineGunTower);
-        machineGunTower.getView().setTranslateY(160d);
-        machineGunTower.getView().setTranslateX(320);
-        gamePane.getChildren().addAll(machineGunTower.getView());
-    }
-
-
 }

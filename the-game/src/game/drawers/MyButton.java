@@ -12,8 +12,8 @@ import java.io.FileNotFoundException;
 public class MyButton extends Button {
     private final String FONT_PATH = "src/Image/UI/AutourOne-Regular.otf";
 
-    private String BUTTON_PRESS_STYLE;//= "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
-    private String BUTTON_FREE_STYLE;//= "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/grey_button06.png');";
+    private String BUTTON_PRESS_STYLE;
+    private String BUTTON_FREE_STYLE;
     private int h;
     private int w;
 
@@ -26,6 +26,8 @@ public class MyButton extends Button {
         setPrefHeight(h);
         setPrefWidth(w);
         intitButtonListener();
+        this.h = h;
+        this.w = w;
 
     }
 
@@ -52,7 +54,7 @@ public class MyButton extends Button {
     }
 
     private void intitButtonListener() {
-        setOnMousePressed(mouseEvent -> {
+        setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                 setButtonPressStyle();
             }

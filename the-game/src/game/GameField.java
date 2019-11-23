@@ -89,7 +89,7 @@ public class GameField
     {
         if(!getEnemyList().isEmpty())
         {
-            //System.out.println("dead = " + getEnemyList().get(i).isDead() + " goal = " + getEnemyList().get(i)
+            System.out.println("dead = " + getEnemyList().get(i).isDead() + " goal = " + getEnemyList().get(i));
             // .hasReachedGoal());
             return getEnemyList().get(i).isDead() || getEnemyList().get(i).hasReachedGoal();
             //System.out.println(getEnemyList());
@@ -107,4 +107,5 @@ public class GameField
             }
         }
     }
+
 }
