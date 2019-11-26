@@ -25,8 +25,11 @@ public abstract class Tower implements GameEntity
     protected ImageView View;
     private  ImageView platform;
     private Point2D pos;
+    Bullet bullet;
+    private Point2D velocity;
 
     private Hill towerHill = new Hill();
+    private double slope;
 
     //platform image properties and methods maybe go here
 
@@ -38,6 +41,7 @@ public abstract class Tower implements GameEntity
             bullet.getView().setTranslateX(getPlatform().getTranslateX()+40);
             bullet.getView().setTranslateY(getPlatform().getTranslateY()+40);
         });*/
+        velocity = new Point2D(1, slope);
     }
 
     public int getAttackDamage()
@@ -165,11 +169,28 @@ public abstract class Tower implements GameEntity
         this.pos = pos;
     }
 //attack method maybe goes here
-public void update(Enemy enemy) {
+
+    public Point2D getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Point2D velocity) {
+        this.velocity = velocity;
+    }
+
+    public double getSlope() {
+        return slope;
+    }
+
+    public void setSlope(double slope) {
+        this.slope = slope;
+    }
+
+    public void update(Enemy enemy) {
     double posEX = enemy.getView().getTranslateX();
     double posEY = enemy.getView().getTranslateY();
-
-
+        slope = (posEX - getPos().getX()) / (posEY - getPos().getY());
+        //  bullet.setDirection();
     double distance = enemy.distance(this);
     if (posEY < getPos().getY() && distance <= RADIUS) {
 
@@ -187,7 +208,8 @@ public void update(Enemy enemy) {
                 bullet.setDirection(new Point2D(posEX -getPos().getX(),posEY - getPos().getY()));
                 bullet.update();
             });*/
-}
+    }
+
 
 
 }

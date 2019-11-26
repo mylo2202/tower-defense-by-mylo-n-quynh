@@ -1,6 +1,5 @@
 package game.drawers;
 
-import game.Controller;
 import game.GameField;
 import game.characters.Bullet;
 import game.characters.Enemy;
@@ -30,7 +29,7 @@ public class GameStage {
     private Stage gameStage;
     private Stage menuStage;
     private MyLabel Money;
-    EventHandler<MouseEvent> MouseReleased = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> MouseReleased = new EventHandler<>() {
 
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -41,12 +40,11 @@ public class GameStage {
     private ImageView[] lifes;
     private int life = 4;
     private TileMap map = new TileMap();
-    private Controller controller;
+
     private List<MachineGunTower> machineGunTowers = new ArrayList<>();
     private List<Bullet> bullets = new ArrayList<>();
     private double eventPosX, eventPosY;
-    private double translateX, translateY;
-    Image hammer = new Image("/Image/Tower/Hammer.png");
+    int money = 50;
 
 
     private GameField gameField = new GameField();
@@ -74,7 +72,7 @@ public class GameStage {
         gameStage.setScene(gameScene);
     }
 
-    private int money = 50;
+
 
     public Stage getStage() {
         return gameStage;
@@ -120,6 +118,8 @@ public class GameStage {
         }
     }
 
+    private Image hammer = new Image("/Image/Tower/Hammer.png");
+
     public void buttonStart() {
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
         MyButton Start = new MyButton("START", 45, 190, url);
@@ -127,10 +127,8 @@ public class GameStage {
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
 
-            machineGunTowers.forEach(machineGunTower -> {
-                machineGunTower.setPos(new Point2D(machineGunTower.getView().getTranslateX(),
-                        machineGunTower.getView().getTranslateY()));
-            });
+            machineGunTowers.forEach(machineGunTower -> machineGunTower.setPos(new Point2D(machineGunTower.getView().getTranslateX(),
+                    machineGunTower.getView().getTranslateY())));
 
             //bullet.setDirection(new Point2D( -1,-1));
             gameTimer = new AnimationTimer() {
@@ -141,7 +139,7 @@ public class GameStage {
                 public void handle(long now) {
 
                     Enemy enemy;
-
+                    Bullet bullet;
                     if (now - timer >= 0.25 * 1e9) {
 
                         if (difficulty > 0) {
@@ -160,9 +158,10 @@ public class GameStage {
                         }
 
                         if (!gameField.getEnemyList().isEmpty()) {
-                            System.out.println(gameField.getEnemyList().get(0).getView().getTranslateX() + " " + gameField.getEnemyList().get(0).getView().getTranslateY());
+                            //   System.out.println(gameField.getEnemyList().get(0).getView().getTranslateX() + " " + gameField.getEnemyList().get(0).getView().getTranslateY());
 
                             for (int i = 0; i < gameField.getEnemyList().size(); i++) {
+
                                 if (gameField.checkRemoveEnemy(i)) {
                                     gamePane.getChildren().remove(gameField.getEnemyList().get(i).getView());
                                     gameField.removeEnemy(i);
@@ -176,21 +175,18 @@ public class GameStage {
 
 
                     machineGunTowers.forEach(machineGunTower -> {
-                        /*int index=0;
-                        for(int i = 0; i< gameField.getEnemyList().size(); i++){
-                            double distance = gameField.getEnemyList().get(i).distance(machineGunTower);
-                            if(distance <= 240) index=i;
-
-                        }*/
                         machineGunTower.update(gameField.getEnemyList().get(0));
+                        gameField.getBulletList().forEach(Bullet::update);
                     });
+                    if (now - timer1 >= 0.25 * 1e9) {
+                        bullet = new Bullet(machineGunTowers.get(0));
+                        System.out.println(bullet.getDirection());
+                        gameField.getBulletList().add(bullet);
+                        gamePane.getChildren().add(bullet.getView());
 
-                    //   gameField.getBulletList().forEach(Bullet::update);
-                   /* gameField.getBulletList().forEach(bullet1 -> {
-                        bullet1.setDirection(new Point2D( 1,1));
-                        //new Point2D(posEX -machineGunTowers.get(0).getPos().getX(),posEY -machineGunTowers.get(0). getPos().getY())
-                        bullet1.update();
-                    });*/
+                        timer1 = now;
+                    }
+
                 }
             };
 
@@ -210,12 +206,11 @@ public class GameStage {
             lifes[i].setLayoutY(128);
             gamePane.getChildren().add(lifes[i]);
         }
-        Money = new MyLabel("MONEY : " + money);
+        Money = gameField.getMoney();
         Money.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
         Money.setLayoutY(64);
         gamePane.getChildren().add(Money);
     }
-
     public EventHandler buildMachineTower() throws IOException {
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
             MachineGunTower machineGunTower = new MachineGunTower();
