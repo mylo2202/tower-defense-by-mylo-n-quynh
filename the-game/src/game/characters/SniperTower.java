@@ -14,7 +14,7 @@ public class SniperTower extends Tower{
         setAttackDamage(200);
         setAttackRange(360);
         setAttackCooldown(2000);
-        setBuildCost(250);
+        setBuildCost(100);
         setUpgradeCost(250);
         setSellPrice(125);
       /*  bullets.forEach(bullet -> {

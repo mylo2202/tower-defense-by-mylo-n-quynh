@@ -37,13 +37,13 @@ public abstract class Tower implements GameEntity
         this.towerLevel = 1;
         platform= new ImageView( new Image("/Image/Tower/platform.png",getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         pos = new Point2D(getPlatform().getTranslateX(),getPlatform().getTranslateY());
-       /* bullets.forEach(bullet -> {
-            bullet.getView().setTranslateX(getPlatform().getTranslateX()+40);
-            bullet.getView().setTranslateY(getPlatform().getTranslateY()+40);
-        });*/
         velocity = new Point2D(1, slope);
     }
 
+    public Bullet createBullet() {
+        bullet = new Bullet();
+        return bullet;
+    }
     public int getAttackDamage()
     {
         return attackDamage;
@@ -171,6 +171,7 @@ public abstract class Tower implements GameEntity
 //attack method maybe goes here
 
     public Point2D getVelocity() {
+        velocity = new Point2D(1 * 10, getSlope() * 10);
         return velocity;
     }
 
@@ -182,32 +183,30 @@ public abstract class Tower implements GameEntity
         return slope;
     }
 
-    public void setSlope(double slope) {
-        this.slope = slope;
+    public void setSlope(Enemy enemy) {
+        double posEX = enemy.getView().getTranslateX();
+        double posEY = enemy.getView().getTranslateY();
+        slope = (posEY - getPos().getY()) / (posEX - getPos().getX());
+
     }
 
     public void update(Enemy enemy) {
-    double posEX = enemy.getView().getTranslateX();
-    double posEY = enemy.getView().getTranslateY();
-        slope = (posEX - getPos().getX()) / (posEY - getPos().getY());
-        //  bullet.setDirection();
-    double distance = enemy.distance(this);
-    if (posEY < getPos().getY() && distance <= RADIUS) {
+        double posEX = enemy.getView().getTranslateX();
+        double posEY = enemy.getView().getTranslateY();
+        double distance = enemy.distance(this);
+        if (posEY < getPos().getY() && distance <= RADIUS) {
 
-        getView().setRotate(-Math.toDegrees(Math.atan((posEX - getPos().getX())
-                / (posEY - getPos().getY()))));
-    }
+            getView().setRotate(-Math.toDegrees(Math.atan((posEX - getPos().getX())
+                    / (posEY - getPos().getY()))));
+        }
 
-    if (posEY > getPos().getY() && distance <= RADIUS)
-        getView().setRotate(180 - Math.toDegrees(Math.atan((posEX - getPos().getX())
-                / (posEY - getPos().getY()))));
-    if (distance > RADIUS) {
-        getView().setRotate(0);
-    }
-            /*bullets.forEach(bullet -> {
-                bullet.setDirection(new Point2D(posEX -getPos().getX(),posEY - getPos().getY()));
-                bullet.update();
-            });*/
+        if (posEY > getPos().getY() && distance <= RADIUS)
+            getView().setRotate(180 - Math.toDegrees(Math.atan((posEX - getPos().getX())
+                    / (posEY - getPos().getY()))));
+        if (distance > RADIUS) {
+            getView().setRotate(0);
+        }
+
     }
 
 

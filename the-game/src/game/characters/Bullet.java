@@ -11,6 +11,7 @@ public class Bullet implements GameEntity {
     private ImageView view;
     private String url;
     private Point2D direction;
+    private Point2D pos;
 
 
     public Bullet()
@@ -25,6 +26,15 @@ public class Bullet implements GameEntity {
         view.setTranslateX(tower.getView().getTranslateX());
         view.setTranslateY(tower.getView().getTranslateY());
         direction = tower.getVelocity();
+        pos = new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY());
+    }
+
+    public Point2D getPos() {
+        return pos;
+    }
+
+    public void setPos(Point2D pos) {
+        this.pos = pos;
     }
 
     public int getBulletDamage()
@@ -84,9 +94,20 @@ public class Bullet implements GameEntity {
         this.direction = direction;
     }
 
-    public void update() {
-        getView().setTranslateX(view.getTranslateX() + direction.getX());
-        getView().setTranslateY(view.getTranslateY() + direction.getY());
+    public void update(Enemy enemy) {
+        double posEX = enemy.getView().getTranslateX();
+        double posEY = enemy.getView().getTranslateY();
+
+
+        if (posEX < getPos().getX()) {
+
+            getView().setTranslateX(view.getTranslateX() - direction.getX());
+            getView().setTranslateY(view.getTranslateY() - direction.getY());
+        } else {
+            getView().setTranslateX(view.getTranslateX() + direction.getX());
+            getView().setTranslateY(view.getTranslateY() + direction.getY());
+        }
+
         System.out.println(direction + "****");
     }
     //bullet trace method goes here, i think

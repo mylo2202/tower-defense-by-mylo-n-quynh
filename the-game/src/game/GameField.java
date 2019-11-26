@@ -2,7 +2,11 @@ package game;
 
 import game.characters.*;
 import game.drawers.MyLabel;
+import game.drawers.TileMap;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,14 +25,23 @@ public class GameField
     private int money;
     private MyLabel Money;
     private double eventPosX, eventPosY;
-
+    private boolean build;
 
     public GameField() {
         enemyList = new ArrayList<>();
         towerList = new ArrayList<>();
         bulletList = new ArrayList<>();
-        money = 50;
+        money = 500;
         Money = new MyLabel("MONEY : " + money);
+        build = false;
+    }
+
+    public boolean isBuild() {
+        return build;
+    }
+
+    public void setBuild(boolean build) {
+        this.build = build;
     }
 
     public MyLabel getMoney() {
@@ -124,13 +137,13 @@ public class GameField
             }
         }
     }
-    /*public EventHandler buildMachineTower(AnchorPane gamePane, TileMap map) throws IOException {
-        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
-            MachineGunTower machineGunTower = new MachineGunTower();
 
+    public EventHandler buildTower(AnchorPane gamePane, TileMap map, Tower tower) throws IOException {
+
+        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if (build == true && money >= machineGunTower.getBuildCost()) {
+                if (build == true && money >= tower.getBuildCost()) {
                     eventPosX = mouseEvent.getSceneX();
                     eventPosY = mouseEvent.getSceneY();
 
@@ -138,11 +151,11 @@ public class GameField
                     int j = (int) eventPosX / map.getGRID_SIZE();
 
                     if (i < 12 && j < 12 && map.getGrid()[i][j] == 0) {
-                        towerList.add(machineGunTower);
-                        machineGunTower.getView().setTranslateX(j * map.getGRID_SIZE());
-                        machineGunTower.getView().setTranslateY(i * map.getGRID_SIZE());
-                        gamePane.getChildren().add(machineGunTower.getView());
-                        money = money - machineGunTower.getBuildCost();
+                        towerList.add(tower);
+                        tower.getView().setTranslateX(j * map.getGRID_SIZE());
+                        tower.getView().setTranslateY(i * map.getGRID_SIZE());
+                        gamePane.getChildren().add(tower.getView());
+                        money = money - tower.getBuildCost();
                         String setTextMoney = "MONEY : ";
                         if (money < 10) setTextMoney = setTextMoney + "0";
                         Money.setText(setTextMoney + money);
@@ -153,6 +166,6 @@ public class GameField
 
         };
         return eventHandler;
-    }*/
+    }
 
 }
