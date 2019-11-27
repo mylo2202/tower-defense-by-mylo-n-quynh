@@ -26,6 +26,8 @@ public class GameField
     private MyLabel Money;
     private double eventPosX, eventPosY;
     private boolean build;
+    private MyLabel life;
+    private int lifes;
 
     public GameField() {
         enemyList = new ArrayList<>();
@@ -34,6 +36,19 @@ public class GameField
         money = 500;
         Money = new MyLabel("MONEY : " + money);
         build = false;
+        lifes = 4;
+        life = new MyLabel("x " + lifes, "/Image/UI/life.png", 45, 100);
+        String setText = "X ";
+        if (lifes < 10) setText = setText + "0";
+        life.setText(setText + lifes);
+    }
+
+    public MyLabel getLife() {
+        return life;
+    }
+
+    public void setLife(MyLabel life) {
+        this.life = life;
     }
 
     public boolean isBuild() {
@@ -119,7 +134,7 @@ public class GameField
     {
         if(!getEnemyList().isEmpty())
         {
-            System.out.println("dead = " + getEnemyList().get(i).isDead() + " goal = " + getEnemyList().get(i));
+            //   System.out.println("dead = " + getEnemyList().get(i).isDead() + " goal = " + getEnemyList().get(i));
             // .hasReachedGoal());
             return getEnemyList().get(i).isDead() || getEnemyList().get(i).hasReachedGoal();
             //System.out.println(getEnemyList());
@@ -131,10 +146,18 @@ public class GameField
     {
         if(!getEnemyList().isEmpty())
         {
+            if (getEnemyList().get(i).hasReachedGoal()) {
+                lifes--;
+                String setText = "X ";
+                if (lifes < 10) setText = setText + "0";
+                life.setText(setText + lifes);
+
+            }
             if(checkRemoveEnemy(i))
             {
                 getEnemyList().remove(getEnemyList().get(i));
             }
+
         }
     }
 
@@ -143,7 +166,7 @@ public class GameField
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if (build == true && money >= tower.getBuildCost()) {
+                if (build == true && money >= tower.getBuildCost() && lifes > 0) {
                     eventPosX = mouseEvent.getSceneX();
                     eventPosY = mouseEvent.getSceneY();
 
@@ -166,6 +189,13 @@ public class GameField
 
         };
         return eventHandler;
+    }
+
+    public void updateMoney(Enemy enemy) {
+        money = money + enemy.getReward();
+        String setTextMoney = "MONEY : ";
+        if (money < 10) setTextMoney = setTextMoney + "0";
+        Money.setText(setTextMoney + money);
     }
 
 }

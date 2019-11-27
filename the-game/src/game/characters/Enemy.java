@@ -66,6 +66,9 @@ public abstract class Enemy extends GameField {
         this.hitPoints = hitPoints;
     }
 
+    public void removeHitPoints(int hitPoints) {
+        this.hitPoints = this.hitPoints - hitPoints;
+    }
     public int getMoveDuration()
     {
         return moveDuration;
@@ -133,7 +136,7 @@ public abstract class Enemy extends GameField {
         }
     }
 
-    public void enemyMove(){
+    public PathTransition enemyMove() {
 
         Path path= new Path();
         //Moving to the starting point
@@ -161,13 +164,14 @@ public abstract class Enemy extends GameField {
 
         //Setting the path
         pathTransition.setPath(path);
+        pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
         pathTransition.setCycleCount(1);
 
         //Setting auto reverse value to false
         pathTransition.setAutoReverse(false);
 
         //Playing the animation
-        pathTransition.play();
+        return pathTransition;
 
 
     }
@@ -178,6 +182,15 @@ public abstract class Enemy extends GameField {
 
         double distance = Math.sqrt(Math.pow(posEX - tower.getPos().getX(), 2) +
                 Math.pow(posEY - tower.getPos().getY(), 2));
+        return distance;
+    }
+
+    public double distance(Bullet bullet) {
+        double posEX = getView().getTranslateX();
+        double posEY = getView().getTranslateY();
+
+        double distance = Math.sqrt(Math.pow(posEX - bullet.getPos().getX(), 2) +
+                Math.pow(posEY - bullet.getPos().getY(), 2));
         return distance;
     }
 }

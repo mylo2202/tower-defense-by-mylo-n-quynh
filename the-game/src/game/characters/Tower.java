@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public abstract class Tower implements GameEntity
@@ -17,19 +19,16 @@ public abstract class Tower implements GameEntity
     private int upgradeCost;                        // Cost for upgrading
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
-    private final int RADIUS = 320;
-    //   protected List<Bullet> bullets= new ArrayList<>();
+    private final int RADIUS = 240;
 
     protected String imageUrl;
     protected Image towerImage;
     protected ImageView View;
     private  ImageView platform;
     private Point2D pos;
-    Bullet bullet;
-    private Point2D velocity;
+    private List<Bullet> bullet = new ArrayList<>();
 
     private Hill towerHill = new Hill();
-    private double slope;
 
     //platform image properties and methods maybe go here
 
@@ -37,11 +36,22 @@ public abstract class Tower implements GameEntity
         this.towerLevel = 1;
         platform= new ImageView( new Image("/Image/Tower/platform.png",getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         pos = new Point2D(getPlatform().getTranslateX(),getPlatform().getTranslateY());
-        velocity = new Point2D(1, slope);
+
     }
 
-    public Bullet createBullet() {
-        bullet = new Bullet();
+    public void createBullet(Bullet bullets) {
+        bullets.setPos(pos);
+        bullets.getView().setTranslateX(pos.getX());
+        bullets.getView().setTranslateY(pos.getY());
+
+        bullet.add(bullets);
+    }
+
+    public Bullet getBullet() {
+        return bullet.get(bullet.size() - 1);
+    }
+
+    public List<Bullet> getBulletList() {
         return bullet;
     }
     public int getAttackDamage()
@@ -169,47 +179,38 @@ public abstract class Tower implements GameEntity
         this.pos = pos;
     }
 //attack method maybe goes here
-
-    public Point2D getVelocity() {
-        velocity = new Point2D(1 * 10, getSlope() * 10);
-        return velocity;
-    }
-
-    public void setVelocity(Point2D velocity) {
-        this.velocity = velocity;
-    }
-
-    public double getSlope() {
-        return slope;
-    }
-
-    public void setSlope(Enemy enemy) {
-        double posEX = enemy.getView().getTranslateX();
-        double posEY = enemy.getView().getTranslateY();
-        slope = (posEY - getPos().getY()) / (posEX - getPos().getX());
-
-    }
-
     public void update(Enemy enemy) {
-        double posEX = enemy.getView().getTranslateX();
-        double posEY = enemy.getView().getTranslateY();
-        double distance = enemy.distance(this);
-        if (posEY < getPos().getY() && distance <= RADIUS) {
+        if (enemy != null) {
+            double posEX = enemy.getView().getTranslateX();
+            double posEY = enemy.getView().getTranslateY();
+            double distance = enemy.distance(this);
+            if (distance <= RADIUS) {
+                getView().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX())
+                        , (posEY - getPos().getY()))));
 
-            getView().setRotate(-Math.toDegrees(Math.atan((posEX - getPos().getX())
-                    / (posEY - getPos().getY()))));
-        }
+            }
 
-        if (posEY > getPos().getY() && distance <= RADIUS)
-            getView().setRotate(180 - Math.toDegrees(Math.atan((posEX - getPos().getX())
-                    / (posEY - getPos().getY()))));
-        if (distance > RADIUS) {
-            getView().setRotate(0);
-        }
+            if (distance > RADIUS) {
+                getView().setRotate(0);
+            }
+        } else getView().setRotate(0);
 
     }
 
+    public Enemy targetEnemy(List<Enemy> enemies) {
 
+        if (!enemies.isEmpty()) {
+            Enemy closestEnemy = enemies.get(0);
+            for (int i = 0; i < enemies.size(); i++) {
+                double distance = enemies.get(i).distance(this);
+                if (distance < RADIUS && distance < closestEnemy.distance(this)) {
+                    closestEnemy = enemies.get(i);
+                }
+
+            }
+            return closestEnemy;
+        } else return null;
+    }
 
 }
 
