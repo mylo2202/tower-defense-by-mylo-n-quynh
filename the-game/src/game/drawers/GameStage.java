@@ -5,6 +5,12 @@ import java.io.*;
 import game.GameEntity;
 import game.characters.*;
 import javafx.animation.AnimationTimer;
+import game.GameField;
+import game.characters.*;
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,7 +18,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class GameStage {
+
     private AnimationTimer gameTimer;
 
     private AnchorPane gamePane;
@@ -22,12 +31,13 @@ public class GameStage {
     private Label Label;
 
     private MyLabel Money;
-    private ImageView [] lifes;
+
+    private Image hammer = new Image("/Image/Tower/Hammer.png");
+    private ImageView[] lifes;
     private int life = 4;
     private TileMap map = new TileMap();
-    private boolean play = false;
 
-    private GameEntity gameEntity = new GameEntity();
+    private GameField gameField = new GameField();
 
     public GameStage() throws IOException {
         initialiseStage();
@@ -74,14 +84,34 @@ public class GameStage {
         return gameStage;
     }
 
-    public void drawPanel()
-    {
+    private EventHandler<MouseEvent> MouseReleased = new EventHandler<>() {
+
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            gameScene.setCursor(Cursor.DEFAULT);
+        }
+
+    };
+
+    public void drawPanel() {
         Image panel = new Image("/Image/UI/green_panel.png",
                 map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize(), map.getSCREEN_HEIGHT(), false, true);
         ImageView panelView = new ImageView(panel);
         panelView.setLayoutX(map.getGrid()[0].length*map.getSize());
         panelView.setLayoutY(0);
         gamePane.getChildren().add(panelView);
+
+        lifes = new ImageView[4];
+        for (int i = 0; i < 4; ++i) {
+            lifes[i] = new ImageView("/Image/UI/heart1.png");
+            lifes[i].setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95 + (i * 48));
+            lifes[i].setLayoutY(128);
+            gamePane.getChildren().add(lifes[i]);
+        }
+        Money = gameField.getMoney();
+        Money.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
+        Money.setLayoutY(64);
+        gamePane.getChildren().add(Money);
     }
 
     private void createTower() throws IOException {
@@ -93,6 +123,31 @@ public class GameStage {
 
     public void createButton(){
         buttonStart();
+        machineTowerButton();
+        normalTowerButton();
+        sniperTowerButton();
+    }
+
+    public void removeLife() {
+        gamePane.getChildren().remove(lifes[life - 1]);
+        life--;
+        if (life == 0) {
+            gameTimer.stop();
+        }
+    }
+
+    public void createNewGame(Stage menuStage) throws IOException {
+        this.menuStage = menuStage;
+        this.menuStage.hide();
+
+        map = new TileMap();
+        drawPanel();
+
+        map.drawMap(gamePane);
+        createButton();
+
+        gameStage.setTitle("Tower Defense");
+        gameStage.show();
     }
 
     public void buttonStart(){
@@ -101,73 +156,163 @@ public class GameStage {
         Start.setLayoutX(map.getGrid()[0].length*map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize())/2 - 95);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
-            gameTimer = new AnimationTimer()
-            {
+
+            gameField.getTowerList().forEach(machineGunTower -> machineGunTower.setPos(new Point2D(machineGunTower.getView().getTranslateX(),
+                    machineGunTower.getView().getTranslateY())));
+
+            //bullet.setDirection(new Point2D( -1,-1));
+            gameTimer = new AnimationTimer() {
                 int difficulty = 10;
                 long timer = System.nanoTime();
-                    @Override
-                    public void handle(long now) {
-                        Enemy enemy;
-                        if(now - timer >= 0.25*1e9)
-                        {
-                            if(difficulty > 0)
-                            {
-                                try {
-                                    //gameEntity.generateEnemy(enemy, 10);
-                                    gameEntity.getEnemyList().add(enemy = new SmallerEnemy());
-                                    assert false;
-                                    enemy.enemyMove();
-                                    gamePane.getChildren().add(enemy.getEnemyView());
-                                    difficulty -= enemy.getLevel();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                long timer1 = System.nanoTime();
+                @Override
+                public void handle(long now) {
 
-                            if(!gameEntity.getEnemyList().isEmpty())
-                            {
-                                System.out.println(gameEntity.getEnemyList().get(0).getEnemyView().getTranslateX() + " " + gameEntity.getEnemyList().get(0).getEnemyView().getTranslateY());
+                    Enemy enemy;
+                    Bullet bullet;
+                    if (now - timer >= 0.25 * 1e9) {
 
-                                for(int i = 0; i < gameEntity.getEnemyList().size(); i++)
-                                {
-                                    if(gameEntity.checkRemoveEnemy(i))
-                                    {
-                                        gamePane.getChildren().remove(gameEntity.getEnemyList().get(i).getEnemyView());
-                                        gameEntity.removeEnemy(i);
-                                    }
-                                }
+                        if (difficulty > 0) {
+                            try {
+                                //gameEntity.generateEnemy(enemy, 10);
+                                gameField.getEnemyList().add(enemy = new SmallerEnemy());
+                                assert false;
+                                enemy.enemyMove();
+
+                                gamePane.getChildren().add(enemy.getView());
+                                difficulty -= enemy.getLevel();
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                            timer = now;
                         }
+
+                        if (!gameField.getEnemyList().isEmpty()) {
+                            //   System.out.println(gameField.getEnemyList().get(0).getView().getTranslateX() + " " + gameField.getEnemyList().get(0).getView().getTranslateY());
+
+                            for (int i = 0; i < gameField.getEnemyList().size(); i++) {
+
+                                if (gameField.checkRemoveEnemy(i)) {
+                                    gamePane.getChildren().remove(gameField.getEnemyList().get(i).getView());
+                                    gameField.removeEnemy(i);
+                                }
+                            }
+                        }
+
+
+                        timer = now;
                     }
+
+
+                    gameField.getTowerList().forEach(tower -> {
+                        tower.update(gameField.getEnemyList().get(0));
+                        tower.setSlope(gameField.getEnemyList().get(0));
+                        gameField.getBulletList().forEach(bullet1 -> {
+                            bullet1.update(gameField.getEnemyList().get(0));
+                        });
+                    });
+                    if (now - timer1 >= 0.25 * 1e9) {
+                        bullet = new Bullet(gameField.getTowerList().get(0));
+                        System.out.println(bullet.getDirection());
+                        gameField.getBulletList().add(bullet);
+                        gamePane.getChildren().add(bullet.getView());
+
+                        timer1 = now;
+                    }
+
+                }
             };
+
             gameTimer.start();
             play = true;
+
 
         });
 
         gamePane.getChildren().add(Start);
     }
 
-    public void createPanelControl(){
-        lifes= new ImageView[4];
-        for (int i=0; i<4; ++i){
-            lifes[i]= new ImageView("/Image/UI/heart1.png");
-            lifes[i].setLayoutX(map.getGrid()[0].length*map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize())/2 - 95 + (i*48));
-            lifes[i].setLayoutY(128);
-            gamePane.getChildren().add(lifes[i]);
-        }
-        Money =new MyLabel("MONEY : 0050");
-        Money.setLayoutX(map.getGrid()[0].length*map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize())/2 - 95);
-        Money.setLayoutY(64);
-        gamePane.getChildren().add(Money);
+    public EventHandler<MouseEvent> buildSniperTower() {
+        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            }
+        };
+        return eventHandler;
     }
 
-    public void removeLife(){
-        gamePane.getChildren().remove(lifes[ life ]);
-        life--;
-        if(life == 0 ) {
-            gameTimer.stop();
-        }
+    public EventHandler<MouseEvent> buildNormalTower() {
+        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+            }
+        };
+        return eventHandler;
+    }
+
+    public void machineTowerButton() {
+
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/machineGunTowerButton.png');";
+        MyButton machine = new MyButton("", 64, 64, url);
+        machine.setLayoutX(1015);
+        machine.setLayoutY(200);
+        gamePane.getChildren().add(machine);
+
+        machine.setOnAction(actionEvent -> {
+            gameField.setBuild(true);
+            gameScene.setCursor(new ImageCursor(hammer));
+            try {
+                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, map, new MachineGunTower()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            gameScene.setOnMouseReleased(MouseReleased);
+
+        });
+
+    }
+
+    public void normalTowerButton() {
+
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/normalTowerButton.png');";
+        MyButton normal = new MyButton("", 64, 64, url);
+        normal.setLayoutX(1089);
+        normal.setLayoutY(200);
+        gamePane.getChildren().add(normal);
+
+        normal.setOnAction(actionEvent -> {
+            gameField.setBuild(true);
+            gameScene.setCursor(new ImageCursor(hammer));
+            try {
+                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, map, new NormalTower()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            gameScene.setOnMouseReleased(MouseReleased);
+
+        });
+
+    }
+
+    public void sniperTowerButton() {
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/sniperTowerButton.png');";
+        MyButton Sniper = new MyButton("", 64, 64, url);
+        Sniper.setLayoutX(1163);
+        Sniper.setLayoutY(200);
+        gamePane.getChildren().add(Sniper);
+
+        Sniper.setOnAction(actionEvent -> {
+            gameField.setBuild(true);
+            gameScene.setCursor(new ImageCursor(hammer));
+            try {
+                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, map, new SniperTower()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            gameScene.setOnMouseReleased(MouseReleased);
+
+        });
+
     }
 }

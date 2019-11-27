@@ -8,11 +8,11 @@ import java.io.IOException;
 public class NormalEnemy extends Enemy
 {
     public NormalEnemy() throws IOException {
-        setEnemySkin("/Image/Enemy/normalEnemy.png");
-        setEnemyImage(new Image(this.getEnemySkin(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
-        setEnemyView(new ImageView(this.getEnemyImage()));
+        setImageUrl("/Image/Enemy/normalEnemy.png");
+        setEnemyImage(new Image(this.getImageUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
+        setView(new ImageView(this.getEnemyImage()));
         setHitPoints(200);
-        setMoveDuration(20);
+        setMoveDuration(500);
         setReward(50);
         setLevel(2);
     }

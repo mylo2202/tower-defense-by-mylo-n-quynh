@@ -8,9 +8,9 @@ import java.io.IOException;
 public class TankerEnemy extends Enemy
 {
     public TankerEnemy() throws IOException {
-        setEnemySkin("/Image/Enemy/tankerEnemy.png");
-        setEnemyImage(new Image(this.getEnemySkin(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
-        setEnemyView(new ImageView(this.getEnemyImage()));
+        setImageUrl("/Image/Enemy/tankerEnemy.png");
+        setEnemyImage(new Image(this.getImageUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
+        setView(new ImageView(this.getEnemyImage()));
         setHitPoints(1000);
         setMoveDuration(40);
         setReward(200);
