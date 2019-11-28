@@ -8,15 +8,17 @@ import java.io.IOException;
 public class NormalTower extends Tower {
     public NormalTower() throws IOException
     {
+
         setImageUrl("/Image/Tower/normalTower.png");
         setTowerImage(new Image(this.getImageUrl(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         setView(new ImageView(getTowerImage()));
         setAttackDamage(50);
         setAttackRange(200);
-        setAttackCooldown(500);
-        setBuildCost(50);
-        setUpgradeCost(100);
-        setSellPrice(50);
+        setAttackCooldown(18);
+        setBuildCost(200);
+        setUpgradeCost(200);
+        setSellPrice(100);
+        setRadius(120);
         /*bullets.forEach(bullet -> {
             bullet.setImageUrl("/Image/Bullet/bullet1.png");
 

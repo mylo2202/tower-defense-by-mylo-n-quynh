@@ -19,7 +19,8 @@ import java.util.Iterator;
 
 public class GameStage {
 
-    private AnimationTimer gameTimer;
+    private AnimationTimer startTimer;
+    private AnimationTimer towerTimer;
     private AnchorPane gamePane;
     private Scene gameScene;
     private Stage gameStage;
@@ -36,18 +37,8 @@ public class GameStage {
 
     public GameStage() throws IOException {
         initialiseStage();
-        createMouseListeners();
+
     }
-
-    private void createMouseListeners() {
-        gameScene.setOnMousePressed(mouseEvent -> {
-
-        });
-        gameScene.setOnMouseReleased(mouseEvent -> {
-
-        });
-    }
-
     private void initialiseStage() {
         gamePane = new AnchorPane();
 
@@ -82,7 +73,7 @@ public class GameStage {
 
         life = new ImageView("/Image/UI/heart1.png");
         life.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 80);
-        life.setLayoutY(138);
+        life.setLayoutY(128);
         gamePane.getChildren().add(life);
         lifes = gameField.getLife();
         lifes.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 40);
@@ -111,11 +102,80 @@ public class GameStage {
 
         map.drawMap(gamePane);
         createButton();
+        gameLoop();
 
         gameStage.setTitle("Tower Defense");
         gameStage.show();
     }
 
+    public void gameLoop() {
+        gameField.getTowerList().forEach(tower -> {
+                    tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
+                }
+        );
+        towerTimer = new AnimationTimer() {
+            long timer1 = System.nanoTime();
+
+            @Override
+            public void handle(long now) {
+                Iterator<Tower> towerIterator = gameField.getTowerList().iterator();
+                while (towerIterator.hasNext()) {
+                    Tower tower = towerIterator.next();
+                    tower.update(tower.targetEnemy(gameField.getEnemyList()));
+
+                    Iterator<Bullet> iterator = tower.getBulletList().iterator();
+                    while (iterator.hasNext()) {
+                        Bullet bullet = iterator.next();
+                        bullet.update(tower.targetEnemy(gameField.getEnemyList()));
+                        Enemy enemy1 = tower.targetEnemy(gameField.getEnemyList());
+                        double range = Math.sqrt(Math.pow(bullet.getView().getTranslateX() - bullet.getPos().getX(), 2)
+                                + Math.pow(bullet.getView().getTranslateY() - bullet.getPos().getY(), 2));
+                        if (range >= tower.getRadius() || gameField.getEnemyList().isEmpty()) {
+                            gamePane.getChildren().remove(bullet.getView());
+                            tower.getBulletList().remove(iterator);
+                        }
+                        if (bullet.isColliding(enemy1)) {
+                            gamePane.getChildren().remove(bullet.getView());
+                            tower.getBulletList().remove(iterator);
+                            enemy1.removeHitPoints(tower.getAttackDamage());
+                            //  if (enemy1.getHitPoints() <= 0) tower.targetEnemy(gameField.getEnemyList()).setDead(true);
+                            if (enemy1.isDead()) gameField.updateMoney(tower.targetEnemy(gameField.getEnemyList()));
+
+                        }
+
+                    }
+
+
+                }
+                if (now - timer1 >= 0.25 * 1e9) {
+
+                    gameField.getTowerList().forEach(tower -> {
+                        if (!gameField.getEnemyList().isEmpty() && tower.targetEnemy(gameField.getEnemyList()).distance(tower) <= tower.getRadius()) {
+                            tower.createBullet(new Bullet(tower));
+                            gamePane.getChildren().add(tower.getBullet().getView());
+                        }
+                    });
+
+                    timer1 = now;
+                }
+                if (!gameField.getEnemyList().isEmpty()) {
+                    //  System.out.println(gameField.getEnemyList().get(0).getView().getTranslateX() + " " + gameField.getEnemyList().get(0).getView().getTranslateY());
+
+                    for (int i = 0; i < gameField.getEnemyList().size(); i++) {
+                        if (gameField.getEnemyList().get(i).hasReachedGoal()) {
+
+                        }
+                        if (gameField.checkRemoveEnemy(i)) {
+                            gamePane.getChildren().remove(gameField.getEnemyList().get(i).getView());
+                            gameField.removeEnemy(i);
+
+                        }
+                    }
+                }
+            }
+        };
+        towerTimer.start();
+    }
     public void buttonStart() {
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
         MyButton Start = new MyButton("START", 45, 190, url);
@@ -124,29 +184,15 @@ public class GameStage {
 
         Start.setOnAction(actionEvent -> {
             if (play == true) {
-                gameField.getTowerList().forEach(tower -> {
-                            tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
-
-                        }
-                );
-
-
-                gameTimer = new AnimationTimer() {
-
+                startTimer = new AnimationTimer() {
                     int difficulty = 10;
                     long timer = System.nanoTime();
-                    long timer1 = System.nanoTime();
-
                     @Override
                     public void handle(long now) {
-
                         Enemy enemy = null;
-
-                        if (now - timer >= 1 * 1e9) {
-
+                        if (now - timer >= .25 * 1e9) {
                             if (difficulty > 0) {
                                 try {
-                                    //gameEntity.generateEnemy(enemy, 10);
                                     gameField.getEnemyList().add(enemy = new SmallerEnemy());
                                     assert false;
                                     enemy.enemyMove().play();
@@ -158,69 +204,13 @@ public class GameStage {
                                     e.printStackTrace();
                                 }
                             }
-
-                            if (!gameField.getEnemyList().isEmpty()) {
-                                //  System.out.println(gameField.getEnemyList().get(0).getView().getTranslateX() + " " + gameField.getEnemyList().get(0).getView().getTranslateY());
-
-                                for (int i = 0; i < gameField.getEnemyList().size(); i++) {
-                                    if (gameField.getEnemyList().get(i).hasReachedGoal()) {
-                                        //   removeLife();
-
-                                    }
-                                    if (gameField.checkRemoveEnemy(i)) {
-                                        gamePane.getChildren().remove(gameField.getEnemyList().get(i).getView());
-                                        gameField.removeEnemy(i);
-
-                                    }
-                                }
-                            }
                             timer = now;
                         }
-                   /* if(life<0){
-                        gameField.getEnemyList().forEach(enemy1 -> {
-                            enemy1.enemyMove().stop();
-                        });
-                    }*/
-
-                        gameField.getTowerList().forEach(tower -> {
-
-                            tower.update(tower.targetEnemy(gameField.getEnemyList()));
-
-                            Iterator<Bullet> iterator = tower.getBulletList().iterator();
-                            while (iterator.hasNext()) {
-                                Bullet bullet = iterator.next();
-                                bullet.update(tower.targetEnemy(gameField.getEnemyList()));
-                                Enemy enemy1 = tower.targetEnemy(gameField.getEnemyList());
-                                if (bullet.isColliding(enemy1)) {
-                                    iterator.remove();
-                                    enemy1.removeHitPoints(tower.getAttackDamage());
-                                    // if(enemy1.getHitPoints()<=0) tower.targetEnemy(gameField.getEnemyList()).setDead(true);
-                                    if (enemy1.isDead())
-                                        gameField.updateMoney(tower.targetEnemy(gameField.getEnemyList()));
-                                    // gamePane.getChildren().remove(bullet.getView());
-                                }
-                            }
-
-                        });
-
-                        if (now - timer1 >= 0.25 * 1e9) {
-
-                            gameField.getTowerList().forEach(tower -> {
-                                if (!gameField.getEnemyList().isEmpty() && tower.targetEnemy(gameField.getEnemyList()).distance(tower) < 240) {
-                                    tower.createBullet(new Bullet());
-                                    gamePane.getChildren().add(tower.getBullet().getView());
-                                }
-                            });
-
-
-                            timer1 = now;
-                        }
-
                     }
                 };
 
-                gameTimer.start();
-                play = false;
+                startTimer.start();
+                //   play = false;
             }
         });
 
@@ -238,7 +228,9 @@ public class GameStage {
         machine.setOnAction(actionEvent -> {
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
+
             try {
+
                 gameScene.setOnMouseClicked(gameField.buildTower(gamePane, map, new MachineGunTower()));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -260,7 +252,9 @@ public class GameStage {
         normal.setOnAction(actionEvent -> {
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
+
             try {
+
                 gameScene.setOnMouseClicked(gameField.buildTower(gamePane, map, new NormalTower()));
             } catch (IOException e) {
                 e.printStackTrace();

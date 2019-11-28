@@ -12,19 +12,19 @@ import java.util.List;
 public abstract class Tower implements GameEntity
 {
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
-    private double attackCooldown;                     // Delayed time for each attack
+    private int attackCooldown;                     // Delayed time for each attack
     private int attackRange;                        // Maximum range the tower can attack
     private int towerLevel;                         // The higher level the tower is the more effective it is
     private int buildCost;                          // Cost for building
     private int upgradeCost;                        // Cost for upgrading
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
-    private final int RADIUS = 240;
+    private int radius;
 
     protected String imageUrl;
     protected Image towerImage;
     protected ImageView View;
-    private  ImageView platform;
+
     private Point2D pos;
     private List<Bullet> bullet = new ArrayList<>();
 
@@ -34,16 +34,19 @@ public abstract class Tower implements GameEntity
 
     public Tower() throws IOException {
         this.towerLevel = 1;
-        platform= new ImageView( new Image("/Image/Tower/platform.png",getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
-        pos = new Point2D(getPlatform().getTranslateX(),getPlatform().getTranslateY());
 
     }
 
-    public void createBullet(Bullet bullets) {
-        bullets.setPos(pos);
-        bullets.getView().setTranslateX(pos.getX());
-        bullets.getView().setTranslateY(pos.getY());
+    public int getRadius() {
+        return radius;
+    }
 
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public void createBullet(Bullet bullets) {
+        bullets.setBulletSpeed(getAttackCooldown());
         bullet.add(bullets);
     }
 
@@ -64,12 +67,12 @@ public abstract class Tower implements GameEntity
         this.attackDamage = attackDamage;
     }
 
-    public double getAttackCooldown()
+    public int getAttackCooldown()
     {
         return attackCooldown;
     }
 
-    public void setAttackCooldown(double attackCooldown)
+    public void setAttackCooldown(int attackCooldown)
     {
         this.attackCooldown = attackCooldown;
     }
@@ -167,9 +170,6 @@ public abstract class Tower implements GameEntity
         return towerHill;
     }
 
-    public ImageView getPlatform() {
-        return platform;
-    }
 
     public Point2D getPos() {
         return pos;
@@ -178,21 +178,21 @@ public abstract class Tower implements GameEntity
     public void setPos(Point2D pos) {
         this.pos = pos;
     }
-//attack method maybe goes here
+
     public void update(Enemy enemy) {
         if (enemy != null) {
+
             double posEX = enemy.getView().getTranslateX();
             double posEY = enemy.getView().getTranslateY();
             double distance = enemy.distance(this);
-            if (distance <= RADIUS) {
+            if (distance <= radius) {
                 getView().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX())
                         , (posEY - getPos().getY()))));
-
             }
-
-            if (distance > RADIUS) {
+            //System.out.println(getView().getTranslateX()+ "  " + getView().getTranslateY() );
+            /*if (distance > RADIUS) {
                 getView().setRotate(0);
-            }
+            }*/
         } else getView().setRotate(0);
 
     }
@@ -203,7 +203,7 @@ public abstract class Tower implements GameEntity
             Enemy closestEnemy = enemies.get(0);
             for (int i = 0; i < enemies.size(); i++) {
                 double distance = enemies.get(i).distance(this);
-                if (distance < RADIUS && distance < closestEnemy.distance(this)) {
+                if (distance < radius && distance < closestEnemy.distance(this)) {
                     closestEnemy = enemies.get(i);
                 }
 

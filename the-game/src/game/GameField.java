@@ -4,10 +4,14 @@ import game.characters.*;
 import game.drawers.MyLabel;
 import game.drawers.TileMap;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -25,6 +29,7 @@ public class GameField
     private int money;
     private MyLabel Money;
     private double eventPosX, eventPosY;
+    private MediaPlayer mediaPlayer;
     private boolean build;
     private MyLabel life;
     private int lifes;
@@ -36,11 +41,20 @@ public class GameField
         money = 500;
         Money = new MyLabel("MONEY : " + money);
         build = false;
-        lifes = 4;
+        lifes = 100;
         life = new MyLabel("x " + lifes, "/Image/UI/life.png", 45, 100);
         String setText = "X ";
         if (lifes < 10) setText = setText + "0";
         life.setText(setText + lifes);
+        mediaPlayer = new MediaPlayer(new Media(new File("src/Sound/enemy.mp3").toURI().toString()));
+    }
+
+    public double getEventPosX() {
+        return eventPosX;
+    }
+
+    public double getEventPosY() {
+        return eventPosY;
     }
 
     public MyLabel getLife() {
@@ -151,6 +165,7 @@ public class GameField
                 String setText = "X ";
                 if (lifes < 10) setText = setText + "0";
                 life.setText(setText + lifes);
+                mediaPlayer.play();
 
             }
             if(checkRemoveEnemy(i))
@@ -161,6 +176,17 @@ public class GameField
         }
     }
 
+    /* public EventHandler getMouse(){
+
+         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+             @Override
+             public void handle(MouseEvent mouseEvent) {
+                     eventPosX = mouseEvent.getSceneX();
+                     eventPosY = mouseEvent.getSceneY();
+                 }
+         };
+        return eventHandler;
+     }*/
     public EventHandler buildTower(AnchorPane gamePane, TileMap map, Tower tower) throws IOException {
 
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
@@ -173,10 +199,11 @@ public class GameField
                     int i = (int) eventPosY / map.getGRID_SIZE();
                     int j = (int) eventPosX / map.getGRID_SIZE();
 
-                    if (i < 12 && j < 12 && map.getGrid()[i][j] == 0) {
+                    if (i < map.getMAP_HEIGHT() && j < map.getMAP_WIDTH() && map.getGrid()[i][j] == 0) {
                         towerList.add(tower);
                         tower.getView().setTranslateX(j * map.getGRID_SIZE());
                         tower.getView().setTranslateY(i * map.getGRID_SIZE());
+                        tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
                         gamePane.getChildren().add(tower.getView());
                         money = money - tower.getBuildCost();
                         String setTextMoney = "MONEY : ";
@@ -186,8 +213,8 @@ public class GameField
                 }
                 build = false;
             }
-
         };
+
         return eventHandler;
     }
 

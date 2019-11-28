@@ -3,13 +3,18 @@ package game.characters;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
 
 public class Bullet implements GameEntity {
     private int bulletDamage;
-    private final int bulletSpeed = 2048;
+    private int bulletSpeed = 0;
     private Enemy bulletTarget;
     private ImageView view;
     private String url;
+    private MediaPlayer mediaBullet;
 
     private Point2D pos;
 
@@ -17,15 +22,17 @@ public class Bullet implements GameEntity {
 
     public Bullet()
     {
-        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 60, 60, false, true));
+        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
 
     }
     public Bullet(Tower tower) {
-        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 60, 60, false, true));
+        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
         view.setTranslateX(tower.getView().getTranslateX());
         view.setTranslateY(tower.getView().getTranslateY());
-
-        pos = new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY());
+        String path = "src/Sound/bullet.mp3";
+        mediaBullet = new MediaPlayer(new Media(new File(path).toURI().toString()));
+        mediaBullet.play();
+        pos = new Point2D(tower.getPos().getX(), tower.getPos().getY());
     }
     public Point2D getPos() {
         return pos;
@@ -58,11 +65,14 @@ public class Bullet implements GameEntity {
         this.bulletDamage = bulletDamage;
     }
 
-    public final int getBulletSpeed()
+    public int getBulletSpeed()
     {
         return bulletSpeed;
     }
 
+    public void setBulletSpeed(int speed) {
+        this.bulletSpeed = speed;
+    }
     public Enemy getBulletTarget() {
         return bulletTarget;
     }
@@ -105,8 +115,8 @@ public class Bullet implements GameEntity {
             Point2D centerE = new Point2D(posEX, posEY);
 
             double angle = (Math.atan2(centerE.getX() - getPos().getX(), centerE.getY() - getPos().getY()));
-            getView().setTranslateX(getView().getTranslateX() + Math.sin(angle) * 10);
-            getView().setTranslateY(getView().getTranslateY() + Math.cos(angle) * 10);
+            getView().setTranslateX(getView().getTranslateX() + Math.sin(angle) * getBulletSpeed());
+            getView().setTranslateY(getView().getTranslateY() + Math.cos(angle) * getBulletSpeed());
         }
     }
 
@@ -116,7 +126,7 @@ public class Bullet implements GameEntity {
             double posEY = enemy.getView().getTranslateY();
             double posX = getView().getTranslateX();
             double posY = getView().getTranslateY();
-            if (posEX <= posX && posX <= posEX + 40 && posEY <= posY && posY <= posEY + 40) return true;
+            if (posEX <= posX && posX <= posEX + 30 && posEY <= posY && posY <= posEY + 30) return true;
             if (posEX >= posX && posX <= posEX - 40 && posEY <= posY && posY >= posEY + 40) return true;
             if (posEX <= posX && posX <= posEX + 40 && posEY >= posY && posY <= posEY - 40) return true;
             return posEX <= posX && posX <= posEX + 40 && posEY <= posY && posY >= posEY + 40;

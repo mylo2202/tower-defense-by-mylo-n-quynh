@@ -13,10 +13,11 @@ public class SniperTower extends Tower{
         setView(new ImageView(this.getTowerImage()));
         setAttackDamage(200);
         setAttackRange(360);
-        setAttackCooldown(2000);
-        setBuildCost(100);
-        setUpgradeCost(250);
-        setSellPrice(125);
+        setAttackCooldown(15);
+        setBuildCost(500);
+        setUpgradeCost(500);
+        setSellPrice(250);
+        setRadius(160);
       /*  bullets.forEach(bullet -> {
             bullet.setImageUrl("/Image/Bullet/bullet1.png");
         });*/

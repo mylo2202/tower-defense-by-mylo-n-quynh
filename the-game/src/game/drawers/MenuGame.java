@@ -7,8 +7,12 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MenuGame {
@@ -21,6 +25,14 @@ public class MenuGame {
     private MyBorderPane mainPane;
     private Scene mainScene;
     private Stage mainStage;
+    boolean setMusic = true;
+    String s = "OFF";
+    private MediaPlayer mediaButton;
+    private MediaPlayer mediaPlayer;
+
+    public Stage getMainStage() {
+        return mainStage;
+    }
 
     public MenuGame() {
 
@@ -33,15 +45,24 @@ public class MenuGame {
         createButton();
         createBackGround();
         createLogo();
-    }
+        String musicFile = "src//Sound//click2.mp3";
+        String path = "src/Sound/menuMedia.mp3";
 
-    public Stage getMainStage() {
-        return mainStage;
+        mediaButton = new MediaPlayer(new Media(new File(musicFile).toURI().toString()));
+        mediaPlayer = new MediaPlayer(new Media(new File(path).toURI().toString()));
+        mediaPlayer.play();
+
+        mediaPlayer.setOnEndOfMedia(new Runnable() {
+            public void run() {
+                mediaPlayer.seek(Duration.ZERO);
+            }
+        });
+
     }
 
     public void createButton() {
         createPlayButton();
-        createContinueButton();
+        createSettingsButton();
         createQuitButton();
 
     }
@@ -49,17 +70,38 @@ public class MenuGame {
     public void createPlayButton() {
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
         MyButton newPlay = new MyButton("NEW GAME", 45, 190, url);
-
         mainPane.addButton(newPlay);
         newPlay.setOnAction(actionEvent -> {
-            GameStage gameViewManger;
+            mediaButton.play();
+
+            GameStage gameStage;
             try {
-                gameViewManger = new GameStage();
-                gameViewManger.createNewGame(mainStage);
+                gameStage = new GameStage();
+                gameStage.createNewGame(mainStage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    public boolean isSetMusic() {
+        return setMusic;
+    }
+
+    public void setSetMusic(boolean setMusic) {
+        this.setMusic = setMusic;
+    }
+
+    public void Music(boolean setMusic) {
+        if (setMusic == false) {
+            s = "ON";
+            mediaPlayer.stop();
+            mediaButton.stop();
+        } else {
+            s = "OFF";
+            mediaPlayer.play();
+            mediaButton.play();
+        }
     }
 
     public void createQuitButton() {
@@ -68,15 +110,24 @@ public class MenuGame {
 
         mainPane.addButton(quit);
         quit.setOnAction(actionEvent -> {
+            mediaButton.play();
             mainStage.close();
         });
     }
 
-    public void createContinueButton() {
+    public void createSettingsButton() {
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
-        MyButton continuePlay = new MyButton("CONTINUE", 45, 190, url);
 
-        mainPane.addButton(continuePlay);
+        MyButton musicPlay = new MyButton("Music : " + s, 45, 190, url);
+        mainPane.addButton(musicPlay);
+
+        musicPlay.setOnMousePressed(actionEvent -> {
+            setSetMusic(!setMusic);
+            Music(setMusic);
+            musicPlay.setText("Music : " + s);
+        });
+
+
     }
 
     private void createBackGround() {

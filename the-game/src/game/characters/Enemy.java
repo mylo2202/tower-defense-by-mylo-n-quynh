@@ -46,14 +46,6 @@ public abstract class Enemy extends GameField {
 
     public Enemy() throws IOException {
         isDead = false;
-
-        //reachedGoal = false;
-
-        //getEnemyList().add(this);
-
-        /*System.out.println("enemyList.size() = " + enemyList.size());
-        System.out.println("isDead = " + isDead);
-        System.out.println("reachedGoal = " + reachedGoal);*/
     }
 
     public int getHitPoints()
