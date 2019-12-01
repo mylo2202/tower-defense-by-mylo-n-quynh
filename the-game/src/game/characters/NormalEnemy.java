@@ -12,7 +12,7 @@ public class NormalEnemy extends Enemy
         setEnemyImage(new Image(this.getImageUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
         setView(new ImageView(this.getEnemyImage()));
         setHitPoints(200);
-        setMoveDuration(500);
+        setMoveDuration(20);
         setReward(50);
         setLevel(2);
     }

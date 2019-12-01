@@ -14,9 +14,9 @@ public class NormalTower extends Tower {
         setAttackDamage(50);
         setAttackRange(200);
         setAttackCooldown(500);
-        setBuildCost(50);
-        setUpgradeCost(100);
-        setSellPrice(50);
+        setBuildCost(200);
+        setUpgradeCost(200);
+        setSellPrice(100);
         /*bullets.forEach(bullet -> {
             bullet.setImageUrl("/Image/Bullet/bullet1.png");
 

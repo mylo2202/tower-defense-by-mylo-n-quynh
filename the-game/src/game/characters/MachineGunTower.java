@@ -13,9 +13,9 @@ public class MachineGunTower extends Tower {
         setAttackDamage(25);
         setAttackRange(120);
         setAttackCooldown(250);
-        setBuildCost(70);
-        setUpgradeCost(50);
-        setSellPrice(25);
+        setBuildCost(100);
+        setUpgradeCost(100);
+        setSellPrice(50);
       /*  bullets.forEach(bullet -> {
             bullet.setImageUrl("/Image/Bullet/bullet1.png");
         });*/

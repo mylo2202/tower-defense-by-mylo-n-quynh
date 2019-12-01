@@ -1,21 +1,17 @@
 package game.drawers;
 
-import java.io.*;
-
-import game.GameEntity;
-import game.characters.*;
-import javafx.animation.AnimationTimer;
 import game.GameField;
 import game.characters.*;
+import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,13 +19,10 @@ import java.io.IOException;
 public class GameStage {
 
     private AnimationTimer gameTimer;
-
     private AnchorPane gamePane;
     private Scene gameScene;
     private Stage gameStage;
     private Stage menuStage;
-    private Label Label;
-
     private MyLabel Money;
 
     private Image hammer = new Image("/Image/Tower/Hammer.png");
@@ -53,34 +46,18 @@ public class GameStage {
         });
     }
 
-    private void initialiseStage()
-    {
+    private void initialiseStage() {
         gamePane = new AnchorPane();
+
         gameScene = new Scene(gamePane, map.getSCREEN_WIDTH(), map.getSCREEN_HEIGHT());
         gameStage = new Stage();
         gameStage.setResizable(false);
         gameStage.setScene(gameScene);
     }
 
-    public void createNewGame(Stage menuStage) throws IOException {
-        this.menuStage=menuStage;
-        this.menuStage.hide();
 
-        map = new TileMap();
 
-        drawPanel();
-        createPanelControl();
-
-        map.drawMap(gamePane);
-
-        createButton();
-        //createGameLoop();
-        createTower();
-        gameStage.setTitle("Tower Defense");
-        gameStage.show();
-    }
-
-    public Stage getStage(){
+    public Stage getStage() {
         return gameStage;
     }
 
@@ -95,9 +72,9 @@ public class GameStage {
 
     public void drawPanel() {
         Image panel = new Image("/Image/UI/green_panel.png",
-                map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize(), map.getSCREEN_HEIGHT(), false, true);
+                map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize(), map.getSCREEN_HEIGHT(), false, true);
         ImageView panelView = new ImageView(panel);
-        panelView.setLayoutX(map.getGrid()[0].length*map.getSize());
+        panelView.setLayoutX(map.getGrid()[0].length * map.getSize());
         panelView.setLayoutY(0);
         gamePane.getChildren().add(panelView);
 
@@ -114,14 +91,7 @@ public class GameStage {
         gamePane.getChildren().add(Money);
     }
 
-    private void createTower() throws IOException {
-        NormalTower normalTower = new NormalTower();
-        normalTower.getTowerView().setLayoutX(240);
-        normalTower.getTowerView().setLayoutY(320);
-        gamePane.getChildren().add(normalTower.getTowerView());
-    }
-
-    public void createButton(){
+    public void createButton() {
         buttonStart();
         machineTowerButton();
         normalTowerButton();
@@ -150,10 +120,10 @@ public class GameStage {
         gameStage.show();
     }
 
-    public void buttonStart(){
-        String url="-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
-        MyButton Start= new MyButton("START",45,190,url);
-        Start.setLayoutX(map.getGrid()[0].length*map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length*map.getSize())/2 - 95);
+    public void buttonStart() {
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
+        MyButton Start = new MyButton("START", 45, 190, url);
+        Start.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
         Start.setLayoutY(640);
         Start.setOnAction(actionEvent -> {
 
@@ -224,7 +194,6 @@ public class GameStage {
             };
 
             gameTimer.start();
-            play = true;
 
 
         });
