@@ -12,24 +12,12 @@ public class NormalTower extends Tower {
         setImageUrl("/Image/Tower/normalTower.png");
         setTowerImage(new Image(this.getImageUrl(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         setView(new ImageView(getTowerImage()));
-        setAttackDamage(50);
-        setAttackRange(200);
-        setAttackCooldown(18);
+        setAttackDamage(25);
+
+        setAttackCooldown(0.2);
         setBuildCost(200);
         setUpgradeCost(200);
         setSellPrice(100);
-        setRadius(120);
-        /*bullets.forEach(bullet -> {
-            bullet.setImageUrl("/Image/Bullet/bullet1.png");
-
-        });*/
+        setAttackRange(200);
     }
-   /* public void setBullet(){
-        bullets.forEach(bullet -> {
-            bullet.setImageUrl("/Image/Bullet/bullet1.png");
-
-        });
-    }
-*/
-    //upgrade tower method goes here
 }

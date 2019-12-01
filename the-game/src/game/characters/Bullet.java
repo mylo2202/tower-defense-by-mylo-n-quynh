@@ -1,20 +1,17 @@
 package game.characters;
 
+import game.Music;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
-import java.io.File;
 
 public class Bullet implements GameEntity {
     private int bulletDamage;
-    private int bulletSpeed = 0;
+    private int bulletSpeed = 15;
     private Enemy bulletTarget;
     private ImageView view;
     private String url;
-    private MediaPlayer mediaBullet;
+    private Music music = new Music();
 
     private Point2D pos;
 
@@ -25,14 +22,17 @@ public class Bullet implements GameEntity {
         view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
 
     }
-    public Bullet(Tower tower) {
+
+    public Bullet(Tower tower, boolean sound) {
         view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
         view.setTranslateX(tower.getView().getTranslateX());
         view.setTranslateY(tower.getView().getTranslateY());
-        String path = "src/Sound/bullet.mp3";
-        mediaBullet = new MediaPlayer(new Media(new File(path).toURI().toString()));
-        mediaBullet.play();
+        if (sound == true) music.getMediaBullet().play();
         pos = new Point2D(tower.getPos().getX(), tower.getPos().getY());
+    }
+
+    public Music getMusic() {
+        return music;
     }
     public Point2D getPos() {
         return pos;
@@ -112,11 +112,12 @@ public class Bullet implements GameEntity {
             double posEX = enemy.getView().getTranslateX();
             double posEY = enemy.getView().getTranslateY();
 
-            Point2D centerE = new Point2D(posEX, posEY);
+            Point2D centerE = new Point2D(posEX + 5, posEY + 5);
 
             double angle = (Math.atan2(centerE.getX() - getPos().getX(), centerE.getY() - getPos().getY()));
-            getView().setTranslateX(getView().getTranslateX() + Math.sin(angle) * getBulletSpeed());
-            getView().setTranslateY(getView().getTranslateY() + Math.cos(angle) * getBulletSpeed());
+            getView().setTranslateX(getView().getTranslateX() + Math.sin(angle) * bulletSpeed);
+            getView().setTranslateY(getView().getTranslateY() + Math.cos(angle) * bulletSpeed);
+            //  System.out.println(getView().getTranslateX() + Math.sin(angle) * bulletSpeed);
         }
     }
 
@@ -126,10 +127,10 @@ public class Bullet implements GameEntity {
             double posEY = enemy.getView().getTranslateY();
             double posX = getView().getTranslateX();
             double posY = getView().getTranslateY();
-            if (posEX <= posX && posX <= posEX + 30 && posEY <= posY && posY <= posEY + 30) return true;
-            if (posEX >= posX && posX <= posEX - 40 && posEY <= posY && posY >= posEY + 40) return true;
+            return posEX <= posX && posX <= posEX + 30 && posEY <= posY && posY <= posEY + 30;
+           /* if (posEX >= posX && posX <= posEX - 40 && posEY <= posY && posY >= posEY + 40) return true;
             if (posEX <= posX && posX <= posEX + 40 && posEY >= posY && posY <= posEY - 40) return true;
-            return posEX <= posX && posX <= posEX + 40 && posEY <= posY && posY >= posEY + 40;
+            return posEX <= posX && posX <= posEX + 40 && posEY <= posY && posY >= posEY + 40;*/
             //  return getView().getBoundsInParent().intersects(enemy.getView().getBoundsInParent());
         }
         return false;

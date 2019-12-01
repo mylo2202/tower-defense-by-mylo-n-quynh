@@ -3,15 +3,14 @@ package game;
 import game.characters.*;
 import game.drawers.MyLabel;
 import game.drawers.TileMap;
+import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -29,24 +28,29 @@ public class GameField
     private int money;
     private MyLabel Money;
     private double eventPosX, eventPosY;
-    private MediaPlayer mediaPlayer;
+    TileMap map = new TileMap();
     private boolean build;
     private MyLabel life;
     private int lifes;
+    ImageView gameOver = new ImageView(new Image("/Image/Enemy/gameOver.png"));
+    private Music music = new Music();
 
-    public GameField() {
+    public GameField() throws IOException {
         enemyList = new ArrayList<>();
         towerList = new ArrayList<>();
         bulletList = new ArrayList<>();
         money = 500;
         Money = new MyLabel("MONEY : " + money);
         build = false;
-        lifes = 100;
+        lifes = 2;
         life = new MyLabel("x " + lifes, "/Image/UI/life.png", 45, 100);
         String setText = "X ";
-        if (lifes < 10) setText = setText + "0";
+        if (lifes < 10 && lifes > 0) setText = setText + "0";
         life.setText(setText + lifes);
-        mediaPlayer = new MediaPlayer(new Media(new File("src/Sound/enemy.mp3").toURI().toString()));
+        gameOver.setLayoutX(500);
+        gameOver.setLayoutY(400);
+
+
     }
 
     public double getEventPosX() {
@@ -132,6 +136,7 @@ public class GameField
                     getEnemyList().add(enemy = new TankerEnemy());
                     difficultyScore -= getEnemyList().get(getEnemyList().size() - 1).getLevel();
                 }
+
             }
             else if(x >= 91 && x <= 100)
             {
@@ -156,6 +161,26 @@ public class GameField
         return false;
     }
 
+    public void gameOver(AnimationTimer animationTimer, AnchorPane anchorPane) {
+
+        if (lifes <= 0) {
+            music.getMediaBackground().stop();
+            music.getMediaGameOver().play();
+            animationTimer.stop();
+            if (!getEnemyList().isEmpty()) {
+                getEnemyList().forEach(enemy -> {
+                    enemy.enemyMove().stop();
+                });
+            }
+            anchorPane.getChildren().add(gameOver);
+
+        }
+    }
+
+    public Music getMusic() {
+        return music;
+    }
+
     public void removeEnemy(int i)
     {
         if(!getEnemyList().isEmpty())
@@ -165,7 +190,8 @@ public class GameField
                 String setText = "X ";
                 if (lifes < 10) setText = setText + "0";
                 life.setText(setText + lifes);
-                mediaPlayer.play();
+                if (lifes < 0) life.setText("X 00");
+                music.getMediaEnemyHasGoal().play();
 
             }
             if(checkRemoveEnemy(i))
@@ -187,7 +213,7 @@ public class GameField
          };
         return eventHandler;
      }*/
-    public EventHandler buildTower(AnchorPane gamePane, TileMap map, Tower tower) throws IOException {
+    public EventHandler buildTower(AnchorPane gamePane, Tower tower) throws IOException {
 
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
             @Override
@@ -200,11 +226,13 @@ public class GameField
                     int j = (int) eventPosX / map.getGRID_SIZE();
 
                     if (i < map.getMAP_HEIGHT() && j < map.getMAP_WIDTH() && map.getGrid()[i][j] == 0) {
+
                         towerList.add(tower);
                         tower.getView().setTranslateX(j * map.getGRID_SIZE());
                         tower.getView().setTranslateY(i * map.getGRID_SIZE());
                         tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
                         gamePane.getChildren().add(tower.getView());
+
                         money = money - tower.getBuildCost();
                         String setTextMoney = "MONEY : ";
                         if (money < 10) setTextMoney = setTextMoney + "0";
@@ -224,5 +252,6 @@ public class GameField
         if (money < 10) setTextMoney = setTextMoney + "0";
         Money.setText(setTextMoney + money);
     }
+
 
 }

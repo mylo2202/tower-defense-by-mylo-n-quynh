@@ -11,15 +11,16 @@ import java.util.List;
 
 public abstract class Tower implements GameEntity
 {
+    private static double attackCooldown;              // Delayed time for each attack
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
-    private int attackCooldown;                     // Delayed time for each attack
-    private int attackRange;                        // Maximum range the tower can attack
+    // Maximum range the tower can attack
     private int towerLevel;                         // The higher level the tower is the more effective it is
     private int buildCost;                          // Cost for building
     private int upgradeCost;                        // Cost for upgrading
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
-    private int radius;
+    private int attackRange;
+
 
     protected String imageUrl;
     protected Image towerImage;
@@ -37,17 +38,16 @@ public abstract class Tower implements GameEntity
 
     }
 
-    public int getRadius() {
-        return radius;
+    public static double getAttackCooldown() {
+        return attackCooldown;
     }
 
-    public void setRadius(int radius) {
-        this.radius = radius;
+    public void setAttackCooldown(double attackCooldown) {
+        Tower.attackCooldown = attackCooldown;
     }
 
-    public void createBullet(Bullet bullets) {
-        bullets.setBulletSpeed(getAttackCooldown());
-        bullet.add(bullets);
+    public int getAttackRange() {
+        return attackRange;
     }
 
     public Bullet getBullet() {
@@ -67,25 +67,16 @@ public abstract class Tower implements GameEntity
         this.attackDamage = attackDamage;
     }
 
-    public int getAttackCooldown()
-    {
-        return attackCooldown;
-    }
-
-    public void setAttackCooldown(int attackCooldown)
-    {
-        this.attackCooldown = attackCooldown;
-    }
-
-    public int getAttackRange()
-    {
-        return attackRange;
-    }
-
-    public void setAttackRange(int attackRange)
-    {
+    public void setAttackRange(int attackRange) {
         this.attackRange = attackRange;
     }
+
+    public void createBullet(Bullet bullets) {
+
+        bullet.add(bullets);
+    }
+
+
 
     public int getTowerLevel()
     {
@@ -185,7 +176,7 @@ public abstract class Tower implements GameEntity
             double posEX = enemy.getView().getTranslateX();
             double posEY = enemy.getView().getTranslateY();
             double distance = enemy.distance(this);
-            if (distance <= radius) {
+            if (distance <= attackRange) {
                 getView().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX())
                         , (posEY - getPos().getY()))));
             }
@@ -201,13 +192,16 @@ public abstract class Tower implements GameEntity
 
         if (!enemies.isEmpty()) {
             Enemy closestEnemy = enemies.get(0);
-            for (int i = 0; i < enemies.size(); i++) {
-                double distance = enemies.get(i).distance(this);
-                if (distance < radius && distance < closestEnemy.distance(this)) {
-                    closestEnemy = enemies.get(i);
-                }
+            if (closestEnemy.isDead() || closestEnemy.distance(this) > attackRange)
+                for (int i = 0; i < enemies.size(); i++) {
+                    double distance = enemies.get(i).distance(this);
 
-            }
+
+                    if (distance < attackRange && distance < closestEnemy.distance(this)) {
+                        closestEnemy = enemies.get(i);
+                    }
+
+                }
             return closestEnemy;
         } else return null;
     }

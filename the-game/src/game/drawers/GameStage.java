@@ -1,6 +1,7 @@
 package game.drawers;
 
 import game.GameField;
+import game.Music;
 import game.characters.*;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -33,6 +34,7 @@ public class GameStage {
     private TileMap map = new TileMap();
 
     private GameField gameField = new GameField();
+    private Music music = gameField.getMusic();
     private boolean play = true;
 
     public GameStage() throws IOException {
@@ -58,10 +60,16 @@ public class GameStage {
 
         @Override
         public void handle(MouseEvent mouseEvent) {
+
             gameScene.setCursor(Cursor.DEFAULT);
+            music.getMediaButton().stop();
         }
 
     };
+
+    public Music getMusic() {
+        return music;
+    }
 
     public void drawPanel() {
         Image panel = new Image("/Image/UI/green_panel.png",
@@ -114,7 +122,10 @@ public class GameStage {
                 }
         );
         towerTimer = new AnimationTimer() {
+
             long timer1 = System.nanoTime();
+            long timer2 = System.nanoTime();
+            long timer3 = System.nanoTime();
 
             @Override
             public void handle(long now) {
@@ -123,22 +134,26 @@ public class GameStage {
                     Tower tower = towerIterator.next();
                     tower.update(tower.targetEnemy(gameField.getEnemyList()));
 
-                    Iterator<Bullet> iterator = tower.getBulletList().iterator();
-                    while (iterator.hasNext()) {
-                        Bullet bullet = iterator.next();
-                        bullet.update(tower.targetEnemy(gameField.getEnemyList()));
+                    for (int i = 0; i < tower.getBulletList().size(); i++) {
+
+                        tower.getBulletList().get(i).update(tower.targetEnemy(gameField.getEnemyList()));
+
                         Enemy enemy1 = tower.targetEnemy(gameField.getEnemyList());
-                        double range = Math.sqrt(Math.pow(bullet.getView().getTranslateX() - bullet.getPos().getX(), 2)
-                                + Math.pow(bullet.getView().getTranslateY() - bullet.getPos().getY(), 2));
-                        if (range >= tower.getRadius() || gameField.getEnemyList().isEmpty()) {
-                            gamePane.getChildren().remove(bullet.getView());
-                            tower.getBulletList().remove(iterator);
+
+                        double range = Math.sqrt(Math.pow(tower.getBulletList().get(i).getView().getTranslateX() - tower.getBulletList().get(i).getPos().getX(), 2)
+                                + Math.pow(tower.getBulletList().get(i).getView().getTranslateY() - tower.getBulletList().get(i).getPos().getY(), 2));
+                        if (range >= tower.getAttackRange() || gameField.getEnemyList().isEmpty()) {
+                            //   System.out.println(bullet.getView().getTranslateX()+"     "+bullet.getView().getTranslateY());
+
+                            gamePane.getChildren().remove(tower.getBulletList().get(i).getView());
+                            tower.getBulletList().remove(tower.getBulletList().get(i));
+
                         }
-                        if (bullet.isColliding(enemy1)) {
-                            gamePane.getChildren().remove(bullet.getView());
-                            tower.getBulletList().remove(iterator);
+                        if (!tower.getBulletList().isEmpty() && tower.getBulletList().get(i).isColliding(enemy1)) {
+                            gamePane.getChildren().remove(tower.getBulletList().get(i).getView());
+                            tower.getBulletList().remove(tower.getBulletList().get(i));
                             enemy1.removeHitPoints(tower.getAttackDamage());
-                            //  if (enemy1.getHitPoints() <= 0) tower.targetEnemy(gameField.getEnemyList()).setDead(true);
+                            if (enemy1.getHitPoints() <= 0) tower.targetEnemy(gameField.getEnemyList()).setDead(true);
                             if (enemy1.isDead()) gameField.updateMoney(tower.targetEnemy(gameField.getEnemyList()));
 
                         }
@@ -147,16 +162,52 @@ public class GameStage {
 
 
                 }
-                if (now - timer1 >= 0.25 * 1e9) {
+                if (now - timer1 >= MachineGunTower.getAttackCooldown() * 1e9) {
 
                     gameField.getTowerList().forEach(tower -> {
-                        if (!gameField.getEnemyList().isEmpty() && tower.targetEnemy(gameField.getEnemyList()).distance(tower) <= tower.getRadius()) {
-                            tower.createBullet(new Bullet(tower));
+                        if (tower instanceof MachineGunTower)
+                            if (!gameField.getEnemyList().isEmpty()
+                                    && tower.targetEnemy(gameField.getEnemyList()).distance(tower) <= tower.getAttackRange()) {
+
+                                tower.createBullet(new Bullet(tower, music.isPlayMusic()));
+
                             gamePane.getChildren().add(tower.getBullet().getView());
                         }
                     });
 
                     timer1 = now;
+                }
+                if (now - timer2 >= NormalTower.getAttackCooldown() * 1e9) {
+
+                    gameField.getTowerList().forEach(tower -> {
+
+                        if (tower instanceof NormalTower) {
+
+                            if (!gameField.getEnemyList().isEmpty() &&
+                                    tower.targetEnemy(gameField.getEnemyList()).distance(tower) <= tower.getAttackRange()) {
+                                tower.createBullet(new Bullet(tower, music.isPlayMusic()));
+                                gamePane.getChildren().add(tower.getBullet().getView());
+
+
+                            }
+
+                        }
+                    });
+                    timer2 = now;
+                }
+                if (now - timer3 >= SniperTower.getAttackCooldown() * 1e9) {
+
+                    gameField.getTowerList().forEach(tower -> {
+                        if (tower instanceof SniperTower)
+                            if (!gameField.getEnemyList().isEmpty()
+                                    && tower.targetEnemy(gameField.getEnemyList()).distance(tower) <= tower.getAttackRange()) {
+
+                                tower.createBullet(new Bullet(tower, music.isPlayMusic()));
+                                gamePane.getChildren().add(tower.getBullet().getView());
+                            }
+                    });
+
+                    timer3 = now;
                 }
                 if (!gameField.getEnemyList().isEmpty()) {
                     //  System.out.println(gameField.getEnemyList().get(0).getView().getTranslateX() + " " + gameField.getEnemyList().get(0).getView().getTranslateY());
@@ -172,8 +223,10 @@ public class GameStage {
                         }
                     }
                 }
+                gameField.gameOver(towerTimer, gamePane);
             }
         };
+
         towerTimer.start();
     }
     public void buttonStart() {
@@ -183,14 +236,16 @@ public class GameStage {
         Start.setLayoutY(640);
 
         Start.setOnAction(actionEvent -> {
+            if (music.isPlayMusic()) music.getMediaButton().play();
             if (play == true) {
+
                 startTimer = new AnimationTimer() {
-                    int difficulty = 10;
+                    int difficulty = 3;
                     long timer = System.nanoTime();
                     @Override
                     public void handle(long now) {
                         Enemy enemy = null;
-                        if (now - timer >= .25 * 1e9) {
+                        if (now - timer >= 1 * 1e9) {
                             if (difficulty > 0) {
                                 try {
                                     gameField.getEnemyList().add(enemy = new SmallerEnemy());
@@ -226,12 +281,15 @@ public class GameStage {
         gamePane.getChildren().add(machine);
 
         machine.setOnAction(actionEvent -> {
+            if (music.isPlayMusic()) music.getMediaButton().play();
+            System.out.println(music.isPlayMusic());
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
 
             try {
 
-                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, map, new MachineGunTower()));
+                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, new MachineGunTower()));
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -250,12 +308,13 @@ public class GameStage {
         gamePane.getChildren().add(normal);
 
         normal.setOnAction(actionEvent -> {
+            if (music.isPlayMusic()) music.getMediaButton().play();
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
 
             try {
 
-                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, map, new NormalTower()));
+                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, new NormalTower()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -273,10 +332,11 @@ public class GameStage {
         gamePane.getChildren().add(Sniper);
 
         Sniper.setOnAction(actionEvent -> {
+            if (music.isPlayMusic()) music.getMediaButton().play();
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
             try {
-                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, map, new SniperTower()));
+                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, new SniperTower()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
