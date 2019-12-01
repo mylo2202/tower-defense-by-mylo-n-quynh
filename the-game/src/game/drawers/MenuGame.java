@@ -1,5 +1,6 @@
 package game.drawers;
 
+import game.Music;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -21,27 +22,39 @@ public class MenuGame {
     private MyBorderPane mainPane;
     private Scene mainScene;
     private Stage mainStage;
+    boolean setMusic = true;
+    private String turnMusic = "ON";
+    private GameStage gameStage;
+    private Music music;
 
-    public MenuGame() {
+    public MenuGame() throws IOException {
 
         mainPane = new MyBorderPane();
         mainPane.setPadding(new Insets(10, 10, 10, 10));
 
+        gameStage = new GameStage();
+        music = gameStage.getMusic();
         mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainStage = new Stage();
         mainStage.setScene(mainScene);
         createButton();
         createBackGround();
         createLogo();
+        music.getMediaBackground().play();
+
     }
 
     public Stage getMainStage() {
         return mainStage;
     }
 
+    public Music getMusic() {
+        return music;
+    }
+
     public void createButton() {
         createPlayButton();
-        createContinueButton();
+        createSettingsButton();
         createQuitButton();
 
     }
@@ -49,16 +62,18 @@ public class MenuGame {
     public void createPlayButton() {
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
         MyButton newPlay = new MyButton("NEW GAME", 45, 190, url);
-
         mainPane.addButton(newPlay);
         newPlay.setOnAction(actionEvent -> {
-            GameStage gameViewManger;
+            if (music.isPlayMusic()) music.getMediaButton().play();
+
             try {
-                gameViewManger = new GameStage();
-                gameViewManger.createNewGame(mainStage);
+                gameStage.createNewGame(mainStage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        });
+        newPlay.setOnMouseReleased(actionEvent -> {
+            if (music.isPlayMusic()) music.getMediaButton().stop();
         });
     }
 
@@ -68,15 +83,31 @@ public class MenuGame {
 
         mainPane.addButton(quit);
         quit.setOnAction(actionEvent -> {
+            if (music.isPlayMusic()) music.getMediaButton().play();
+            System.out.println(music.isPlayMusic());
             mainStage.close();
         });
     }
 
-    public void createContinueButton() {
+    public void createSettingsButton() {
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
-        MyButton continuePlay = new MyButton("CONTINUE", 45, 190, url);
 
-        mainPane.addButton(continuePlay);
+        MyButton musicPlay = new MyButton("Music : " + turnMusic, 45, 190, url);
+        mainPane.addButton(musicPlay);
+
+        musicPlay.setOnMousePressed(actionEvent -> {
+            music.getMediaButton().play();
+
+            music.setPlayMusic(!music.isPlayMusic());
+
+            if (music.isPlayMusic()) turnMusic = "ON";
+            else turnMusic = "OFF";
+            // System.out.println(music.isPlayMusic());
+            music.setMusic();
+            musicPlay.setText("Music : " + turnMusic);
+        });
+
+
     }
 
     private void createBackGround() {

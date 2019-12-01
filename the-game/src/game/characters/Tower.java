@@ -5,43 +5,56 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public abstract class Tower implements GameEntity
 {
+    private static double attackCooldown;              // Delayed time for each attack
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
-    private double attackCooldown;                     // Delayed time for each attack
-    private int attackRange;                        // Maximum range the tower can attack
+    // Maximum range the tower can attack
     private int towerLevel;                         // The higher level the tower is the more effective it is
     private int buildCost;                          // Cost for building
     private int upgradeCost;                        // Cost for upgrading
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
-    private final int RADIUS = 320;
-    //   protected List<Bullet> bullets= new ArrayList<>();
+    private int attackRange;
+
 
     protected String imageUrl;
     protected Image towerImage;
     protected ImageView View;
-    private  ImageView platform;
+
     private Point2D pos;
-    Bullet bullet;
-    private Point2D velocity;
+    private List<Bullet> bullet = new ArrayList<>();
 
     private Hill towerHill = new Hill();
-    private double slope;
 
     //platform image properties and methods maybe go here
 
     public Tower() throws IOException {
         this.towerLevel = 1;
-        platform= new ImageView( new Image("/Image/Tower/platform.png",getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
-        pos = new Point2D(getPlatform().getTranslateX(),getPlatform().getTranslateY());
-        velocity = new Point2D(1, slope);
+
     }
 
-    public Bullet createBullet() {
-        bullet = new Bullet();
+    public static double getAttackCooldown() {
+        return attackCooldown;
+    }
+
+    public void setAttackCooldown(double attackCooldown) {
+        Tower.attackCooldown = attackCooldown;
+    }
+
+    public int getAttackRange() {
+        return attackRange;
+    }
+
+    public Bullet getBullet() {
+        return bullet.get(bullet.size() - 1);
+    }
+
+    public List<Bullet> getBulletList() {
         return bullet;
     }
     public int getAttackDamage()
@@ -54,25 +67,16 @@ public abstract class Tower implements GameEntity
         this.attackDamage = attackDamage;
     }
 
-    public double getAttackCooldown()
-    {
-        return attackCooldown;
-    }
-
-    public void setAttackCooldown(double attackCooldown)
-    {
-        this.attackCooldown = attackCooldown;
-    }
-
-    public int getAttackRange()
-    {
-        return attackRange;
-    }
-
-    public void setAttackRange(int attackRange)
-    {
+    public void setAttackRange(int attackRange) {
         this.attackRange = attackRange;
     }
+
+    public void createBullet(Bullet bullets) {
+
+        bullet.add(bullets);
+    }
+
+
 
     public int getTowerLevel()
     {
@@ -157,9 +161,6 @@ public abstract class Tower implements GameEntity
         return towerHill;
     }
 
-    public ImageView getPlatform() {
-        return platform;
-    }
 
     public Point2D getPos() {
         return pos;
@@ -168,48 +169,42 @@ public abstract class Tower implements GameEntity
     public void setPos(Point2D pos) {
         this.pos = pos;
     }
-//attack method maybe goes here
-
-    public Point2D getVelocity() {
-        velocity = new Point2D(1 * 10, getSlope() * 10);
-        return velocity;
-    }
-
-    public void setVelocity(Point2D velocity) {
-        this.velocity = velocity;
-    }
-
-    public double getSlope() {
-        return slope;
-    }
-
-    public void setSlope(Enemy enemy) {
-        double posEX = enemy.getView().getTranslateX();
-        double posEY = enemy.getView().getTranslateY();
-        slope = (posEY - getPos().getY()) / (posEX - getPos().getX());
-
-    }
 
     public void update(Enemy enemy) {
-        double posEX = enemy.getView().getTranslateX();
-        double posEY = enemy.getView().getTranslateY();
-        double distance = enemy.distance(this);
-        if (posEY < getPos().getY() && distance <= RADIUS) {
+        if (enemy != null) {
 
-            getView().setRotate(-Math.toDegrees(Math.atan((posEX - getPos().getX())
-                    / (posEY - getPos().getY()))));
-        }
-
-        if (posEY > getPos().getY() && distance <= RADIUS)
-            getView().setRotate(180 - Math.toDegrees(Math.atan((posEX - getPos().getX())
-                    / (posEY - getPos().getY()))));
-        if (distance > RADIUS) {
-            getView().setRotate(0);
-        }
+            double posEX = enemy.getView().getTranslateX();
+            double posEY = enemy.getView().getTranslateY();
+            double distance = enemy.distance(this);
+            if (distance <= attackRange) {
+                getView().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX())
+                        , (posEY - getPos().getY()))));
+            }
+            //System.out.println(getView().getTranslateX()+ "  " + getView().getTranslateY() );
+            /*if (distance > RADIUS) {
+                getView().setRotate(0);
+            }*/
+        } else getView().setRotate(0);
 
     }
 
+    public Enemy targetEnemy(List<Enemy> enemies) {
 
+        if (!enemies.isEmpty()) {
+            Enemy closestEnemy = enemies.get(0);
+            if (closestEnemy.isDead() || closestEnemy.distance(this) > attackRange)
+                for (int i = 0; i < enemies.size(); i++) {
+                    double distance = enemies.get(i).distance(this);
+
+
+                    if (distance < attackRange && distance < closestEnemy.distance(this)) {
+                        closestEnemy = enemies.get(i);
+                    }
+
+                }
+            return closestEnemy;
+        } else return null;
+    }
 
 }
 

@@ -1,36 +1,54 @@
 package game.characters;
 
+import game.Music;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Bullet implements GameEntity {
     private int bulletDamage;
-    private final int bulletSpeed = 2048;
+    private int bulletSpeed = 15;
     private Enemy bulletTarget;
     private ImageView view;
     private String url;
-    private Point2D direction;
+    private Music music = new Music();
+
     private Point2D pos;
 
+    private boolean alive;
 
     public Bullet()
     {
-        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 60, 60, false, true));
-        view.setTranslateX(0);
-        view.setTranslateY(0);
+        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
+
     }
 
-    public Bullet(Tower tower) {
-        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 60, 60, false, true));
+    public Bullet(Tower tower, boolean sound) {
+        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
         view.setTranslateX(tower.getView().getTranslateX());
         view.setTranslateY(tower.getView().getTranslateY());
-        direction = tower.getVelocity();
-        pos = new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY());
+        if (sound == true) music.getMediaBullet().play();
+        pos = new Point2D(tower.getPos().getX(), tower.getPos().getY());
     }
 
+    public Music getMusic() {
+        return music;
+    }
     public Point2D getPos() {
         return pos;
+    }
+
+    public boolean isDead() {
+        return !isAlive();
+    }
+
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public void setPos(Point2D pos) {
@@ -47,11 +65,14 @@ public class Bullet implements GameEntity {
         this.bulletDamage = bulletDamage;
     }
 
-    public final int getBulletSpeed()
+    public int getBulletSpeed()
     {
         return bulletSpeed;
     }
 
+    public void setBulletSpeed(int speed) {
+        this.bulletSpeed = speed;
+    }
     public Enemy getBulletTarget() {
         return bulletTarget;
     }
@@ -86,29 +107,34 @@ public class Bullet implements GameEntity {
         this.url = imageUrl;
     }
 
-    public Point2D getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Point2D direction) {
-        this.direction = direction;
-    }
-
     public void update(Enemy enemy) {
-        double posEX = enemy.getView().getTranslateX();
-        double posEY = enemy.getView().getTranslateY();
+        if (enemy != null) {
+            double posEX = enemy.getView().getTranslateX();
+            double posEY = enemy.getView().getTranslateY();
 
+            Point2D centerE = new Point2D(posEX + 5, posEY + 5);
 
-        if (posEX < getPos().getX()) {
-
-            getView().setTranslateX(view.getTranslateX() - direction.getX());
-            getView().setTranslateY(view.getTranslateY() - direction.getY());
-        } else {
-            getView().setTranslateX(view.getTranslateX() + direction.getX());
-            getView().setTranslateY(view.getTranslateY() + direction.getY());
+            double angle = (Math.atan2(centerE.getX() - getPos().getX(), centerE.getY() - getPos().getY()));
+            getView().setTranslateX(getView().getTranslateX() + Math.sin(angle) * bulletSpeed);
+            getView().setTranslateY(getView().getTranslateY() + Math.cos(angle) * bulletSpeed);
+            //  System.out.println(getView().getTranslateX() + Math.sin(angle) * bulletSpeed);
         }
-
-        System.out.println(direction + "****");
     }
-    //bullet trace method goes here, i think
+
+    public boolean isColliding(Enemy enemy) {
+        if (enemy != null) {
+            double posEX = enemy.getView().getTranslateX();
+            double posEY = enemy.getView().getTranslateY();
+            double posX = getView().getTranslateX();
+            double posY = getView().getTranslateY();
+            return posEX <= posX && posX <= posEX + 30 && posEY <= posY && posY <= posEY + 30;
+           /* if (posEX >= posX && posX <= posEX - 40 && posEY <= posY && posY >= posEY + 40) return true;
+            if (posEX <= posX && posX <= posEX + 40 && posEY >= posY && posY <= posEY - 40) return true;
+            return posEX <= posX && posX <= posEX + 40 && posEY <= posY && posY >= posEY + 40;*/
+            //  return getView().getBoundsInParent().intersects(enemy.getView().getBoundsInParent());
+        }
+        return false;
+
+    }
+
 }

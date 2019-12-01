@@ -30,9 +30,29 @@ public class MyLabel extends Label {
         setLabelFont();
     }
 
+    public MyLabel(String text, String url, int h, int w) {
+        setPrefWidth(w);
+        setPrefHeight(h);
+        setAlignment(Pos.CENTER_LEFT);
+        setText(text);
+        setPadding(new Insets(10, 10, 10, 20));
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(url, w, h, false, true),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
+        setBackground(new Background(backgroundImage));
+        setLabelFont();
+    }
+
     private void setLabelFont() {
         try {
             setFont(Font.loadFont(new FileInputStream(FONT_PATH), 18));
+        } catch (FileNotFoundException e) {
+            setFont(Font.font("Mongoose", 15));
+        }
+    }
+
+    private void setLabelFont(String url) {
+        try {
+            setFont(Font.loadFont(new FileInputStream(url), 18));
         } catch (FileNotFoundException e) {
             setFont(Font.font("Mongoose", 15));
         }

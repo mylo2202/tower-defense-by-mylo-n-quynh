@@ -15,5 +15,6 @@ public class NormalEnemy extends Enemy
         setMoveDuration(20);
         setReward(50);
         setLevel(2);
+
     }
 }
