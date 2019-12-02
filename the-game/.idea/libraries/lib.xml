@@ -5,13 +5,13 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$PATH_TO_JAVAFX$/src.zip!/javafx.base" />
-      <root url="jar://$PATH_TO_JAVAFX$/src.zip!/javafx.controls" />
-      <root url="jar://$PATH_TO_JAVAFX$/src.zip!/javafx.fxml" />
-      <root url="jar://$PATH_TO_JAVAFX$/src.zip!/javafx.graphics" />
-      <root url="jar://$PATH_TO_JAVAFX$/src.zip!/javafx.media" />
-      <root url="jar://$PATH_TO_JAVAFX$/src.zip!/javafx.swing" />
-      <root url="jar://$PATH_TO_JAVAFX$/src.zip!/javafx.web" />
+      <root url="file://$PATH_TO_JAVAFX$/src/javafx.base" />
+      <root url="file://$PATH_TO_JAVAFX$/src/javafx.controls" />
+      <root url="file://$PATH_TO_JAVAFX$/src/javafx.fxml" />
+      <root url="file://$PATH_TO_JAVAFX$/src/javafx.graphics" />
+      <root url="file://$PATH_TO_JAVAFX$/src/javafx.media" />
+      <root url="file://$PATH_TO_JAVAFX$/src/javafx.swing" />
+      <root url="file://$PATH_TO_JAVAFX$/src/javafx.web" />
     </SOURCES>
     <jarDirectory url="file://$PATH_TO_JAVAFX$" recursive="false" />
   </library>
