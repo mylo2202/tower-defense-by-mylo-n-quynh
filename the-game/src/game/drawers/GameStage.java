@@ -9,6 +9,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -32,6 +33,7 @@ public class GameStage {
     private ImageView life;
     private MyLabel lifes;
     private TileMap map = new TileMap();
+    private MySubScene[] infoTower = new MySubScene[3];
 
     private GameField gameField = new GameField();
     private Music music = gameField.getMusic();
@@ -63,6 +65,7 @@ public class GameStage {
 
             gameScene.setCursor(Cursor.DEFAULT);
             music.getMediaButton().stop();
+
         }
 
     };
@@ -93,11 +96,12 @@ public class GameStage {
         gamePane.getChildren().add(Money);
     }
 
-    public void createButton() {
+    public void createButton() throws IOException {
         buttonStart();
         machineTowerButton();
         normalTowerButton();
         sniperTowerButton();
+        // hfhjf();
     }
 
 
@@ -111,7 +115,6 @@ public class GameStage {
         map.drawMap(gamePane);
         createButton();
         gameLoop();
-
         gameStage.setTitle("Tower Defense");
         gameStage.show();
     }
@@ -272,13 +275,16 @@ public class GameStage {
         gamePane.getChildren().add(Start);
     }
 
-    public void machineTowerButton() {
+    public void machineTowerButton() throws IOException {
 
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/machineGunTowerButton.png');";
         MyButton machine = new MyButton("", 64, 64, url);
         machine.setLayoutX(1015);
         machine.setLayoutY(200);
         gamePane.getChildren().add(machine);
+        int index = 0;
+        createSubScene("MACHINEGUN TOWER", index);
+        infoTower[index].setInfo(new MachineGunTower().getInfo());
 
         machine.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
@@ -296,15 +302,25 @@ public class GameStage {
             gameScene.setOnMouseReleased(MouseReleased);
 
         });
+        machine.setOnMouseEntered(action -> {
+            machine.setEffect(new DropShadow());
+            infoTower[index].moveSubScene();
+        });
+        machine.setOnMouseExited(action -> {
+            infoTower[index].moveSubScene();
+        });
 
     }
 
-    public void normalTowerButton() {
+    public void normalTowerButton() throws IOException {
 
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/normalTowerButton.png');";
         MyButton normal = new MyButton("", 64, 64, url);
         normal.setLayoutX(1089);
         normal.setLayoutY(200);
+        int index = 1;
+        createSubScene("  NORMAL TOWER", index);
+        infoTower[index].setInfo(new NormalTower().getInfo());
         gamePane.getChildren().add(normal);
 
         normal.setOnAction(actionEvent -> {
@@ -319,17 +335,42 @@ public class GameStage {
                 e.printStackTrace();
             }
             gameScene.setOnMouseReleased(MouseReleased);
-
+        });
+        normal.setOnMouseEntered(action -> {
+            normal.setEffect(new DropShadow());
+            infoTower[index].moveSubScene();
+        });
+        normal.setOnMouseExited(action -> {
+            infoTower[index].moveSubScene();
         });
 
-    }
 
-    public void sniperTowerButton() {
+    }
+   /* public void hfhjf(){
+
+        gameField.setBuild(true);
+        // gameScene.setCursor(new ImageCursor(hammer));
+        infoTower.getBuild().setOnAction(action->{
+            if (music.isPlayMusic()) music.getMediaButton().play();
+            try {
+
+                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, new NormalTower()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            gameScene.setOnMouseReleased(MouseReleased);
+        });
+    }*/
+
+    public void sniperTowerButton() throws IOException {
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/sniperTowerButton.png');";
         MyButton Sniper = new MyButton("", 64, 64, url);
         Sniper.setLayoutX(1163);
         Sniper.setLayoutY(200);
         gamePane.getChildren().add(Sniper);
+        int index = 2;
+        createSubScene("  SNIPER TOWER", index);
+        infoTower[index].setInfo(new SniperTower().getInfo());
 
         Sniper.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
@@ -343,6 +384,20 @@ public class GameStage {
             gameScene.setOnMouseReleased(MouseReleased);
 
         });
+        Sniper.setOnMouseEntered(action -> {
+            Sniper.setEffect(new DropShadow());
+            infoTower[index].moveSubScene();
+        });
+        Sniper.setOnMouseExited(action -> {
+            infoTower[index].moveSubScene();
+        });
+
+    }
+
+    public void createSubScene(String s, int i) throws IOException {
+
+        infoTower[i] = new MySubScene(s);
+        gamePane.getChildren().add(infoTower[i]);
 
     }
 }

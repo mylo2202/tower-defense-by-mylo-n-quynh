@@ -20,4 +20,5 @@ public class NormalTower extends Tower {
         setSellPrice(100);
         setAttackRange(200);
     }
+
 }

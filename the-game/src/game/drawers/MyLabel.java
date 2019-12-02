@@ -50,11 +50,11 @@ public class MyLabel extends Label {
         }
     }
 
-    private void setLabelFont(String url) {
+    public void setLabelFont(String url, int size) {
         try {
-            setFont(Font.loadFont(new FileInputStream(url), 18));
+            setFont(Font.loadFont(new FileInputStream(url), size));
         } catch (FileNotFoundException e) {
-            setFont(Font.font("Mongoose", 15));
+            setFont(Font.font("Mongoose", size));
         }
     }
 }

@@ -206,6 +206,15 @@ public abstract class Tower implements GameEntity
         } else return null;
     }
 
+    public String getInfo() {
+        return "AttackDamage: " + getAttackDamage() + "\n" +
+                "AttackCooldown: " + getAttackCooldown() + "\n" +
+                "BuildCost: " + getBuildCost() + "\n" +
+                "AttackRange: " + getAttackRange();
+
+
+    }
+
 }
 
 

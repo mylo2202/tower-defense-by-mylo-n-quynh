@@ -34,7 +34,7 @@ public class MyButton extends Button {
     public void setButtonFont() {
         try {
 
-            setFont(Font.loadFont(new FileInputStream(FONT_PATH), 23));
+            setFont(Font.loadFont(new FileInputStream(FONT_PATH), 20));
         } catch (FileNotFoundException e) {
             setFont(Font.font("Mongoose", 21));
         }
