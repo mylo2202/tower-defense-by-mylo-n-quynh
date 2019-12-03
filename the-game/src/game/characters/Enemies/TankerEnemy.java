@@ -1,5 +1,6 @@
-package game.characters;
+package game.characters.Enemies;
 
+import game.characters.Enemy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -12,8 +13,8 @@ public class TankerEnemy extends Enemy
         setEnemyImage(new Image(this.getImageUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
         setView(new ImageView(this.getEnemyImage()));
         setHitPoints(1000);
-        setMoveDuration(40);
-        setReward(100);
+        setMoveDuration(32);
+        setReward(50);
         setLevel(10);
     }
 }

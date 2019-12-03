@@ -71,7 +71,7 @@ public class Music {
             getMediaBackground().stop();
             getMediaButton().stop();
             getMediaGameOver().stop();
-            getMediaBullet().stop();
+            //getMediaBullet().stop();
             getMediaEnemyHasGoal().stop();
         } else {
             getMediaBackground().play();

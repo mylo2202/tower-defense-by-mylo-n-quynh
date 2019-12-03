@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class Tower implements GameEntity
 {
-    private static int attackCooldown;              // Delayed time for each attack
+    private int attackCooldown;              // Delayed time for each attack
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
     // Maximum range the tower can attack
     private int towerLevel;                         // The higher level the tower is the more effective it is
@@ -40,12 +40,12 @@ public abstract class Tower implements GameEntity
 
     }
 
-    public static int getAttackCooldown() {
+    public int getAttackCooldown() {
         return attackCooldown;
     }
 
     public void setAttackCooldown(int attackCooldown) {
-        Tower.attackCooldown = attackCooldown;
+        this.attackCooldown = attackCooldown;
     }
 
     public int getAttackRange() {
@@ -219,7 +219,7 @@ public abstract class Tower implements GameEntity
     }
 
     public void towerAttack(long now, GameField gameField, AnchorPane gamePane) {
-        if (now - this.towerTimer >= getAttackCooldown() * 1e9) {
+        if (now - this.towerTimer >= this.attackCooldown * 1e6) {
 
             /*gameField.getTowerList().forEach(tower -> {
                 //if (this instanceof Tower)

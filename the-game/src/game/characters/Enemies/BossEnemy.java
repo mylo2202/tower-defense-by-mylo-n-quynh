@@ -1,5 +1,6 @@
-package game.characters;
+package game.characters.Enemies;
 
+import game.characters.Enemy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -12,8 +13,8 @@ public class BossEnemy extends Enemy
         setEnemyImage(new Image(this.getImageUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
         setView(new ImageView(this.getEnemyImage()));
         setHitPoints(5000);
-        setMoveDuration(80);
-        setReward(500);
+        setMoveDuration(64);
+        setReward(100);
         setLevel(50);
     }
 }
