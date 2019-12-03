@@ -1,8 +1,10 @@
 package game.characters;
 
+import game.GameField;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public abstract class Tower implements GameEntity
     private int sellPrice;                          // Gold gained for selling
     private Enemy attackTarget;
     private int attackRange;
-
+    private long towerTimer = System.nanoTime();
 
     protected String imageUrl;
     protected Image towerImage;
@@ -54,9 +56,14 @@ public abstract class Tower implements GameEntity
         return bullet.get(bullet.size() - 1);
     }
 
+    public Bullet getBulletIndex(int i) {
+        return bullet.get(i);
+    }
+
     public List<Bullet> getBulletList() {
         return bullet;
     }
+
     public int getAttackDamage()
     {
         return attackDamage;
@@ -188,16 +195,16 @@ public abstract class Tower implements GameEntity
     public Enemy targetEnemy(List<Enemy> enemies) {
 
         if (!enemies.isEmpty()) {
+
             Enemy closestEnemy = enemies.get(0);
-            if (closestEnemy.isDead() || closestEnemy.distance(this) > attackRange)
-                for (Enemy enemy : enemies) {
-                    double distance = enemy.distance(this);
-
-                    if (distance < attackRange && distance < closestEnemy.distance(this)) {
-                        closestEnemy = enemy;
-                    }
-
+            for (int i = 0; i < enemies.size(); i++) {
+                double distance;
+                distance = enemies.get(i).distance(this);
+                if (distance < attackRange && distance < closestEnemy.distance(this)) {
+                    closestEnemy = enemies.get(i);
                 }
+            }
+
             return closestEnemy;
         } else return null;
     }
@@ -211,7 +218,26 @@ public abstract class Tower implements GameEntity
 
     }
 
+    public void towerAttack(long now, GameField gameField, AnchorPane gamePane) {
+        if (now - this.towerTimer >= getAttackCooldown() * 1e9) {
 
+            /*gameField.getTowerList().forEach(tower -> {
+                //if (this instanceof Tower)
+
+            });*/
+
+            if (!gameField.getEnemyList().isEmpty()
+
+                    && this.targetEnemy(gameField.getEnemyList()).distance(this) <= this.getAttackRange()) {
+
+                this.createBullet(new Bullet(this));
+
+                gamePane.getChildren().add(this.getBullet().getView());
+            }
+
+            this.towerTimer = now;
+        }
+    }
 }
 
 

@@ -24,8 +24,12 @@ public class Music {
         mediaButton = new MediaPlayer(new javafx.scene.media.Media(new File(PATH_MEDIA_BUTTON).toURI().toString()));
         mediaBackground = new MediaPlayer(new javafx.scene.media.Media(new File(PATH_MEDIA_BACKGROUND).toURI().toString()));
         mediaGameOver = new MediaPlayer(new Media(new File(PATH_MEDIA_GAMEOVER).toURI().toString()));
-        mediaBackground.setOnEndOfMedia(() -> mediaBackground.seek(Duration.ZERO));
-        mediaBullet = new MediaPlayer(new javafx.scene.media.Media(new File(PATH_MEDIA_BULLET).toURI().toString()));
+        mediaBackground.setOnEndOfMedia(new Runnable() {
+            public void run() {
+                mediaBackground.seek(Duration.ZERO);
+            }
+        });
+        // mediaBullet = new MediaPlayer(new javafx.scene.media.Media(new File(PATH_MEDIA_BULLET).toURI().toString()));
     }
 
     public MediaPlayer getMediaGameOver() {

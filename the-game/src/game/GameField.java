@@ -194,10 +194,10 @@ public class GameField
             if (getEnemyList().get(i).hasReachedGoal()) {
                 lives--;
                 String setText = "X ";
-                if (lives < 10) setText = setText + "0";
-                life.setText(setText + lives);
-                if (lives < 0) life.setText("X 00");
-                music.getMediaEnemyHasGoal().play();
+                if (lifes < 10) setText = setText + "0";
+                life.setText(setText + lifes);
+                if (lifes < 0) life.setText("X 00");
+                //music.getMediaEnemyHasGoal().play();
 
             }
             if(checkRemoveEnemy(i))

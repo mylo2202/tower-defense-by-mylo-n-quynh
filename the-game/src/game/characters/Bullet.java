@@ -1,17 +1,16 @@
 package game.characters;
 
-import game.Music;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Bullet implements GameEntity {
     private int bulletDamage;
-    private int bulletSpeed = 15;
+    private int bulletSpeed = 25;
     private Enemy bulletTarget;
     private ImageView view;
     private String url;
-    private Music music = new Music();
+    //  private Music music = new Music();
 
     private Point2D pos;
 
@@ -27,13 +26,21 @@ public class Bullet implements GameEntity {
         view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
         view.setTranslateX(tower.getView().getTranslateX());
         view.setTranslateY(tower.getView().getTranslateY());
-        if (sound == true) music.getMediaBullet().play();
+        //   if (sound == true) music.getMediaBullet().play();
         pos = new Point2D(tower.getPos().getX(), tower.getPos().getY());
     }
 
-    public Music getMusic() {
-        return music;
+    public Bullet(Tower tower) {
+        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
+        view.setTranslateX(tower.getView().getTranslateX());
+        view.setTranslateY(tower.getView().getTranslateY());
+
+        pos = new Point2D(tower.getPos().getX(), tower.getPos().getY());
     }
+
+    // public Music getMusic() {
+    //    return music;
+    // }
     public Point2D getPos() {
         return pos;
     }
@@ -127,7 +134,7 @@ public class Bullet implements GameEntity {
             double posEY = enemy.getView().getTranslateY();
             double posX = getView().getTranslateX();
             double posY = getView().getTranslateY();
-            return posEX <= posX && posX <= posEX + 30 && posEY <= posY && posY <= posEY + 30;
+            return posEX - 30 <= posX && posX <= posEX + 30 && posEY - 30 <= posY && posY <= posEY + 30;
            /* if (posEX >= posX && posX <= posEX - 40 && posEY <= posY && posY >= posEY + 40) return true;
             if (posEX <= posX && posX <= posEX + 40 && posEY >= posY && posY <= posEY - 40) return true;
             return posEX <= posX && posX <= posEX + 40 && posEY <= posY && posY >= posEY + 40;*/
