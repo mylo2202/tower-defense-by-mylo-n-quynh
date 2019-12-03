@@ -95,7 +95,7 @@ public abstract class Enemy extends GameField {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void updateLevel(int level) {
         this.level = level;
     }
 

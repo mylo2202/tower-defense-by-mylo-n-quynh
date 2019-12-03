@@ -29,7 +29,7 @@ public class Music {
                 mediaBackground.seek(Duration.ZERO);
             }
         });
-        // mediaBullet = new MediaPlayer(new javafx.scene.media.Media(new File(PATH_MEDIA_BULLET).toURI().toString()));
+        mediaBullet = new MediaPlayer(new javafx.scene.media.Media(new File(PATH_MEDIA_BULLET).toURI().toString()));
     }
 
     public MediaPlayer getMediaGameOver() {
