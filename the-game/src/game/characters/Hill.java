@@ -10,7 +10,6 @@ public class Hill extends TileMap {
     private ArrayList<Point2D> hill = new ArrayList<>();
 
     public Hill() throws IOException {
-        super();
         mapHill();
     }
 

@@ -1,0 +1,36 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007fff6afef913, pid=6252, tid=21956
+#
+# JRE version: Java(TM) SE Runtime Environment (13.0.1+9) (build 13.0.1+9)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (13.0.1+9, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
+# Problematic frame:
+# V  [jvm.dll+0x37f913]
+#
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: --module-path=D:/Setup/javafx-sdk-13/lib --add-modules=javafx.controls,javafx.fxml,javafx.media --add-modules=javafx.base,javafx.graphics --add-reads=javafx.base=ALL-UNNAMED --add-reads=javafx.graphics=ALL-UNNAMED -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2019.2.1\lib\idea_rt.jar=50020:C:\Program Files\JetBrains\IntelliJ IDEA 2019.2.1\bin -Dfile.encoding=UTF-8 game.Main
+
+Host: Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz, 8 cores, 3G,  Windows 10 , 64 bit Build 18362 (10.0.18362.329)
+Time: Tue Dec  3 09:24:22 2019 SE Asia Standard Time elapsed time: 155 seconds (0d 0h 2m 35s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000025a9209f800):  JavaThread "Thread-243982" [_thread_in_vm, id=21956, stack(0x000000d2f0700000,0x000000d2f0800000)]
+
+Stack: [0x000000d2f0700000,0x000000d2f0800000],  sp=0x000000d2f07ff4e0,  free space=1021k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x37f913]
+V  [jvm.dll+0x626df2]
+V  [jvm.dll+0x380419]
+V  [jvm.dll+0x3806a7]
+V  [jvm.dll+0x3f1871]
+V  [jvm.dll+0x738b16]
+V  [jvm.dll+0x731c0a]

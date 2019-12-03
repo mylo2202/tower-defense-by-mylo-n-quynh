@@ -46,6 +46,7 @@ public abstract class Enemy extends GameField {
 
     public Enemy() throws IOException {
         isDead = false;
+        //enemyMove().play();
     }
 
     public int getHitPoints()
@@ -172,17 +173,15 @@ public abstract class Enemy extends GameField {
         double posEX = getView().getTranslateX();
         double posEY = getView().getTranslateY();
 
-        double distance = Math.sqrt(Math.pow(posEX - tower.getPos().getX(), 2) +
+        return Math.sqrt(Math.pow(posEX - tower.getPos().getX(), 2) +
                 Math.pow(posEY - tower.getPos().getY(), 2));
-        return distance;
     }
 
     public double distance(Bullet bullet) {
         double posEX = getView().getTranslateX();
         double posEY = getView().getTranslateY();
 
-        double distance = Math.sqrt(Math.pow(posEX - bullet.getPos().getX(), 2) +
+        return Math.sqrt(Math.pow(posEX - bullet.getPos().getX(), 2) +
                 Math.pow(posEY - bullet.getPos().getY(), 2));
-        return distance;
     }
 }

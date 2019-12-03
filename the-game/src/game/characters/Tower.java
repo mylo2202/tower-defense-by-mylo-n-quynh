@@ -11,7 +11,7 @@ import java.util.List;
 
 public abstract class Tower implements GameEntity
 {
-    private static double attackCooldown;              // Delayed time for each attack
+    private static int attackCooldown;              // Delayed time for each attack
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
     // Maximum range the tower can attack
     private int towerLevel;                         // The higher level the tower is the more effective it is
@@ -38,11 +38,11 @@ public abstract class Tower implements GameEntity
 
     }
 
-    public static double getAttackCooldown() {
+    public static int getAttackCooldown() {
         return attackCooldown;
     }
 
-    public void setAttackCooldown(double attackCooldown) {
+    public void setAttackCooldown(int attackCooldown) {
         Tower.attackCooldown = attackCooldown;
     }
 
@@ -75,8 +75,6 @@ public abstract class Tower implements GameEntity
 
         bullet.add(bullets);
     }
-
-
 
     public int getTowerLevel()
     {
@@ -161,7 +159,6 @@ public abstract class Tower implements GameEntity
         return towerHill;
     }
 
-
     public Point2D getPos() {
         return pos;
     }
@@ -193,12 +190,11 @@ public abstract class Tower implements GameEntity
         if (!enemies.isEmpty()) {
             Enemy closestEnemy = enemies.get(0);
             if (closestEnemy.isDead() || closestEnemy.distance(this) > attackRange)
-                for (int i = 0; i < enemies.size(); i++) {
-                    double distance = enemies.get(i).distance(this);
-
+                for (Enemy enemy : enemies) {
+                    double distance = enemy.distance(this);
 
                     if (distance < attackRange && distance < closestEnemy.distance(this)) {
-                        closestEnemy = enemies.get(i);
+                        closestEnemy = enemy;
                     }
 
                 }
@@ -214,6 +210,7 @@ public abstract class Tower implements GameEntity
 
 
     }
+
 
 }
 

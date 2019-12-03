@@ -8,7 +8,7 @@ import java.io.File;
 
 public class Music {
     private final String PATH_MEDIA_BUTTON = "src//Sound//click2.mp3";
-    private final String PATH_MEDIA_BACKGROUND = "src/Sound/Zombies-On-Your-Lawn-Laura-Shigihara.mp3";
+    private final String PATH_MEDIA_BACKGROUND = "src/Sound/Watery Graves- Laura Shigihara.mp3";
     private final String PATH_MEDIA_BULLET = "src/Sound/bullet.mp3";
     private final String PATH_MEDIA_ENEMY = "src/Sound/enemy.mp3";
     private final String PATH_MEDIA_GAMEOVER = "src/Sound/lost.mp3";
@@ -24,11 +24,7 @@ public class Music {
         mediaButton = new MediaPlayer(new javafx.scene.media.Media(new File(PATH_MEDIA_BUTTON).toURI().toString()));
         mediaBackground = new MediaPlayer(new javafx.scene.media.Media(new File(PATH_MEDIA_BACKGROUND).toURI().toString()));
         mediaGameOver = new MediaPlayer(new Media(new File(PATH_MEDIA_GAMEOVER).toURI().toString()));
-        mediaBackground.setOnEndOfMedia(new Runnable() {
-            public void run() {
-                mediaBackground.seek(Duration.ZERO);
-            }
-        });
+        mediaBackground.setOnEndOfMedia(() -> mediaBackground.seek(Duration.ZERO));
         mediaBullet = new MediaPlayer(new javafx.scene.media.Media(new File(PATH_MEDIA_BULLET).toURI().toString()));
     }
 
@@ -67,7 +63,7 @@ public class Music {
     }
 
     public void setMusic() {
-        if (playMusic == false) {
+        if (!playMusic) {
             getMediaBackground().stop();
             getMediaButton().stop();
             getMediaGameOver().stop();
