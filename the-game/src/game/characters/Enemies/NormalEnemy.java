@@ -1,5 +1,6 @@
-package game.characters;
+package game.characters.Enemies;
 
+import game.characters.Enemy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -12,8 +13,8 @@ public class NormalEnemy extends Enemy
         setEnemyImage(new Image(this.getImageUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
         setView(new ImageView(this.getEnemyImage()));
         setHitPoints(200);
-        setMoveDuration(20);
-        setReward(50);
+        setMoveDuration(16);
+        setReward(20);
         setLevel(2);
 
     }

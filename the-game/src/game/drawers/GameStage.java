@@ -3,6 +3,9 @@ package game.drawers;
 import game.GameField;
 import game.Music;
 import game.characters.*;
+import game.characters.Towers.MachineGunTower;
+import game.characters.Towers.NormalTower;
+import game.characters.Towers.SniperTower;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -17,7 +20,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 public class GameStage {
 
@@ -52,8 +54,6 @@ public class GameStage {
         gameStage.setScene(gameScene);
     }
 
-
-
     public Stage getStage() {
         return gameStage;
     }
@@ -62,12 +62,9 @@ public class GameStage {
 
         @Override
         public void handle(MouseEvent mouseEvent) {
-
             gameScene.setCursor(Cursor.DEFAULT);
             music.getMediaButton().stop();
-
         }
-
     };
 
     public Music getMusic() {
@@ -101,7 +98,6 @@ public class GameStage {
         machineTowerButton();
         normalTowerButton();
         sniperTowerButton();
-        // hfhjf();
     }
 
 
@@ -148,7 +144,7 @@ public class GameStage {
                         if (!tower.getBulletList().isEmpty() && tower.getBulletIndex(i).isColliding(enemy1)) {
                             gamePane.getChildren().remove(tower.getBulletIndex(i).getView());
                             tower.getBulletList().remove(tower.getBulletIndex(i));
-                            System.out.println(tower.getBulletList().size());
+                            //System.out.println(tower.getBulletList().size());
                             enemy1.removeHitPoints(tower.getAttackDamage());
                             if (enemy1.getHitPoints() <= 0) tower.targetEnemy(gameField.getEnemyList()).setDead(true);
                             if (enemy1.isDead()) gameField.updateMoney(tower.targetEnemy(gameField.getEnemyList()));
@@ -170,7 +166,7 @@ public class GameStage {
                     }
                 }
                 if(gameField.getLives() < 0) play = false;
-                gameField.gameOver(towerTimer, gamePane);
+                gameField.gameOver(gameTimer, gamePane);
             }
         };
 
@@ -187,12 +183,13 @@ public class GameStage {
             if (play)
             {
                 System.out.println("--------------- LEVEL " + gameField.getLevel() + " ---------------");
+                System.out.println("diff factor = " + Math.pow(2, gameField.getLevel() - 1));
                 startTimer = new AnimationTimer() {
                     long timer = System.nanoTime();
-                    int difficulty = gameField.getLevel() * 10;
+                    int difficulty = (int) (8 * Math.pow(2, gameField.getLevel() - 1));
                     @Override
                     public void handle(long now) {
-                        if (now - timer >= 1e9 && difficulty > 0) {
+                        if (now - timer >= 0.25e9 && difficulty > 0) {
                             //System.out.println("looking good");
                                 try {
                                     gameField.generateEnemy(gameField.getEnemyList(), difficulty);

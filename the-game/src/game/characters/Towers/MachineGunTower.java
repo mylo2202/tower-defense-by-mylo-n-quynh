@@ -1,5 +1,6 @@
-package game.characters;
+package game.characters.Towers;
 
+import game.characters.Tower;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 

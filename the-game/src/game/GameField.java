@@ -1,6 +1,10 @@
 package game;
 
 import game.characters.*;
+import game.characters.Enemies.BossEnemy;
+import game.characters.Enemies.NormalEnemy;
+import game.characters.Enemies.SmallerEnemy;
+import game.characters.Enemies.TankerEnemy;
 import game.drawers.MyLabel;
 import game.drawers.TileMap;
 import javafx.animation.AnimationTimer;
@@ -39,7 +43,7 @@ public class GameField
         enemyList = new ArrayList<>();
         towerList = new ArrayList<>();
         bulletList = new ArrayList<>();
-        money = 400;
+        money = 200;
         Money = new MyLabel("MONEY : " + money);
         build = false;
         lives = 100;
@@ -192,11 +196,11 @@ public class GameField
         if(!getEnemyList().isEmpty())
         {
             if (getEnemyList().get(i).hasReachedGoal()) {
-                lives--;
+                lives -= getEnemyList().get(i).getLevel();
                 String setText = "X ";
-                if (lifes < 10) setText = setText + "0";
-                life.setText(setText + lifes);
-                if (lifes < 0) life.setText("X 00");
+                if (lives < 10) setText = setText + "0";
+                life.setText(setText + lives);
+                if (lives < 0) life.setText("X 00");
                 //music.getMediaEnemyHasGoal().play();
 
             }
@@ -208,17 +212,6 @@ public class GameField
         }
     }
 
-    /* public EventHandler getMouse(){
-
-         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
-             @Override
-             public void handle(MouseEvent mouseEvent) {
-                     eventPosX = mouseEvent.getSceneX();
-                     eventPosY = mouseEvent.getSceneY();
-                 }
-         };
-        return eventHandler;
-     }*/
     public EventHandler buildTower(AnchorPane gamePane, Tower tower) {
 
         return (EventHandler<MouseEvent>) mouseEvent -> {

@@ -1,11 +1,12 @@
-package game.characters;
+package game.characters.Towers;
 
+import game.characters.Tower;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
-public class SniperTower extends Tower{
+public class SniperTower extends Tower {
     public SniperTower() throws IOException
     {
         setImageUrl("/Image/Tower/sniperTower.png");
