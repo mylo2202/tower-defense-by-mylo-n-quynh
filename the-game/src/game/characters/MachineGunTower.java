@@ -12,7 +12,7 @@ public class MachineGunTower extends Tower {
         setImageUrl("/Image/Tower/machineGunTower.png");
         setTowerImage(new Image(this.getImageUrl(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         setView(new ImageView(this.getTowerImage()));
-        setAttackDamage(2);
+        setAttackDamage(10);
 
         setAttackCooldown(0.25);
         setBuildCost(100);

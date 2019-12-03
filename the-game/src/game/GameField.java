@@ -39,10 +39,10 @@ public class GameField
         enemyList = new ArrayList<>();
         towerList = new ArrayList<>();
         bulletList = new ArrayList<>();
-        money = 500;
+        money = 2500;
         Money = new MyLabel("MONEY : " + money);
         build = false;
-        lifes = 2;
+        lifes = 100;
         life = new MyLabel("x " + lifes, "/Image/UI/life.png", 45, 100);
         String setText = "X ";
         if (lifes < 10 && lifes > 0) setText = setText + "0";
@@ -191,7 +191,7 @@ public class GameField
                 if (lifes < 10) setText = setText + "0";
                 life.setText(setText + lifes);
                 if (lifes < 0) life.setText("X 00");
-                music.getMediaEnemyHasGoal().play();
+                //music.getMediaEnemyHasGoal().play();
 
             }
             if(checkRemoveEnemy(i))

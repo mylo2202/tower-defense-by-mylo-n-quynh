@@ -14,7 +14,7 @@ public class NormalTower extends Tower {
         setView(new ImageView(getTowerImage()));
         setAttackDamage(25);
 
-        setAttackCooldown(0.2);
+        setAttackCooldown(0.5);
         setBuildCost(200);
         setUpgradeCost(200);
         setSellPrice(100);

@@ -21,7 +21,7 @@ public class MyLabel extends Label {
     public MyLabel(String text) {
         setPrefWidth(190);
         setPrefHeight(45);
-        setAlignment(Pos.CENTER_LEFT);
+        setAlignment(Pos.CENTER);
         setText(text);
         setPadding(new Insets(10, 10, 10, 20));
         BackgroundImage backgroundImage = new BackgroundImage(new Image(BACKGROUND_IMAGE, 190, 45, false, true),
@@ -33,7 +33,7 @@ public class MyLabel extends Label {
     public MyLabel(String text, String url, int h, int w) {
         setPrefWidth(w);
         setPrefHeight(h);
-        setAlignment(Pos.CENTER_LEFT);
+        setAlignment(Pos.CENTER);
         setText(text);
         setPadding(new Insets(10, 10, 10, 20));
         BackgroundImage backgroundImage = new BackgroundImage(new Image(url, w, h, false, true),
