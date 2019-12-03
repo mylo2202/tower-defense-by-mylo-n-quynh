@@ -127,9 +127,7 @@ public class GameStage {
         gameTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                Iterator<Tower> towerIterator = gameField.getTowerList().iterator();
-                while (towerIterator.hasNext()) {
-                    Tower tower = towerIterator.next();
+                for (Tower tower : gameField.getTowerList()) {
                     tower.update(tower.targetEnemy(gameField.getEnemyList()));
 
                     for (int i = 0; i < tower.getBulletList().size(); i++) {
@@ -161,22 +159,18 @@ public class GameStage {
                 for (Tower tower : gameField.getTowerList()) {
                     tower.towerAttack(now, gameField, gamePane);
                 }
-
                 if (!gameField.getEnemyList().isEmpty()) {
                     //  System.out.println(gameField.getEnemyList().get(0).getView().getTranslateX() + " " + gameField.getEnemyList().get(0).getView().getTranslateY());
 
                     for (int i = 0; i < gameField.getEnemyList().size(); i++) {
-                        if (gameField.getEnemyList().get(i).hasReachedGoal()) {
-
-                        }
                         if (gameField.checkRemoveEnemy(i)) {
                             gamePane.getChildren().remove(gameField.getEnemyList().get(i).getView());
                             gameField.removeEnemy(i);
-
                         }
                     }
                 }
-                gameField.gameOver(gameTimer, gamePane);
+                if(gameField.getLives() < 0) play = false;
+                gameField.gameOver(towerTimer, gamePane);
             }
         };
 
@@ -190,35 +184,36 @@ public class GameStage {
 
         Start.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
-            if (play == true) {
-
+            if (play)
+            {
+                System.out.println("--------------- LEVEL " + gameField.getLevel() + " ---------------");
                 startTimer = new AnimationTimer() {
-                    int difficulty = 1;
                     long timer = System.nanoTime();
+                    int difficulty = gameField.getLevel() * 10;
                     @Override
                     public void handle(long now) {
-                        Enemy enemy = null;
-                        if (now - timer >= 1 * 1e9) {
-                            if (difficulty > 0) {
+                        if (now - timer >= 1e9 && difficulty > 0) {
+                            //System.out.println("looking good");
                                 try {
-                                    gameField.getEnemyList().add(enemy = new SmallerEnemy());
-                                    assert false;
-                                    enemy.enemyMove().play();
-
-                                    gamePane.getChildren().add(enemy.getView());
-                                    difficulty -= enemy.getLevel();
-
+                                    gameField.generateEnemy(gameField.getEnemyList(), difficulty);
+                                    System.out.println("size = " + gameField.getEnemyList().size());
+                                    gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).enemyMove().play();
+                                    gamePane.getChildren().add(gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getView());
+                                    difficulty -= gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getLevel();
+                                    System.out.println("difficulty = " + difficulty);
+                                    if(difficulty <= 0)
+                                    {
+                                        gameField.setLevel(gameField.getLevel() + 1);
+                                        startTimer.stop();
+                                    }
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                            }
                             timer = now;
                         }
                     }
                 };
-
                 startTimer.start();
-                //   play = false;
             }
         });
 
@@ -233,12 +228,12 @@ public class GameStage {
         machine.setLayoutY(200);
         gamePane.getChildren().add(machine);
         int index = 0;
-        createSubScene("MACHINEGUN TOWER", index);
+        createSubScene("MACHINE GUN TOWER", index);
         infoTower[index].setInfo(new MachineGunTower().getInfo());
 
         machine.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
-            System.out.println(music.isPlayMusic());
+            //System.out.println(music.isPlayMusic());
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
 
@@ -296,7 +291,6 @@ public class GameStage {
 
 
     }
-
 
     public void sniperTowerButton() throws IOException {
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/Tower/sniperTowerButton.png');";

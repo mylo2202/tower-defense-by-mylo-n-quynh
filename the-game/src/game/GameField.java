@@ -10,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -31,7 +30,8 @@ public class GameField
     TileMap map = new TileMap();
     private boolean build;
     private MyLabel life;
-    private int lifes;
+    private int lives;
+    private int level;
     ImageView gameOver = new ImageView(new Image("/Image/Enemy/gameOver.png"));
     private Music music = new Music();
 
@@ -39,18 +39,17 @@ public class GameField
         enemyList = new ArrayList<>();
         towerList = new ArrayList<>();
         bulletList = new ArrayList<>();
-        money = 2500;
+        money = 400;
         Money = new MyLabel("MONEY : " + money);
         build = false;
-        lifes = 100;
-        life = new MyLabel("x " + lifes, "/Image/UI/life.png", 45, 100);
+        lives = 100;
+        life = new MyLabel("x " + lives, "/Image/UI/life.png", 45, 100);
         String setText = "X ";
-        if (lifes < 10 && lifes > 0) setText = setText + "0";
-        life.setText(setText + lifes);
+        if (lives < 10 && lives > 0) setText = setText + "0";
+        life.setText(setText + lives);
         gameOver.setLayoutX(500);
         gameOver.setLayoutY(400);
-
-
+        this.level = 1;
     }
 
     public double getEventPosX() {
@@ -67,6 +66,14 @@ public class GameField
 
     public void setLife(MyLabel life) {
         this.life = life;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     public boolean isBuild() {
@@ -109,44 +116,43 @@ public class GameField
         this.bulletList = bulletList;
     }
 
-    public void generateEnemy(Enemy enemy, int difficulty) throws IOException {
-        Random random = new Random();
-        int difficultyScore = difficulty;
-        while(difficultyScore > 0)
-        {
-            int x = random.ints(1, 101).limit(1).findFirst().getAsInt();
-            System.out.println(x);
-            if(x >= 1 && x <= 30)
-            {
-                getEnemyList().add(enemy = new SmallerEnemy());
-                difficultyScore -= getEnemyList().get(getEnemyList().size() - 1).getLevel();
-            }
-            else if(x >= 31 && x <= 70)
-            {
-                if(difficultyScore >= 2)
-                {
-                    getEnemyList().add(enemy = new NormalEnemy());
-                    difficultyScore -= getEnemyList().get(getEnemyList().size() - 1).getLevel();
-                }
-            }
-            else if(x >= 71 && x <= 90)
-            {
-                if(difficultyScore >= 10)
-                {
-                    getEnemyList().add(enemy = new TankerEnemy());
-                    difficultyScore -= getEnemyList().get(getEnemyList().size() - 1).getLevel();
-                }
+    public int getLevel() {
+        return level;
+    }
 
-            }
-            else if(x >= 91 && x <= 100)
-            {
-                if(difficultyScore >= 50)
-                {
-                    getEnemyList().add(enemy = new BossEnemy());
-                    difficultyScore -= getEnemyList().get(getEnemyList().size() - 1).getLevel();
-                }
-            }
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void generateEnemy(ArrayList<Enemy> enemyList, int difficulty) throws IOException {
+        Random rand = new Random();
+        int randomNum = 0;
+        if (difficulty == 1)
+        {
+            enemyList.add(new SmallerEnemy());
         }
+        else if (difficulty >= 2 && difficulty < 10)
+        {
+            randomNum = rand.nextInt(7);
+            if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
+            else if (randomNum >= 4 && randomNum <= 6) enemyList.add(new SmallerEnemy());
+        }
+        else if (difficulty >= 10 && difficulty < 50)
+        {
+            randomNum = rand.nextInt(9);
+            if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
+            else if (randomNum >= 4 && randomNum <= 6) enemyList.add(new SmallerEnemy());
+            else if (randomNum >= 7 && randomNum <= 8) enemyList.add(new TankerEnemy());
+        }
+        else if (difficulty >= 50)
+        {
+            randomNum = rand.nextInt(10);
+            if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
+            else if (randomNum >= 4 && randomNum <= 6) enemyList.add(new SmallerEnemy());
+            else if (randomNum >= 7 && randomNum <= 8) enemyList.add(new TankerEnemy());
+            else if (randomNum == 9) enemyList.add(new BossEnemy());
+        }
+        System.out.println("random = " + randomNum);
     }
 
     public boolean checkRemoveEnemy(int i)
@@ -163,7 +169,7 @@ public class GameField
 
     public void gameOver(AnimationTimer animationTimer, AnchorPane anchorPane) {
 
-        if (lifes <= 0) {
+        if (lives <= 0) {
             music.getMediaBackground().stop();
             music.getMediaGameOver().play();
             animationTimer.stop();
@@ -186,7 +192,7 @@ public class GameField
         if(!getEnemyList().isEmpty())
         {
             if (getEnemyList().get(i).hasReachedGoal()) {
-                lifes--;
+                lives--;
                 String setText = "X ";
                 if (lifes < 10) setText = setText + "0";
                 life.setText(setText + lifes);
@@ -213,37 +219,32 @@ public class GameField
          };
         return eventHandler;
      }*/
-    public EventHandler buildTower(AnchorPane gamePane, Tower tower) throws IOException {
+    public EventHandler buildTower(AnchorPane gamePane, Tower tower) {
 
-        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (build == true && money >= tower.getBuildCost() && lifes > 0) {
-                    eventPosX = mouseEvent.getSceneX();
-                    eventPosY = mouseEvent.getSceneY();
+        return (EventHandler<MouseEvent>) mouseEvent -> {
+            if (build && money >= tower.getBuildCost() && lives > 0) {
+                eventPosX = mouseEvent.getSceneX();
+                eventPosY = mouseEvent.getSceneY();
 
-                    int i = (int) eventPosY / map.getGRID_SIZE();
-                    int j = (int) eventPosX / map.getGRID_SIZE();
+                int i = (int) eventPosY / map.getGRID_SIZE();
+                int j = (int) eventPosX / map.getGRID_SIZE();
 
-                    if (i < map.getMAP_HEIGHT() && j < map.getMAP_WIDTH() && map.getGrid()[i][j] == 0) {
+                if (i < map.getMAP_HEIGHT() && j < map.getMAP_WIDTH() && map.getGrid()[i][j] == 0) {
 
-                        towerList.add(tower);
-                        tower.getView().setTranslateX(j * map.getGRID_SIZE());
-                        tower.getView().setTranslateY(i * map.getGRID_SIZE());
-                        tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
-                        gamePane.getChildren().add(tower.getView());
+                    towerList.add(tower);
+                    tower.getView().setTranslateX(j * map.getGRID_SIZE());
+                    tower.getView().setTranslateY(i * map.getGRID_SIZE());
+                    tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
+                    gamePane.getChildren().add(tower.getView());
 
-                        money = money - tower.getBuildCost();
-                        String setTextMoney = "MONEY : ";
-                        if (money < 10) setTextMoney = setTextMoney + "0";
-                        Money.setText(setTextMoney + money);
-                    }
+                    money = money - tower.getBuildCost();
+                    String setTextMoney = "MONEY : ";
+                    if (money < 10) setTextMoney = setTextMoney + "0";
+                    Money.setText(setTextMoney + money);
                 }
-                build = false;
             }
+            build = false;
         };
-
-        return eventHandler;
     }
 
     public void updateMoney(Enemy enemy) {
@@ -252,6 +253,4 @@ public class GameField
         if (money < 10) setTextMoney = setTextMoney + "0";
         Money.setText(setTextMoney + money);
     }
-
-
 }
