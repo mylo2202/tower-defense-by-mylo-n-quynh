@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 
 public class Bullet implements GameEntity {
     private int bulletDamage;
-    private int bulletSpeed = 25;
+    private int bulletSpeed = 15;
     private Enemy bulletTarget;
     private ImageView view;
     private String url;

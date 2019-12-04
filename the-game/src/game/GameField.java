@@ -1,10 +1,12 @@
 package game;
 
-import game.characters.*;
+import game.characters.Bullet;
 import game.characters.Enemies.BossEnemy;
 import game.characters.Enemies.NormalEnemy;
 import game.characters.Enemies.SmallerEnemy;
 import game.characters.Enemies.TankerEnemy;
+import game.characters.Enemy;
+import game.characters.Tower;
 import game.drawers.MyLabel;
 import game.drawers.TileMap;
 import javafx.animation.AnimationTimer;
@@ -14,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,6 +33,7 @@ public class GameField
     Image hammer = new Image("/Image/Tower/Hammer.png");
     private int money;
     private MyLabel moneyLabel;
+    private MyLabel Level;
     private double eventPosX, eventPosY;
     TileMap map = new TileMap();
     private boolean build;
@@ -46,6 +50,8 @@ public class GameField
         bulletList = new ArrayList<>();
         money = 200;
         moneyLabel = new MyLabel("MONEY : " + money);
+        level = 1;
+        Level = new MyLabel("Level " + level);
         build = false;
         lives = 100;
         life = new MyLabel("x " + lives, "/Image/UI/life.png", 45, 100);
@@ -63,6 +69,15 @@ public class GameField
 
     public double getEventPosY() {
         return eventPosY;
+    }
+
+    public void updateLevel() {
+        level++;
+        Level.setText("Level " + level);
+    }
+
+    public MyLabel getLabelLevel() {
+        return Level;
     }
 
     public MyLabel getLife() {
@@ -129,6 +144,10 @@ public class GameField
         this.bulletList = bulletList;
     }
 
+    public void setLabelLevel(MyLabel level) {
+        Level = level;
+    }
+
     public int getLevel() {
         return level;
     }
@@ -143,6 +162,15 @@ public class GameField
 
     public void setMoney(int money) {
         this.money = money;
+    }
+    
+    public void updateLabelLevel() {
+        level++;
+        Level.setText("Level " + level);
+    }
+
+    public void updateLevel(int level) {
+        this.level = level;
     }
 
     public void generateEnemy(ArrayList<Enemy> enemyList, int difficulty) throws IOException {
