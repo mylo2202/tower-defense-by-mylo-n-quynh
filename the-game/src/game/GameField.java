@@ -29,10 +29,11 @@ public class GameField
     protected ArrayList<Bullet> bulletList;
     Image hammer = new Image("/Image/Tower/Hammer.png");
     private int money;
-    private MyLabel Money;
+    private MyLabel moneyLabel;
     private double eventPosX, eventPosY;
     TileMap map = new TileMap();
     private boolean build;
+    private boolean generatedEnemy = false;
     private MyLabel life;
     private int lives;
     private int level;
@@ -44,7 +45,7 @@ public class GameField
         towerList = new ArrayList<>();
         bulletList = new ArrayList<>();
         money = 200;
-        Money = new MyLabel("MONEY : " + money);
+        moneyLabel = new MyLabel("MONEY : " + money);
         build = false;
         lives = 100;
         life = new MyLabel("x " + lives, "/Image/UI/life.png", 45, 100);
@@ -53,7 +54,7 @@ public class GameField
         life.setText(setText + lives);
         gameOver.setLayoutX(500);
         gameOver.setLayoutY(400);
-        this.level = 1;
+        this.level = 0;
     }
 
     public double getEventPosX() {
@@ -88,12 +89,20 @@ public class GameField
         this.build = build;
     }
 
-    public MyLabel getMoney() {
-        return Money;
+    public boolean hasGeneratedEnemy() {
+        return generatedEnemy;
     }
 
-    public void setMoney(MyLabel money) {
-        this.Money = money;
+    public void setGeneratedEnemy(boolean generatedEnemy) {
+        this.generatedEnemy = generatedEnemy;
+    }
+
+    public MyLabel getMoneyLabel() {
+        return moneyLabel;
+    }
+
+    public void setMoneyLabel(MyLabel moneyLabel) {
+        this.moneyLabel = moneyLabel;
     }
 
     public ArrayList<Enemy> getEnemyList() {
@@ -128,6 +137,14 @@ public class GameField
         this.level = level;
     }
 
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
     public void generateEnemy(ArrayList<Enemy> enemyList, int difficulty) throws IOException {
         Random rand = new Random();
         int randomNum = 0;
@@ -157,6 +174,7 @@ public class GameField
             else if (randomNum == 9) enemyList.add(new BossEnemy());
         }
         System.out.println("random = " + randomNum);
+        this.generatedEnemy = true;
     }
 
     public boolean checkRemoveEnemy(int i)
@@ -196,7 +214,7 @@ public class GameField
         if(!getEnemyList().isEmpty())
         {
             if (getEnemyList().get(i).hasReachedGoal()) {
-                lives -= getEnemyList().get(i).getLevel();
+                lives -= getEnemyList().get(i).getDamage();
                 String setText = "X ";
                 if (lives < 10) setText = setText + "0";
                 life.setText(setText + lives);
@@ -233,7 +251,7 @@ public class GameField
                     money = money - tower.getBuildCost();
                     String setTextMoney = "MONEY : ";
                     if (money < 10) setTextMoney = setTextMoney + "0";
-                    Money.setText(setTextMoney + money);
+                    moneyLabel.setText(setTextMoney + money);
                 }
             }
             build = false;
@@ -244,6 +262,13 @@ public class GameField
         money = money + enemy.getReward();
         String setTextMoney = "MONEY : ";
         if (money < 10) setTextMoney = setTextMoney + "0";
-        Money.setText(setTextMoney + money);
+        moneyLabel.setText(setTextMoney + money);
+    }
+
+    public void updateMoney()
+    {
+        String setTextMoney = "MONEY : ";
+        if (money < 10) setTextMoney = setTextMoney + "0";
+        moneyLabel.setText(setTextMoney + money);
     }
 }

@@ -87,7 +87,7 @@ public class GameStage {
         lifes.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 40);
         lifes.setLayoutY(128);
         gamePane.getChildren().add(lifes);
-        Money = gameField.getMoney();
+        Money = gameField.getMoneyLabel();
         Money.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
         Money.setLayoutY(64);
         gamePane.getChildren().add(Money);
@@ -150,11 +150,9 @@ public class GameStage {
                             if (enemy1.isDead()) gameField.updateMoney(tower.targetEnemy(gameField.getEnemyList()));
                         }
                     }
-                }
-
-                for (Tower tower : gameField.getTowerList()) {
                     tower.towerAttack(now, gameField, gamePane);
                 }
+
                 if (!gameField.getEnemyList().isEmpty()) {
                     //  System.out.println(gameField.getEnemyList().get(0).getView().getTranslateX() + " " + gameField.getEnemyList().get(0).getView().getTranslateY());
 
@@ -165,6 +163,15 @@ public class GameStage {
                         }
                     }
                 }
+
+                if (gameField.getEnemyList().isEmpty() && gameField.getLevel() > 0 && !play && gameField.hasGeneratedEnemy())
+                {
+                    gameField.setMoney(gameField.getMoney() + 200 + gameField.getLevel()*25);
+                    gameField.updateMoney();
+                    gameField.setGeneratedEnemy(false);
+                    play = true;
+                }
+
                 if(gameField.getLives() < 0) play = false;
                 gameField.gameOver(gameTimer, gamePane);
             }
@@ -180,32 +187,33 @@ public class GameStage {
 
         Start.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
+            gameField.setLevel(gameField.getLevel() + 1);
             if (play)
             {
+                play = false;
                 System.out.println("--------------- LEVEL " + gameField.getLevel() + " ---------------");
                 System.out.println("diff factor = " + Math.pow(2, gameField.getLevel() - 1));
                 startTimer = new AnimationTimer() {
                     long timer = System.nanoTime();
-                    int difficulty = (int) (8 * Math.pow(2, gameField.getLevel() - 1));
+                    int difficulty = (int) (10 * Math.pow(2, gameField.getLevel() - 1));
                     @Override
                     public void handle(long now) {
                         if (now - timer >= 0.25e9 && difficulty > 0) {
                             //System.out.println("looking good");
-                                try {
-                                    gameField.generateEnemy(gameField.getEnemyList(), difficulty);
-                                    System.out.println("size = " + gameField.getEnemyList().size());
-                                    gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).enemyMove().play();
-                                    gamePane.getChildren().add(gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getView());
-                                    difficulty -= gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getLevel();
-                                    System.out.println("difficulty = " + difficulty);
-                                    if(difficulty <= 0)
-                                    {
-                                        gameField.setLevel(gameField.getLevel() + 1);
-                                        startTimer.stop();
-                                    }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                            try {
+                                gameField.generateEnemy(gameField.getEnemyList(), difficulty);
+                                System.out.println("size = " + gameField.getEnemyList().size());
+                                gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).enemyMove().play();
+                                gamePane.getChildren().add(gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getView());
+                                difficulty -= gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getLevel();
+                                System.out.println("difficulty = " + difficulty);
+                                if(difficulty <= 0)
+                                {
+                                    startTimer.stop();
                                 }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             timer = now;
                         }
                     }

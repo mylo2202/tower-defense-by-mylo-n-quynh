@@ -15,6 +15,7 @@ public abstract class Enemy extends GameField {
     private int hitPoints;                      // How Strong enemy is
     private int moveDuration;                      // How fast enemy moves
     private int reward;                         // Gold reward for enemy's death
+    private int damage;
     private boolean isDead;                     // Triggering flag for enemy's death and removal
     //private boolean reachedGoal;                // Check for enemy reaching the goal alive and removal if it does
     private int level;                          // How difficult to kill the enemy is
@@ -62,6 +63,7 @@ public abstract class Enemy extends GameField {
     public void removeHitPoints(int hitPoints) {
         this.hitPoints = this.hitPoints - hitPoints;
     }
+
     public int getMoveDuration()
     {
         return moveDuration;
@@ -97,6 +99,14 @@ public abstract class Enemy extends GameField {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
     public String getImageUrl() {

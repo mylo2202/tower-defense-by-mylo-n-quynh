@@ -13,8 +13,9 @@ public class SmallerEnemy extends Enemy
         setEnemyImage(new Image(this.getImageUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
         setView(new ImageView(this.getEnemyImage()));
         setHitPoints(100);
-        setMoveDuration(8);
-        setReward(10);
+        setMoveDuration(16);
+        setReward(5);
         setLevel(1);
+        setDamage(1);
     }
 }
