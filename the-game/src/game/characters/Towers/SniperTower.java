@@ -13,7 +13,7 @@ public class SniperTower extends Tower {
         setTowerImage(new Image(this.getImageUrl(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
         setView(new ImageView(this.getTowerImage()));
         setAttackDamage(200);
-        setAttackCooldown(200);
+        setAttackCooldown(2000);
         setBuildCost(500);
         setUpgradeCost(5000);
         setSellPrice(250);

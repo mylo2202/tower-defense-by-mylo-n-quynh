@@ -13,7 +13,6 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -31,18 +30,18 @@ public class GameField
     protected ArrayList<Enemy> enemyList;
     protected ArrayList<Tower> towerList;
     protected ArrayList<Bullet> bulletList;
-
+    Image hammer = new Image("/Image/Tower/Hammer.png");
     private int money;
-    private MyLabel MoneyLabel;
-    private MyLabel LevelLabel;
+    private MyLabel moneyLabel;
     private double eventPosX, eventPosY;
     TileMap map = new TileMap();
     private boolean build;
+    private boolean generatedEnemy = false;
     private MyLabel life;
-
+    private MyLabel labelLevel;
     private int lives;
     private int level;
-    ImageView gameOver = new ImageView(new Image("/Image/Enemy/gameOver.png"));
+    //  ImageView gameOver = new ImageView(new Image("/Image/Enemy/gameOver.png"));
     private Music music = new Music();
 
     public GameField() throws IOException {
@@ -50,18 +49,23 @@ public class GameField
         towerList = new ArrayList<>();
         bulletList = new ArrayList<>();
         money = 200;
-        MoneyLabel = new MyLabel("MONEY : " + money);
-
-        LevelLabel = new MyLabel("Level 0");
+        moneyLabel = new MyLabel("MONEY : " + money);
         build = false;
         lives = 100;
         life = new MyLabel("x " + lives, "/Image/UI/life.png", 45, 100);
         String setText = "X ";
-        if (lives < 10 && lives > 0) setText = setText + "0";
         life.setText(setText + lives);
-        gameOver.setLayoutX(300);
-        gameOver.setLayoutY(200);
         this.level = 0;
+        labelLevel = new MyLabel("Level " + level);
+
+    }
+
+    public MyLabel getLabelLevel() {
+        return labelLevel;
+    }
+
+    public void updateLabelLevel() {
+        labelLevel.setText("Level " + getLevel());
     }
 
     public double getEventPosX() {
@@ -70,12 +74,6 @@ public class GameField
 
     public double getEventPosY() {
         return eventPosY;
-    }
-
-
-
-    public MyLabel getLabelLevel() {
-        return LevelLabel;
     }
 
     public MyLabel getLife() {
@@ -102,12 +100,20 @@ public class GameField
         this.build = build;
     }
 
-    public void setLabelLevel(MyLabel level) {
-        LevelLabel = level;
+    public boolean hasGeneratedEnemy() {
+        return generatedEnemy;
+    }
+
+    public void setGeneratedEnemy(boolean generatedEnemy) {
+        this.generatedEnemy = generatedEnemy;
     }
 
     public MyLabel getMoneyLabel() {
-        return MoneyLabel;
+        return moneyLabel;
+    }
+
+    public void setMoneyLabel(MyLabel moneyLabel) {
+        this.moneyLabel = moneyLabel;
     }
 
     public ArrayList<Enemy> getEnemyList() {
@@ -134,25 +140,20 @@ public class GameField
         this.bulletList = bulletList;
     }
 
-    public void setMoneyLabel(MyLabel moneyLabel) {
-        this.MoneyLabel = moneyLabel;
-    }
-
-    public int getLevelLabel() {
+    public int getLevel() {
         return level;
     }
 
-    public void setLevelLabel(int levelLabel) {
-        this.level = levelLabel;
-    }
-
-    public void updateLabelLevel() {
-        level++;
-        LevelLabel.setText("Level " + level);
-    }
-
-    public void updateLevel(int level) {
+    public void setLevel(int level) {
         this.level = level;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 
     public void generateEnemy(ArrayList<Enemy> enemyList, int difficulty) throws IOException {
@@ -161,21 +162,18 @@ public class GameField
         if (difficulty == 1)
         {
             enemyList.add(new SmallerEnemy());
-        }
-        else if (difficulty >= 2 && difficulty < 10)
+        } else if (difficulty > 1 && difficulty <= 10)
         {
             randomNum = rand.nextInt(7);
             if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
             else if (randomNum >= 4 && randomNum <= 6) enemyList.add(new SmallerEnemy());
-        }
-        else if (difficulty >= 10 && difficulty < 50)
+        } else if (difficulty > 10 && difficulty <= 50)
         {
             randomNum = rand.nextInt(9);
             if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
             else if (randomNum >= 4 && randomNum <= 6) enemyList.add(new SmallerEnemy());
             else if (randomNum >= 7 && randomNum <= 8) enemyList.add(new TankerEnemy());
-        }
-        else if (difficulty >= 50)
+        } else if (difficulty > 50)
         {
             randomNum = rand.nextInt(10);
             if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
@@ -183,7 +181,8 @@ public class GameField
             else if (randomNum >= 7 && randomNum <= 8) enemyList.add(new TankerEnemy());
             else if (randomNum == 9) enemyList.add(new BossEnemy());
         }
-        System.out.println("random = " + randomNum);
+        //System.out.println("random = " + randomNum);
+        this.generatedEnemy = true;
     }
 
     public boolean checkRemoveEnemy(int i)
@@ -198,18 +197,29 @@ public class GameField
         return false;
     }
 
-    public boolean gameOver() {
-        return lives <= 0;
-    }
-
-    public void gameOver(AnimationTimer animationTimer, AnimationTimer timer, Stage game, Stage menu) throws IOException {
+    public void gameOver(AnimationTimer animationTimer, AnimationTimer timer, Stage game, Stage Menu) {
 
         if (lives <= 0) {
+            music.getMediaBackground().stop();
+            music.getMediaGameOver().play();
             animationTimer.stop();
             timer.stop();
+            Menu.show();
             game.close();
+            if (!getEnemyList().isEmpty()) {
+                getEnemyList().forEach(enemy -> {
+                    enemy.enemyMove().stop();
+                });
+            }
+            /*Iterator iteratorEnenemy = getEnemyList().iterator();
+            while (iteratorEnenemy.hasNext()){
+                iteratorEnenemy.remove();
+            }
+            Iterator iteratorTower = getTowerList().iterator();
+            while (iteratorTower.hasNext()){
+                iteratorTower.remove();
+            }*/
 
-            menu.show();
 
         }
     }
@@ -223,20 +233,17 @@ public class GameField
         if(!getEnemyList().isEmpty())
         {
             if (getEnemyList().get(i).hasReachedGoal()) {
-                lives--;
+                lives -= getEnemyList().get(i).getDamage();
                 String setText = "X ";
                 if (lives < 10) setText = setText + "0";
                 life.setText(setText + lives);
                 if (lives < 0) life.setText("X 00");
-                //   music.getMediaEnemyHasGoal().play();
-                // music.getMediaEnemyHasGoal().setStopTime(music.getMediaEnemyHasGoal().getStopTime()/2);
-
+                //music.getMediaEnemyHasGoal().play();
 
             }
             if(checkRemoveEnemy(i))
             {
                 getEnemyList().remove(getEnemyList().get(i));
-                music.getMediaEnemyHasGoal().stop();
             }
 
         }
@@ -263,7 +270,7 @@ public class GameField
                     money = money - tower.getBuildCost();
                     String setTextMoney = "MONEY : ";
                     if (money < 10) setTextMoney = setTextMoney + "0";
-                    MoneyLabel.setText(setTextMoney + money);
+                    moneyLabel.setText(setTextMoney + money);
                 }
             }
             build = false;
@@ -274,6 +281,12 @@ public class GameField
         money = money + enemy.getReward();
         String setTextMoney = "MONEY : ";
         if (money < 10) setTextMoney = setTextMoney + "0";
-        MoneyLabel.setText(setTextMoney + money);
+        moneyLabel.setText(setTextMoney + money);
+    }
+
+    public void updateMoney() {
+        String setTextMoney = "MONEY : ";
+        if (money < 10) setTextMoney = setTextMoney + "0";
+        moneyLabel.setText(setTextMoney + money);
     }
 }

@@ -16,7 +16,6 @@ public class MenuGame {
     public static final int HEIGHT = 515;
     public static final int WIDTH = 900;
 
-    public static final int LOGO_X = 185;
     public static final int LOGO_Y = 60;
 
     private MyBorderPane mainPane;
@@ -26,7 +25,6 @@ public class MenuGame {
     private String turnMusic = "ON";
     private GameStage gameStage;
     private Music music;
-    private ImageView logo;
 
     public MenuGame() throws IOException {
 
@@ -69,8 +67,8 @@ public class MenuGame {
 
             try {
                 gameStage = new GameStage();
-
                 gameStage.createNewGame(mainStage);
+                gameStage.setMusic(music);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -87,7 +85,7 @@ public class MenuGame {
         mainPane.addButton(quit);
         quit.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
-            System.out.println(music.isPlayMusic());
+            //System.out.println(music.isPlayMusic());
             mainStage.close();
         });
     }
@@ -105,7 +103,7 @@ public class MenuGame {
 
             if (music.isPlayMusic()) turnMusic = "ON";
             else turnMusic = "OFF";
-            // System.out.println(music.isPlayMusic());
+            //System.out.println(music.isPlayMusic());
             music.setMusic();
             musicPlay.setText("Music : " + turnMusic);
         });
@@ -121,7 +119,7 @@ public class MenuGame {
     }
 
     private void createLogo() {
-        logo = new ImageView("/Image/Logo/logo3.png");
+        ImageView logo = new ImageView("/Image/Logo/logo3.png");
 
         logo.setOnMouseEntered(mouseEvent -> logo.setEffect(new DropShadow()));
         logo.setOnMouseExited(mouseEvent -> logo.setEffect(null));
@@ -130,9 +128,5 @@ public class MenuGame {
 
         BorderPane.setMargin(logo, new Insets(LOGO_Y, 10, 10, 10));
         BorderPane.setAlignment(logo, Pos.CENTER);
-    }
-
-    public void setLogo(String url) {
-        logo = new ImageView(url);
     }
 }

@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class TileMap {
-    protected final int GRID_SIZE = 80;
-    protected final int SCREEN_HEIGHT = 720;
-    protected final int SCREEN_WIDTH = 1280;
-    protected final int MAP_HEIGHT = 9;
-    protected final int MAP_WIDTH = 12;
+    protected static final int GRID_SIZE = 80;
+    protected static final int SCREEN_HEIGHT = 720;
+    protected static final int SCREEN_WIDTH = 1280;
+    protected static final int MAP_HEIGHT = 9;
+    protected static final int MAP_WIDTH = 12;
     private int[][] grid;
 
 

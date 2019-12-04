@@ -93,11 +93,11 @@ public abstract class Enemy extends GameField {
         isDead = dead;
     }
 
-    public int getLevelLabel() {
+    public int getLevel() {
         return level;
     }
 
-    public void updateLevel(int level) {
+    public void setLevel(int level) {
         this.level = level;
     }
 

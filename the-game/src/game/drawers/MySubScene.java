@@ -14,9 +14,9 @@ public class MySubScene extends SubScene {
     private static final String FONT_PATH = "/src/UI/Font/kenvector_future.ttf";
     private static final String BACKGROUND_IMAGE = "/Image/UI/grey_panel.png";
     // private MyButton build= new MyButton("Build",45,100,"-fx-background-color: transparent; -fx-background-image: url('/Image/UI/life.png');");
-    private static final double WIDTH = 250;
-    private static final double HEIGHT = 250;
-    private static final double POSX = 1050;
+    private static final double WIDTH = (TileMap.SCREEN_WIDTH - TileMap.MAP_WIDTH * TileMap.GRID_SIZE) * 3 / 4;
+    private static final double HEIGHT = (TileMap.SCREEN_WIDTH - TileMap.MAP_WIDTH * TileMap.GRID_SIZE) * 3 / 4;
+    private static final double POSX = TileMap.SCREEN_WIDTH;
     private static final double POSY = 300;
     private MyLabel myLabel = new MyLabel("");
     private Label info = new Label("");
@@ -58,7 +58,7 @@ public class MySubScene extends SubScene {
         transition.setDuration(Duration.seconds(0.4));
         transition.setNode(this);
         if (isHidden) {
-            transition.setToX(-WIDTH - 53);
+            transition.setToX(-WIDTH - (TileMap.SCREEN_WIDTH - TileMap.MAP_WIDTH * TileMap.GRID_SIZE) * 7 / 8);
             isHidden = false;
         } else {
             transition.setToX(POSX);
