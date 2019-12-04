@@ -14,7 +14,8 @@ public class BossEnemy extends Enemy
         setView(new ImageView(this.getEnemyImage()));
         setHitPoints(5000);
         setMoveDuration(54);
-        setReward(100);
-        setLevelLabel(50);
+        setReward(50);
+        setLevel(50);
+        setDamage(20);
     }
 }

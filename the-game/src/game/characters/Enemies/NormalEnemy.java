@@ -14,8 +14,8 @@ public class NormalEnemy extends Enemy
         setView(new ImageView(this.getEnemyImage()));
         setHitPoints(200);
         setMoveDuration(24);
-        setReward(20);
-        setLevelLabel(2);
-
+        setReward(10);
+        setLevel(2);
+        setDamage(2);
     }
 }
