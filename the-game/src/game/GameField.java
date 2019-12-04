@@ -14,8 +14,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 //should this class be abstract?
@@ -35,9 +39,10 @@ public class GameField
     private boolean build;
     private boolean generatedEnemy = false;
     private MyLabel life;
+    private  MyLabel labelLevel;
     private int lives;
     private int level;
-    ImageView gameOver = new ImageView(new Image("/Image/Enemy/gameOver.png"));
+  //  ImageView gameOver = new ImageView(new Image("/Image/Enemy/gameOver.png"));
     private Music music = new Music();
 
     public GameField() throws IOException {
@@ -50,11 +55,18 @@ public class GameField
         lives = 100;
         life = new MyLabel("x " + lives, "/Image/UI/life.png", 45, 100);
         String setText = "X ";
-        if (lives < 10 && lives > 0) setText = setText + "0";
         life.setText(setText + lives);
-        gameOver.setLayoutX(500);
-        gameOver.setLayoutY(400);
         this.level = 0;
+        labelLevel = new MyLabel("Level "+ level);
+
+    }
+
+    public MyLabel getLabelLevel() {
+        return labelLevel;
+    }
+
+    public void updateLabelLevel() {
+        labelLevel.setText("Level "+ getLevel());
     }
 
     public double getEventPosX() {
@@ -152,20 +164,20 @@ public class GameField
         {
             enemyList.add(new SmallerEnemy());
         }
-        else if (difficulty >= 2 && difficulty < 10)
+        else if (difficulty > 1 && difficulty <= 10)
         {
             randomNum = rand.nextInt(7);
             if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
             else if (randomNum >= 4 && randomNum <= 6) enemyList.add(new SmallerEnemy());
         }
-        else if (difficulty >= 10 && difficulty < 50)
+        else if (difficulty > 10 && difficulty <= 50)
         {
             randomNum = rand.nextInt(9);
             if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
             else if (randomNum >= 4 && randomNum <= 6) enemyList.add(new SmallerEnemy());
             else if (randomNum >= 7 && randomNum <= 8) enemyList.add(new TankerEnemy());
         }
-        else if (difficulty >= 50)
+        else if (difficulty > 50)
         {
             randomNum = rand.nextInt(10);
             if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
@@ -173,7 +185,7 @@ public class GameField
             else if (randomNum >= 7 && randomNum <= 8) enemyList.add(new TankerEnemy());
             else if (randomNum == 9) enemyList.add(new BossEnemy());
         }
-        System.out.println("random = " + randomNum);
+        //System.out.println("random = " + randomNum);
         this.generatedEnemy = true;
     }
 
@@ -189,18 +201,29 @@ public class GameField
         return false;
     }
 
-    public void gameOver(AnimationTimer animationTimer, AnchorPane anchorPane) {
+    public void gameOver(AnimationTimer animationTimer,AnimationTimer timer, Stage game, Stage Menu) {
 
         if (lives <= 0) {
             music.getMediaBackground().stop();
             music.getMediaGameOver().play();
             animationTimer.stop();
+            timer.stop();
+            Menu.show();
+            game.close();
             if (!getEnemyList().isEmpty()) {
                 getEnemyList().forEach(enemy -> {
                     enemy.enemyMove().stop();
                 });
             }
-            anchorPane.getChildren().add(gameOver);
+            /*Iterator iteratorEnenemy = getEnemyList().iterator();
+            while (iteratorEnenemy.hasNext()){
+                iteratorEnenemy.remove();
+            }
+            Iterator iteratorTower = getTowerList().iterator();
+            while (iteratorTower.hasNext()){
+                iteratorTower.remove();
+            }*/
+
 
         }
     }

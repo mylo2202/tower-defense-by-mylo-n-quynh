@@ -26,7 +26,7 @@ public class MyButton extends Button {
         setText(text);
         setButtonFont();
         setStyle(BUTTON_FREE_STYLE);
-        setPrefHeight(h );
+        setPrefHeight(h);
         setPrefWidth(w);
         intitButtonListener();
         this.h = h;

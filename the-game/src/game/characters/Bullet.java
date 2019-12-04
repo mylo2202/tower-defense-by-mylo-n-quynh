@@ -1,5 +1,8 @@
 package game.characters;
 
+import game.characters.Towers.MachineGunTower;
+import game.characters.Towers.NormalTower;
+import game.characters.Towers.SniperTower;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,12 +21,11 @@ public class Bullet implements GameEntity {
 
     public Bullet()
     {
-        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
-
+        view = new ImageView(new Image("/Image/Bullet/normalBullet.png", 80, 80, false, true));
     }
 
     public Bullet(Tower tower, boolean sound) {
-        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
+        view = new ImageView(new Image("/Image/Bullet/normalBullet.png", 80, 80, false, true));
         view.setTranslateX(tower.getView().getTranslateX());
         view.setTranslateY(tower.getView().getTranslateY());
         //   if (sound == true) music.getMediaBullet().play();
@@ -31,10 +33,16 @@ public class Bullet implements GameEntity {
     }
 
     public Bullet(Tower tower) {
-        view = new ImageView(new Image("/Image/Bullet/bullet1.png", 80, 80, false, true));
+        if (tower instanceof NormalTower)
+            view = new ImageView(new Image("/Image/Bullet/normalBullet.png", 80, 80, false, true));
+        else if (tower instanceof MachineGunTower)
+            view = new ImageView(new Image("/Image/Bullet/machineBullet.png", 80, 80, false, true));
+        else if (tower instanceof SniperTower)
+            view = new ImageView(new Image("/Image/Bullet/sniperBullet.png", 80, 80, false, true));
+        else
+            view = new ImageView(new Image("/Image/Bullet/normalBullet.png", 80, 80, false, true));
         view.setTranslateX(tower.getView().getTranslateX());
         view.setTranslateY(tower.getView().getTranslateY());
-
         pos = new Point2D(tower.getPos().getX(), tower.getPos().getY());
     }
 

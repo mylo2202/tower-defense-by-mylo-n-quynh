@@ -9,7 +9,7 @@ import java.io.File;
 public class Music {
     private final String PATH_MEDIA_BUTTON = "src//Sound//click2.mp3";
     private final String PATH_MEDIA_BACKGROUND = "src/Sound/Watery Graves- Laura Shigihara.mp3";
-    private final String PATH_MEDIA_BULLET = "src/Sound/bullet.mp3";
+    //private final String PATH_MEDIA_BULLET = "src/Sound/bullet.mp3";
     private final String PATH_MEDIA_ENEMY = "src/Sound/enemy.mp3";
     private final String PATH_MEDIA_GAMEOVER = "src/Sound/lost.mp3";
     private MediaPlayer mediaBullet;
@@ -54,7 +54,6 @@ public class Music {
     }
 
     public MediaPlayer getMediaBackground() {
-        //  System.out.println("8888");
         return mediaBackground;
     }
 

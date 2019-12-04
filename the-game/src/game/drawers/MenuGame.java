@@ -16,7 +16,6 @@ public class MenuGame {
     public static final int HEIGHT = 515;
     public static final int WIDTH = 900;
 
-    public static final int LOGO_X = 185;
     public static final int LOGO_Y = 60;
 
     private MyBorderPane mainPane;
@@ -67,7 +66,9 @@ public class MenuGame {
             if (music.isPlayMusic()) music.getMediaButton().play();
 
             try {
+                gameStage= new GameStage();
                 gameStage.createNewGame(mainStage);
+                gameStage.setMusic(music);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -84,7 +85,7 @@ public class MenuGame {
         mainPane.addButton(quit);
         quit.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
-            System.out.println(music.isPlayMusic());
+            //System.out.println(music.isPlayMusic());
             mainStage.close();
         });
     }
@@ -102,7 +103,7 @@ public class MenuGame {
 
             if (music.isPlayMusic()) turnMusic = "ON";
             else turnMusic = "OFF";
-            // System.out.println(music.isPlayMusic());
+            //System.out.println(music.isPlayMusic());
             music.setMusic();
             musicPlay.setText("Music : " + turnMusic);
         });
