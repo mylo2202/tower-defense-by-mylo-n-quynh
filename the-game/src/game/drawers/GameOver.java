@@ -12,23 +12,21 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MenuGame {
+public class GameOver {
     public static final int HEIGHT = 515;
     public static final int WIDTH = 900;
 
     public static final int LOGO_X = 185;
     public static final int LOGO_Y = 60;
-
+    boolean setMusic = true;
     private MyBorderPane mainPane;
     private Scene mainScene;
     private Stage mainStage;
-    boolean setMusic = true;
     private String turnMusic = "ON";
     private GameStage gameStage;
     private Music music;
-    private ImageView logo;
 
-    public MenuGame() throws IOException {
+    public GameOver() throws IOException {
 
         mainPane = new MyBorderPane();
         mainPane.setPadding(new Insets(10, 10, 10, 10));
@@ -68,8 +66,6 @@ public class MenuGame {
             if (music.isPlayMusic()) music.getMediaButton().play();
 
             try {
-                gameStage = new GameStage();
-
                 gameStage.createNewGame(mainStage);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -121,7 +117,7 @@ public class MenuGame {
     }
 
     private void createLogo() {
-        logo = new ImageView("/Image/Logo/logo3.png");
+        ImageView logo = new ImageView("/Image/Logo/logo3.png");
 
         logo.setOnMouseEntered(mouseEvent -> logo.setEffect(new DropShadow()));
         logo.setOnMouseExited(mouseEvent -> logo.setEffect(null));
@@ -130,9 +126,5 @@ public class MenuGame {
 
         BorderPane.setMargin(logo, new Insets(LOGO_Y, 10, 10, 10));
         BorderPane.setAlignment(logo, Pos.CENTER);
-    }
-
-    public void setLogo(String url) {
-        logo = new ImageView(url);
     }
 }

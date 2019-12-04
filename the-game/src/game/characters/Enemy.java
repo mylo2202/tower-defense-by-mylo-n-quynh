@@ -91,7 +91,7 @@ public abstract class Enemy extends GameField {
         isDead = dead;
     }
 
-    public int getLevel() {
+    public int getLevelLabel() {
         return level;
     }
 

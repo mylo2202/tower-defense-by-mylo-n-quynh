@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public abstract class Tower implements GameEntity
 {
-    private static double attackCooldown;              // Delayed time for each attack
+    private double attackCooldown;              // Delayed time for each attack
     private int attackDamage;                       // Amount of health to reduce from enemies per attack
     // Maximum range the tower can attack
     private int towerLevel;                         // The higher level the tower is the more effective it is
@@ -24,7 +25,6 @@ public abstract class Tower implements GameEntity
     private Enemy attackTarget;
     private int attackRange;
     private long towerTimer = System.nanoTime();
-
 
     protected String imageUrl;
     protected Image towerImage;
@@ -47,7 +47,7 @@ public abstract class Tower implements GameEntity
     }
 
     public void setAttackCooldown(double attackCooldown) {
-        Tower.attackCooldown = attackCooldown;
+        this.attackCooldown = attackCooldown;
     }
 
     public int getAttackRange() {
@@ -218,30 +218,18 @@ public abstract class Tower implements GameEntity
     }
 
     public void towerAttack(long now, GameField gameField, MediaPlayer music, AnchorPane gamePane) {
-        if (!gameField.getEnemyList().isEmpty()
+        /*if (!gameField.getEnemyList().isEmpty()
 
                 && this.targetEnemy(gameField.getEnemyList()).distance(this) <= this.getAttackRange()) {
-
-
-        }
+        }*/
         if (now - this.towerTimer >= getAttackCooldown() * 1e6) {
-
-            /*gameField.getTowerList().forEach(tower -> {
-                //if (this instanceof Tower)
-
-            });*/
 
             if (!gameField.getEnemyList().isEmpty()
 
                     && this.targetEnemy(gameField.getEnemyList()).distance(this) <= this.getAttackRange()) {
 
-                /*music.setOnEndOfMedia(new Runnable() {
-                    public void run() {
-                        music.play();
-                    }
-                });*/
-
-
+                music.setStartTime(Duration.ZERO);
+                music.play();
                 this.createBullet(new Bullet(this));
 
                 gamePane.getChildren().add(this.getBullet().getView());

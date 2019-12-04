@@ -43,6 +43,7 @@ public class GameStage {
     private GameField gameField = new GameField();
     private Music music = gameField.getMusic();
     private boolean play = true;
+    private boolean gameOver;
 
     public GameStage() throws IOException {
         initialiseStage();
@@ -95,9 +96,9 @@ public class GameStage {
         gameField.getLife().setLayoutY(128);
         gamePane.getChildren().add(gameField.getLife());
 
-        gameField.getMoney().setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
-        gameField.getMoney().setLayoutY(64);
-        gamePane.getChildren().add(gameField.getMoney());
+        gameField.getMoneyLabel().setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
+        gameField.getMoneyLabel().setLayoutY(64);
+        gamePane.getChildren().add(gameField.getMoneyLabel());
 
         gameField.getLabelLevel().setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
         gameField.getLabelLevel().setLayoutY(580);
@@ -109,7 +110,7 @@ public class GameStage {
         machineTowerButton();
         normalTowerButton();
         sniperTowerButton();
-        // hfhjf();
+
     }
 
 
@@ -179,42 +180,47 @@ public class GameStage {
                         }
                     }
                 }
-                if(gameField.getLives() < 0) play = false;
-                gameField.gameOver(gameTimer, gamePane);
+
+                try {
+                    gameField.gameOver(gameTimer, startTimer, gameStage, menuStage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         };
 
         gameTimer.start();
     }
+
     public void buttonStart() {
         String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
         MyButton Start = new MyButton("START", 45, 190, url);
         Start.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
         Start.setLayoutY(640);
-
+        if (play == true) {
         Start.setOnAction(actionEvent -> {
-            gameField.updateLevel();
+            System.out.println(play);
+            gameField.updateLabelLevel();
             if (music.isPlayMusic()) music.getMediaButton().play();
-            if (play)
-            {
-                System.out.println("--------------- LEVEL " + gameField.getLevel() + " ---------------");
+            //  System.out.println("--------------- LEVEL " + gameField.getLevel() + " ---------------");
                 startTimer = new AnimationTimer() {
                     long timer = System.nanoTime();
-                    int difficulty = gameField.getLevel() * 10;
+                    int difficulty = gameField.getLevelLabel() * 10;
                     @Override
                     public void handle(long now) {
                         if (now - timer >= 1e9 && difficulty > 0) {
                             //System.out.println("looking good");
                                 try {
                                     gameField.generateEnemy(gameField.getEnemyList(), difficulty);
-                                    System.out.println("size = " + gameField.getEnemyList().size());
+                                    //                    System.out.println("size = " + gameField.getEnemyList().size());
                                     gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).enemyMove().play();
                                     gamePane.getChildren().add(gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getView());
-                                    difficulty -= gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getLevel();
-                                    System.out.println("difficulty = " + difficulty);
+                                    difficulty -= gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getLevelLabel();
+                                    //                  System.out.println("difficulty = " + difficulty);
                                     if(difficulty <= 0)
                                     {
-                                        gameField.updateLevel(gameField.getLevel() + 1);
+                                        gameField.updateLevel(gameField.getLevelLabel() + 1);
                                         startTimer.stop();
                                     }
                                 } catch (IOException e) {
@@ -222,12 +228,20 @@ public class GameStage {
                                 }
                             timer = now;
                         }
+                        gameOver = gameField.gameOver();
                     }
-                };
-                startTimer.start();
-            }
-        });
 
+                };
+
+            startTimer.start();
+            // gameField.gameOver(startTimer);
+        });
+            if (gameOver) play = false;
+        }
+
+       /* if(gameField.getLives() <0) {
+            play = false;
+        }*/
         gamePane.getChildren().add(Start);
     }
 
@@ -282,7 +296,7 @@ public class GameStage {
         gamePane.getChildren().add(normal);
 
         normal.setOnAction(actionEvent -> {
-            gameField.updateLabelLevel();
+
             if (music.isPlayMusic()) music.getMediaButton().play();
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));

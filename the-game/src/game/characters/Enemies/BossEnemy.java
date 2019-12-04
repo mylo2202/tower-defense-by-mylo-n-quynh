@@ -13,8 +13,8 @@ public class BossEnemy extends Enemy
         setEnemyImage(new Image(this.getImageUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
         setView(new ImageView(this.getEnemyImage()));
         setHitPoints(5000);
-        setMoveDuration(64);
+        setMoveDuration(54);
         setReward(100);
-        setLevel(50);
+        setLevelLabel(50);
     }
 }

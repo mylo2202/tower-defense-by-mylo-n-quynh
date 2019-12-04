@@ -13,8 +13,8 @@ public class TankerEnemy extends Enemy
         setEnemyImage(new Image(this.getImageUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
         setView(new ImageView(this.getEnemyImage()));
         setHitPoints(1000);
-        setMoveDuration(32);
+        setMoveDuration(36);
         setReward(50);
-        setLevel(10);
+        setLevelLabel(10);
     }
 }
