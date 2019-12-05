@@ -248,7 +248,6 @@ public class GameStage {
 
         machine.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
-            System.out.println(music.isPlayMusic());
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
 

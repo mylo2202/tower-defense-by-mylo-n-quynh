@@ -205,7 +205,7 @@ public class GameField
 
         if (lives <= 0) {
             music.getMediaBackground().stop();
-            music.getMediaGameOver().play();
+            //music.getMediaGameOver().play();
             animationTimer.stop();
             timer.stop();
             Menu.show();
@@ -270,7 +270,7 @@ public class GameField
                     tower.getView().setTranslateY(i * map.getGRID_SIZE());
                     tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
                     gamePane.getChildren().add(tower.getView());
-
+                    map.getGrid()[i][j] = 1;
                     money = money - tower.getBuildCost();
                     String setTextMoney = "MONEY : ";
                     if (money < 10) setTextMoney = setTextMoney + "0";
