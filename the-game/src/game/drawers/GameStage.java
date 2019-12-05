@@ -126,11 +126,15 @@ public class GameStage {
     public void gameLoop() {
         gameField.getTowerList().forEach(tower -> {
                     tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
+
                 }
         );
+
         gameTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                gameField.upgradeTower();
+                gameField.sellTower(gamePane);
                 //System.out.println(gameField.getLevel());
                 for (Tower tower : gameField.getTowerList()) {
                     tower.update(tower.targetEnemy(gameField.getEnemyList()));
@@ -156,7 +160,8 @@ public class GameStage {
                             //System.out.println(tower.getBulletList().size());
                             enemy.removeHitPoints(tower.getAttackDamage());
                             if (enemy.getHitPoints() <= 0) tower.targetEnemy(gameField.getEnemyList()).setDead(true);
-                            if (enemy.isDead()) gameField.updateMoney(tower.targetEnemy(gameField.getEnemyList()));
+                            if (enemy.isDead())
+                                gameField.updateMoneyReward(tower.targetEnemy(gameField.getEnemyList()));
                         }
                     }
                     tower.towerAttack(now, gameField, gamePane);
@@ -242,7 +247,7 @@ public class GameStage {
         exit.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
             gameStage.close();
-            menuStage.show();
+            //  menuStage.show();
         });
         gamePane.getChildren().add(exit);
     }

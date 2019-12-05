@@ -10,6 +10,7 @@ import game.characters.Tower;
 import game.drawers.MyLabel;
 import game.drawers.TileMap;
 import javafx.animation.AnimationTimer;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -211,16 +212,6 @@ public class GameField
                     enemy.enemyMove().stop();
                 });
             }
-            /*Iterator iteratorEnenemy = getEnemyList().iterator();
-            while (iteratorEnenemy.hasNext()){
-                iteratorEnenemy.remove();
-            }
-            Iterator iteratorTower = getTowerList().iterator();
-            while (iteratorTower.hasNext()){
-                iteratorTower.remove();
-            }*/
-
-
         }
     }
 
@@ -260,33 +251,70 @@ public class GameField
                 int j = (int) eventPosX / map.getGRID_SIZE();
 
                 if (i < map.getMAP_HEIGHT() && j < map.getMAP_WIDTH() && map.getGrid()[i][j] == 0) {
-
+                    map.getGrid()[i][j] = 1;
                     towerList.add(tower);
                     tower.getView().setTranslateX(j * map.getGRID_SIZE());
                     tower.getView().setTranslateY(i * map.getGRID_SIZE());
+
                     tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
-                    gamePane.getChildren().add(tower.getView());
+                    tower.infoLevel().setTranslateX(tower.getView().getTranslateX() + 20);
+                    tower.infoLevel().setTranslateY(tower.getView().getTranslateY() + 40);
+                    //  tower.infoLevel().setTranslateY(i * map.getGRID_SIZE()+40);
+
+                    gamePane.getChildren().addAll(tower.getView(), tower.infoLevel());
 
                     money = money - tower.getBuildCost();
-                    String setTextMoney = "MONEY : ";
-                    if (money < 10) setTextMoney = setTextMoney + "0";
-                    moneyLabel.setText(setTextMoney + money);
+                    updateMoney();
                 }
             }
             build = false;
         };
     }
 
-    public void updateMoney(Enemy enemy) {
-        money = money + enemy.getReward();
-        String setTextMoney = "MONEY : ";
-        if (money < 10) setTextMoney = setTextMoney + "0";
-        moneyLabel.setText(setTextMoney + money);
+    public void sellTower(AnchorPane anchorPane) {
+        for (int i = 0; i < getTowerList().size(); i++) {
+            int finalI = i;
+            getTowerList().get(i).getSell().setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    money = money + getTowerList().get(finalI).getSellPrice();
+                    updateMoney();
+                    anchorPane.getChildren().removeAll(getTowerList().get(finalI).getView(), getTowerList().get(finalI).infoLevel());
+                    getTowerList().remove(finalI);
+                }
+            });
+        }
+    }
+
+    public void upgradeTower() {
+        getTowerList().forEach(tower -> {
+            tower.getUpgrade().setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    if (getMoney() >= tower.getUpgradeCost()) {
+                        tower.setTowerLevel(tower.getTowerLevel() + 1);
+                        tower.setUpgrade();
+                        tower.getLabelLevel().setText("level " + tower.getTowerLevel());
+
+                        money = money - tower.getUpgradeCost();
+                        updateMoney();
+                    }
+                }
+            });
+        });
+
     }
 
     public void updateMoney() {
         String setTextMoney = "MONEY : ";
         if (money < 10) setTextMoney = setTextMoney + "0";
         moneyLabel.setText(setTextMoney + money);
+    }
+
+    public void updateMoneyReward(Enemy enemy) {
+        money = money + enemy.getReward();
+        updateMoney();
     }
 }

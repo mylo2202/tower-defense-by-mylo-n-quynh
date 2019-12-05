@@ -1,9 +1,14 @@
 package game.characters;
 
 import game.GameField;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -27,6 +32,10 @@ public abstract class Tower implements GameEntity
     protected String imageUrl;
     protected Image towerImage;
     protected ImageView View;
+    private Label labelLevel;
+    private ContextMenu contextMenu;
+    private MenuItem upgrade;
+    private MenuItem sell;
 
     private Point2D pos;
     private List<Bullet> bullet = new ArrayList<>();
@@ -37,6 +46,11 @@ public abstract class Tower implements GameEntity
 
     public Tower() throws IOException {
         this.towerLevel = 1;
+        contextMenu = new ContextMenu();
+        labelLevel = new Label("level " + towerLevel);
+        upgrade = new MenuItem("upgrade");
+        sell = new MenuItem("sell");
+
 
     }
 
@@ -183,12 +197,18 @@ public abstract class Tower implements GameEntity
             if (distance <= attackRange) {
                 getView().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX())
                         , (posEY - getPos().getY()))));
+
+                infoLevel().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX()), (posEY - getPos().getY()))));
             }
-            //System.out.println(getView().getTranslateX()+ "  " + getView().getTranslateY() );
+            System.out.println(getView().getTranslateX() + "  " + getView().getTranslateY());
             /*if (distance > RADIUS) {
                 getView().setRotate(0);
             }*/
-        } else getView().setRotate(0);
+        } else {
+
+            getView().setRotate(0);
+            infoLevel().setRotate(0);
+        }
 
     }
 
@@ -210,10 +230,13 @@ public abstract class Tower implements GameEntity
     }
 
     public String getInfo() {
-        return "AttackDamage: " + getAttackDamage() + "\n" +
-                "AttackCooldown: " + getAttackCooldown() + "\n" +
+        return "Level1:\n" +
+                "AttackDamage: " + getAttackDamage() + "\n" +
+                "Each level is doubled" + "\n" +
+                "AttackCooldown: " + getAttackCooldown() / 1e3 + "s\n" +
                 "BuildCost: " + getBuildCost() + "\n" +
-                "AttackRange: " + getAttackRange();
+                "AttackRange: " + getAttackRange() + "\n";
+
 
 
     }
@@ -237,6 +260,53 @@ public abstract class Tower implements GameEntity
 
             this.towerTimer = now;
         }
+    }
+
+    public void setUpgrade() {
+        setAttackDamage(getAttackDamage() * 2);
+    }
+
+    public void setContextMenu() {
+        getView().setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+
+            @Override
+            public void handle(ContextMenuEvent event) {
+
+                contextMenu.show(getView(), event.getScreenX(), event.getScreenY());
+            }
+        });
+
+        contextMenu.getItems().addAll(upgrade, sell);
+    }
+
+
+    public Label getLabelLevel() {
+        return labelLevel;
+    }
+
+    public void setLabelLevel(Label labelLevel) {
+        this.labelLevel = labelLevel;
+    }
+
+    public MenuItem getUpgrade() {
+        return upgrade;
+    }
+
+    public void setUpgrade(MenuItem upgrade) {
+        this.upgrade = upgrade;
+    }
+
+    public MenuItem getSell() {
+        return sell;
+    }
+
+    public void setSell(MenuItem sell) {
+        this.sell = sell;
+    }
+
+    public Label infoLevel() {
+        return labelLevel;
+
     }
 }
 
