@@ -34,7 +34,7 @@ public abstract class Tower implements GameEntity
     protected ImageView View;
     private Label labelLevel;
     private ContextMenu contextMenu;
-    private MenuItem upgrade;
+    private MenuItem upgradeItem;
     private MenuItem sell;
 
     private Point2D pos;
@@ -48,7 +48,7 @@ public abstract class Tower implements GameEntity
         this.towerLevel = 1;
         contextMenu = new ContextMenu();
         labelLevel = new Label("level " + towerLevel);
-        upgrade = new MenuItem("upgrade");
+        upgradeItem = new MenuItem("upgrade");
         sell = new MenuItem("sell");
 
 
@@ -200,10 +200,7 @@ public abstract class Tower implements GameEntity
 
                 infoLevel().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX()), (posEY - getPos().getY()))));
             }
-            System.out.println(getView().getTranslateX() + "  " + getView().getTranslateY());
-            /*if (distance > RADIUS) {
-                getView().setRotate(0);
-            }*/
+
         } else {
 
             getView().setRotate(0);
@@ -216,16 +213,16 @@ public abstract class Tower implements GameEntity
 
         if (!enemies.isEmpty()) {
 
-            Enemy closestEnemy = enemies.get(0);
+            attackTarget = enemies.get(0);
             for (int i = 0; i < enemies.size(); i++) {
                 double distance;
                 distance = enemies.get(i).distance(this);
-                if (distance < attackRange && distance < closestEnemy.distance(this)) {
-                    closestEnemy = enemies.get(i);
+                if (distance < attackRange && distance < attackTarget.distance(this)) {
+                    attackTarget = enemies.get(i);
                 }
             }
 
-            return closestEnemy;
+            return attackTarget;
         } else return null;
     }
 
@@ -276,7 +273,7 @@ public abstract class Tower implements GameEntity
             }
         });
 
-        contextMenu.getItems().addAll(upgrade, sell);
+        contextMenu.getItems().addAll(upgradeItem, sell);
     }
 
 
@@ -288,12 +285,12 @@ public abstract class Tower implements GameEntity
         this.labelLevel = labelLevel;
     }
 
-    public MenuItem getUpgrade() {
-        return upgrade;
+    public MenuItem getUpgradeItem() {
+        return upgradeItem;
     }
 
-    public void setUpgrade(MenuItem upgrade) {
-        this.upgrade = upgrade;
+    public void setUpgradeItem(MenuItem upgradeItem) {
+        this.upgradeItem = upgradeItem;
     }
 
     public MenuItem getSell() {

@@ -257,8 +257,8 @@ public class GameField
                     tower.getView().setTranslateY(i * map.getGRID_SIZE());
 
                     tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
-                    tower.infoLevel().setTranslateX(tower.getView().getTranslateX() + 20);
-                    tower.infoLevel().setTranslateY(tower.getView().getTranslateY() + 40);
+                    tower.infoLevel().setTranslateX(tower.getView().getTranslateX() + 25);
+                    tower.infoLevel().setTranslateY(tower.getView().getTranslateY() + 30);
                     //  tower.infoLevel().setTranslateY(i * map.getGRID_SIZE()+40);
 
                     gamePane.getChildren().addAll(tower.getView(), tower.infoLevel());
@@ -289,12 +289,12 @@ public class GameField
 
     public void upgradeTower() {
         getTowerList().forEach(tower -> {
-            tower.getUpgrade().setOnAction(new EventHandler<ActionEvent>() {
+            tower.getUpgradeItem().setOnAction(new EventHandler<ActionEvent>() {
 
                 @Override
                 public void handle(ActionEvent event) {
                     if (getMoney() >= tower.getUpgradeCost()) {
-                        tower.setTowerLevel(tower.getTowerLevel() + 1);
+                        tower.upgradeTower();
                         tower.setUpgrade();
                         tower.getLabelLevel().setText("level " + tower.getTowerLevel());
 
@@ -310,6 +310,7 @@ public class GameField
     public void updateMoney() {
         String setTextMoney = "MONEY : ";
         if (money < 10) setTextMoney = setTextMoney + "0";
+        if (money < 0) setTextMoney = setTextMoney + "00";
         moneyLabel.setText(setTextMoney + money);
     }
 

@@ -137,13 +137,13 @@ public class GameStage {
                 gameField.sellTower(gamePane);
                 //System.out.println(gameField.getLevel());
                 for (Tower tower : gameField.getTowerList()) {
-                    tower.update(tower.targetEnemy(gameField.getEnemyList()));
+                    tower.update(tower.getAttackTarget());
 
                     for (int i = 0; i < tower.getBulletList().size(); i++) {
 
-                        tower.getBulletIndex(i).update(tower.targetEnemy(gameField.getEnemyList()));
+                        tower.getBulletIndex(i).update(tower.getAttackTarget());
 
-                        Enemy enemy = tower.targetEnemy(gameField.getEnemyList());
+                        Enemy enemy = tower.getAttackTarget();
 
                         double range = Math.sqrt(Math.pow(tower.getBulletIndex(i).getView().getTranslateX() - tower.getBulletIndex(i).getPos().getX(), 2)
                                 + Math.pow(tower.getBulletIndex(i).getView().getTranslateY() - tower.getBulletIndex(i).getPos().getY(), 2));
@@ -159,9 +159,9 @@ public class GameStage {
                             tower.getBulletList().remove(tower.getBulletIndex(i));
                             //System.out.println(tower.getBulletList().size());
                             enemy.removeHitPoints(tower.getAttackDamage());
-                            if (enemy.getHitPoints() <= 0) tower.targetEnemy(gameField.getEnemyList()).setDead(true);
+                            if (enemy.getHitPoints() <= 0) tower.getAttackTarget().setDead(true);
                             if (enemy.isDead())
-                                gameField.updateMoneyReward(tower.targetEnemy(gameField.getEnemyList()));
+                                gameField.updateMoneyReward(tower.getAttackTarget());
                         }
                     }
                     tower.towerAttack(now, gameField, gamePane);
@@ -193,9 +193,9 @@ public class GameStage {
         gameTimer.start();
     }
     public void buttonStart() {
-        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/life.png');";
-        MyButton start = new MyButton("START", 45, 100, url);
-        start.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 120);
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/green_button13.png');";
+        MyButton start = new MyButton("START", 45, 190, url);
+        start.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 95);
         start.setLayoutY(640);
 
         start.setOnAction(actionEvent -> {
@@ -240,10 +240,10 @@ public class GameStage {
     }
 
     public void buttonExit() {
-        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/life.png');";
-        MyButton exit = new MyButton("EXIT", 45, 100, url);
-        exit.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 + 15);
-        exit.setLayoutY(640);
+        String url = "-fx-background-color: transparent; -fx-background-image: url('/Image/UI/towerDefense_tile017.png');";
+        MyButton exit = new MyButton("", 64, 64, url);
+        exit.setLayoutX(map.getSCREEN_WIDTH() - 69);
+        exit.setLayoutY(4);
         exit.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
             gameStage.close();
@@ -264,7 +264,7 @@ public class GameStage {
 
         machine.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
-            System.out.println(music.isPlayMusic());
+
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
 
