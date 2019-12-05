@@ -194,8 +194,9 @@ public class GameStage {
                     play = true;
                 }
 
-                if(gameField.getLives() < 0) play = false;
-                gameField.gameOver(gameTimer, startTimer,gameStage,menuStage);
+                if (gameField.getLives() < 0) play = false;
+                gameField.gameOver(gameTimer, startTimer, gameStage, menuStage);
+
             }
         };
 
@@ -273,6 +274,7 @@ public class GameStage {
 
         machine.setOnAction(actionEvent -> {
             if (music.isPlayMusic()) music.getMediaButton().play();
+
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
 
