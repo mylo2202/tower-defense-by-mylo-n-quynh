@@ -15,7 +15,7 @@ public class NormalTower extends Tower {
         setAttackDamage(50);
         setAttackCooldown(500);
         setBuildCost(200);
-        setUpgradeCost(2000);
+        setUpgradeCost(getBuildCost() + (getBuildCost() / 4) * getTowerLevel());
         setSellPrice(100);
         setAttackRange(200);
         setContextMenu();

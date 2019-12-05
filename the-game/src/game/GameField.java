@@ -7,6 +7,8 @@ import game.characters.Enemies.SmallerEnemy;
 import game.characters.Enemies.TankerEnemy;
 import game.characters.Enemy;
 import game.characters.Tower;
+import game.drawers.GameStage;
+import game.drawers.MenuGame;
 import game.drawers.MyLabel;
 import game.drawers.TileMap;
 import javafx.animation.AnimationTimer;
@@ -255,7 +257,6 @@ public class GameField
                     towerList.add(tower);
                     tower.getView().setTranslateX(j * map.getGRID_SIZE());
                     tower.getView().setTranslateY(i * map.getGRID_SIZE());
-
                     tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
                     tower.infoLevel().setTranslateX(tower.getView().getTranslateX() + 25);
                     tower.infoLevel().setTranslateY(tower.getView().getTranslateY() + 30);
@@ -274,33 +275,24 @@ public class GameField
     public void sellTower(AnchorPane anchorPane) {
         for (int i = 0; i < getTowerList().size(); i++) {
             int finalI = i;
-            getTowerList().get(i).getSell().setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    money = money + getTowerList().get(finalI).getSellPrice();
-                    updateMoney();
-                    anchorPane.getChildren().removeAll(getTowerList().get(finalI).getView(), getTowerList().get(finalI).infoLevel());
-                    getTowerList().remove(finalI);
-                }
+            getTowerList().get(i).getSell().setOnAction(event -> {
+                money = money + getTowerList().get(finalI).getSellPrice();
+                updateMoney();
+                anchorPane.getChildren().removeAll(getTowerList().get(finalI).getView(), getTowerList().get(finalI).infoLevel());
+                getTowerList().remove(finalI);
             });
         }
     }
 
     public void upgradeTower() {
         getTowerList().forEach(tower -> {
-            tower.getUpgradeItem().setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    if (getMoney() >= tower.getUpgradeCost()) {
-                        tower.upgradeTower();
-                        tower.setUpgrade();
-                        tower.getLabelLevel().setText("level " + tower.getTowerLevel());
-
-                        money = money - tower.getUpgradeCost();
-                        updateMoney();
-                    }
+            tower.getUpgradeItem().setOnAction(event -> {
+                if (getMoney() >= tower.getUpgradeCost()) {
+                    tower.upgradeTower();
+                    money = money - tower.getUpgradeCost();
+                    updateMoney();
+                    tower.setUpgrade();
+                    //tower.getLabelLevel().setText("level " + tower.getTowerLevel());
                 }
             });
         });
@@ -314,7 +306,7 @@ public class GameField
         moneyLabel.setText(setTextMoney + money);
     }
 
-    public void updateMoneyReward(Enemy enemy) {
+    public void updateMoney(Enemy enemy) {
         money = money + enemy.getReward();
         updateMoney();
     }

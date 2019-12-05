@@ -15,7 +15,7 @@ public class MachineGunTower extends Tower {
         setAttackDamage(25);
         setAttackCooldown(250);
         setBuildCost(100);
-        setUpgradeCost(1000);
+        setUpgradeCost(getBuildCost() + (getBuildCost() / 4) * getTowerLevel());
         setSellPrice(50);
         setAttackRange(120);
         setContextMenu();

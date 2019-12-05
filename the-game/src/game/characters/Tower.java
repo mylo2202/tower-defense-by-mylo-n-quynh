@@ -38,8 +38,6 @@ public abstract class Tower implements GameEntity
     private Point2D pos;
     private List<Bullet> bullet = new ArrayList<>();
 
-    private Hill towerHill = new Hill();
-
     //platform image properties and methods maybe go here
 
     public Tower() throws IOException {
@@ -48,8 +46,6 @@ public abstract class Tower implements GameEntity
         labelLevel = new Label("level " + towerLevel);
         upgradeItem = new MenuItem("upgrade");
         sell = new MenuItem("sell");
-
-
     }
 
     public int getAttackCooldown() {
@@ -174,10 +170,6 @@ public abstract class Tower implements GameEntity
         this.View = view;
     }
 
-    public Hill getTowerHill() {
-        return towerHill;
-    }
-
     public Point2D getPos() {
         return pos;
     }
@@ -195,8 +187,6 @@ public abstract class Tower implements GameEntity
             if (distance <= attackRange) {
                 getView().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX())
                         , (posEY - getPos().getY()))));
-
-                infoLevel().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX()), (posEY - getPos().getY()))));
             }
 
         } else {
@@ -211,26 +201,25 @@ public abstract class Tower implements GameEntity
 
         if (!enemies.isEmpty()) {
 
-            Enemy closetEnemy = enemies.get(0);
+            Enemy closestEnemy = enemies.get(0);
             for (Enemy enemy : enemies) {
                 double distance;
                 distance = enemy.distance(this);
-                if (distance < attackRange && distance < closetEnemy.distance(this)) {
-                    closetEnemy = enemy;
+                if (distance < attackRange && distance < closestEnemy.distance(this)) {
+                    closestEnemy = enemy;
                 }
             }
 
-            return closetEnemy;
+            return closestEnemy;
         } else return null;
     }
 
     public String getInfo() {
-        return "Level 1:\n" +
-                "AttackDamage: " + getAttackDamage() + " x level" + "\n" +
+        return "AttackDamage: " + getAttackDamage() + " x level\n" +
                 "AttackCooldown: " + getAttackCooldown() / 1e3 + "s\n" +
                 "AttackRange: " + getAttackRange() + "\n" +
                 "BuildCost: " + getBuildCost() + "\n" +
-                "UpgradeCost: " + getUpgradeCost() + "\n" +
+                "UpgradeCost: " + getBuildCost() + " + " +  getBuildCost()/4 + " x level\n" +
                 "SellPrice: " + getSellPrice() + "\n";
 
 
@@ -259,7 +248,8 @@ public abstract class Tower implements GameEntity
     }
 
     public void setUpgrade() {
-        setAttackDamage(getAttackDamage() * getTowerLevel());
+        setAttackDamage(getAttackDamage() * getTowerLevel() / (getTowerLevel() - 1));
+        setUpgradeCost(getBuildCost() + (getBuildCost() / 4) * getTowerLevel());
     }
 
     public void setContextMenu() {
@@ -295,7 +285,6 @@ public abstract class Tower implements GameEntity
 
     public Label infoLevel() {
         return labelLevel;
-
     }
 }
 

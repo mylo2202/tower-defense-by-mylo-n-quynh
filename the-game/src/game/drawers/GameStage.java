@@ -54,6 +54,13 @@ public class GameStage {
         gameStage.setScene(gameScene);
     }
 
+    public boolean isPlay() {
+        return play;
+    }
+
+    public void setPlay(boolean play) {
+        this.play = play;
+    }
 
     public Stage getStage() {
         return gameStage;
@@ -158,11 +165,16 @@ public class GameStage {
                             if (tower.targetEnemy(gameField.getEnemyList()).getHitPoints() <= 0)
                                 tower.targetEnemy(gameField.getEnemyList()).setDead(true);
                             if (tower.targetEnemy(gameField.getEnemyList()).isDead())
-                                gameField.updateMoneyReward(tower.targetEnemy(gameField.getEnemyList()));
+                                gameField.updateMoney(tower.targetEnemy(gameField.getEnemyList()));
                         }
                     }
                     tower.towerAttack(now, gameField, gamePane);
                 }
+
+                gameField.getTowerList().forEach(tower -> {
+                    if(play) tower.getLabelLevel().setText("level " + tower.getTowerLevel());
+                    else tower.getLabelLevel().setText("");
+                });
 
                 if (!gameField.getEnemyList().isEmpty()) {
                     //  System.out.println(gameField.getEnemyList().get(0).getView().getTranslateX() + " " + gameField.getEnemyList().get(0).getView().getTranslateY());
@@ -176,7 +188,7 @@ public class GameStage {
                 }
 
                 if (gameField.getEnemyList().isEmpty() && gameField.getLevel() > 0 && !play && gameField.hasGeneratedEnemy()) {
-                    gameField.setMoney(gameField.getMoney() + 100 + gameField.getLives() + gameField.getLevel() * 25);
+                    gameField.setMoney(gameField.getMoney() + 200);
                     gameField.updateMoney();
                     gameField.setGeneratedEnemy(false);
                     play = true;

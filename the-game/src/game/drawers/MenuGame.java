@@ -47,6 +47,10 @@ public class MenuGame {
         return mainStage;
     }
 
+    public GameStage getGameStage() {
+        return gameStage;
+    }
+
     public Music getMusic() {
         return music;
     }
