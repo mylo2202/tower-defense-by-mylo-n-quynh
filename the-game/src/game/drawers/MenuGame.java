@@ -66,7 +66,7 @@ public class MenuGame {
             if (music.isPlayMusic()) music.getMediaButton().play();
 
             try {
-                gameStage= new GameStage();
+                gameStage = new GameStage();
                 gameStage.createNewGame(mainStage);
                 gameStage.setMusic(music);
             } catch (IOException e) {

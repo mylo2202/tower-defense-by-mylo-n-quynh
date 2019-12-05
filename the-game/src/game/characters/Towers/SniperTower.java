@@ -18,5 +18,6 @@ public class SniperTower extends Tower {
         setUpgradeCost(5000);
         setSellPrice(250);
         setAttackRange(360);
+        setContextMenu();
     }
 }

@@ -2,6 +2,7 @@ package game.characters;
 
 import game.drawers.TileMap;
 import javafx.geometry.Point2D;
+
 import java.io.IOException;
 import java.util.ArrayList;
 

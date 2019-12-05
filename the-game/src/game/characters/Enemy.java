@@ -1,6 +1,5 @@
 package game.characters;
 
-import game.GameField;
 import javafx.animation.PathTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,7 +10,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 
-public abstract class Enemy extends GameField {
+public abstract class Enemy implements GameEntity {
     private int hitPoints;                      // How Strong enemy is
     private int moveDuration;                      // How fast enemy moves
     private int reward;                         // Gold reward for enemy's death

@@ -2,6 +2,9 @@ package game.characters;
 
 import game.GameField;
 import javafx.geometry.Point2D;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -27,6 +30,10 @@ public abstract class Tower implements GameEntity
     protected String imageUrl;
     protected Image towerImage;
     protected ImageView View;
+    private Label labelLevel;
+    private ContextMenu contextMenu;
+    private MenuItem upgradeItem;
+    private MenuItem sell;
 
     private Point2D pos;
     private List<Bullet> bullet = new ArrayList<>();
@@ -37,6 +44,11 @@ public abstract class Tower implements GameEntity
 
     public Tower() throws IOException {
         this.towerLevel = 1;
+        contextMenu = new ContextMenu();
+        labelLevel = new Label("level " + towerLevel);
+        upgradeItem = new MenuItem("upgrade");
+        sell = new MenuItem("sell");
+
 
     }
 
@@ -183,12 +195,15 @@ public abstract class Tower implements GameEntity
             if (distance <= attackRange) {
                 getView().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX())
                         , (posEY - getPos().getY()))));
+
+                infoLevel().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX()), (posEY - getPos().getY()))));
             }
-            //System.out.println(getView().getTranslateX()+ "  " + getView().getTranslateY() );
-            /*if (distance > RADIUS) {
-                getView().setRotate(0);
-            }*/
-        } else getView().setRotate(0);
+
+        } else {
+
+            getView().setRotate(0);
+            infoLevel().setRotate(0);
+        }
 
     }
 
@@ -196,24 +211,28 @@ public abstract class Tower implements GameEntity
 
         if (!enemies.isEmpty()) {
 
-            Enemy closestEnemy = enemies.get(0);
-            for (int i = 0; i < enemies.size(); i++) {
+            Enemy closetEnemy = enemies.get(0);
+            for (Enemy enemy : enemies) {
                 double distance;
-                distance = enemies.get(i).distance(this);
-                if (distance < attackRange && distance < closestEnemy.distance(this)) {
-                    closestEnemy = enemies.get(i);
+                distance = enemy.distance(this);
+                if (distance < attackRange && distance < closetEnemy.distance(this)) {
+                    closetEnemy = enemy;
                 }
             }
 
-            return closestEnemy;
+            return closetEnemy;
         } else return null;
     }
 
     public String getInfo() {
-        return "AttackDamage: " + getAttackDamage() + "\n" +
-                "AttackCooldown: " + getAttackCooldown() + "\n" +
+        return "Level 1:\n" +
+                "AttackDamage: " + getAttackDamage() + " x level" + "\n" +
+                "AttackCooldown: " + getAttackCooldown() / 1e3 + "s\n" +
+                "AttackRange: " + getAttackRange() + "\n" +
                 "BuildCost: " + getBuildCost() + "\n" +
-                "AttackRange: " + getAttackRange();
+                "UpgradeCost: " + getUpgradeCost() + "\n" +
+                "SellPrice: " + getSellPrice() + "\n";
+
 
 
     }
@@ -237,6 +256,46 @@ public abstract class Tower implements GameEntity
 
             this.towerTimer = now;
         }
+    }
+
+    public void setUpgrade() {
+        setAttackDamage(getAttackDamage() * getTowerLevel());
+    }
+
+    public void setContextMenu() {
+        getView().setOnContextMenuRequested(event -> contextMenu.show(getView(), event.getScreenX(), event.getScreenY()));
+
+        contextMenu.getItems().addAll(upgradeItem, sell);
+    }
+
+
+    public Label getLabelLevel() {
+        return labelLevel;
+    }
+
+    public void setLabelLevel(Label labelLevel) {
+        this.labelLevel = labelLevel;
+    }
+
+    public MenuItem getUpgradeItem() {
+        return upgradeItem;
+    }
+
+    public void setUpgradeItem(MenuItem upgradeItem) {
+        this.upgradeItem = upgradeItem;
+    }
+
+    public MenuItem getSell() {
+        return sell;
+    }
+
+    public void setSell(MenuItem sell) {
+        this.sell = sell;
+    }
+
+    public Label infoLevel() {
+        return labelLevel;
+
     }
 }
 

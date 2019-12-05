@@ -18,5 +18,6 @@ public class MachineGunTower extends Tower {
         setUpgradeCost(1000);
         setSellPrice(50);
         setAttackRange(120);
+        setContextMenu();
     }
 }

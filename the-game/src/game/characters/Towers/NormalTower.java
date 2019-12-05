@@ -18,5 +18,6 @@ public class NormalTower extends Tower {
         setUpgradeCost(2000);
         setSellPrice(100);
         setAttackRange(200);
+        setContextMenu();
     }
 }

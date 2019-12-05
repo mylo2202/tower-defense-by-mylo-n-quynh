@@ -1,22 +1,23 @@
 package game;
 
-import game.characters.*;
+import game.characters.Bullet;
 import game.characters.Enemies.BossEnemy;
 import game.characters.Enemies.NormalEnemy;
 import game.characters.Enemies.SmallerEnemy;
 import game.characters.Enemies.TankerEnemy;
+import game.characters.Enemy;
+import game.characters.Tower;
 import game.drawers.MyLabel;
 import game.drawers.TileMap;
 import javafx.animation.AnimationTimer;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,10 +40,10 @@ public class GameField
     private boolean build;
     private boolean generatedEnemy = false;
     private MyLabel life;
-    private  MyLabel labelLevel;
+    private MyLabel labelLevel;
     private int lives;
     private int level;
-  //  ImageView gameOver = new ImageView(new Image("/Image/Enemy/gameOver.png"));
+    //  ImageView gameOver = new ImageView(new Image("/Image/Enemy/gameOver.png"));
     private Music music = new Music();
 
     public GameField() throws IOException {
@@ -57,7 +58,7 @@ public class GameField
         String setText = "X ";
         life.setText(setText + lives);
         this.level = 0;
-        labelLevel = new MyLabel("Level "+ level);
+        labelLevel = new MyLabel("Level " + level);
 
     }
 
@@ -66,7 +67,7 @@ public class GameField
     }
 
     public void updateLabelLevel() {
-        labelLevel.setText("Level "+ getLevel());
+        labelLevel.setText("Level " + getLevel());
     }
 
     public double getEventPosX() {
@@ -163,21 +164,18 @@ public class GameField
         if (difficulty == 1)
         {
             enemyList.add(new SmallerEnemy());
-        }
-        else if (difficulty > 1 && difficulty <= 10)
+        } else if (difficulty > 1 && difficulty <= 10)
         {
             randomNum = rand.nextInt(7);
             if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
             else if (randomNum >= 4 && randomNum <= 6) enemyList.add(new SmallerEnemy());
-        }
-        else if (difficulty > 10 && difficulty <= 50)
+        } else if (difficulty > 10 && difficulty <= 50)
         {
             randomNum = rand.nextInt(9);
             if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
             else if (randomNum >= 4 && randomNum <= 6) enemyList.add(new SmallerEnemy());
             else if (randomNum >= 7 && randomNum <= 8) enemyList.add(new TankerEnemy());
-        }
-        else if (difficulty > 50)
+        } else if (difficulty > 50)
         {
             randomNum = rand.nextInt(10);
             if(randomNum >= 0 && randomNum <= 3) enemyList.add(new NormalEnemy());
@@ -201,7 +199,7 @@ public class GameField
         return false;
     }
 
-    public void gameOver(AnimationTimer animationTimer,AnimationTimer timer, Stage game, Stage Menu) {
+    public void gameOver(AnimationTimer animationTimer, AnimationTimer timer, Stage game, Stage Menu) {
 
         if (lives <= 0) {
             music.getMediaBackground().stop();
@@ -215,16 +213,6 @@ public class GameField
                     enemy.enemyMove().stop();
                 });
             }
-            /*Iterator iteratorEnenemy = getEnemyList().iterator();
-            while (iteratorEnenemy.hasNext()){
-                iteratorEnenemy.remove();
-            }
-            Iterator iteratorTower = getTowerList().iterator();
-            while (iteratorTower.hasNext()){
-                iteratorTower.remove();
-            }*/
-
-
         }
     }
 
@@ -264,34 +252,71 @@ public class GameField
                 int j = (int) eventPosX / map.getGRID_SIZE();
 
                 if (i < map.getMAP_HEIGHT() && j < map.getMAP_WIDTH() && map.getGrid()[i][j] == 0) {
-
+                    map.getGrid()[i][j] = 1;
                     towerList.add(tower);
                     tower.getView().setTranslateX(j * map.getGRID_SIZE());
                     tower.getView().setTranslateY(i * map.getGRID_SIZE());
+
                     tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
-                    gamePane.getChildren().add(tower.getView());
-                    map.getGrid()[i][j] = 1;
+                    tower.infoLevel().setTranslateX(tower.getView().getTranslateX() + 25);
+                    tower.infoLevel().setTranslateY(tower.getView().getTranslateY() + 30);
+                    //  tower.infoLevel().setTranslateY(i * map.getGRID_SIZE()+40);
+
+                    gamePane.getChildren().addAll(tower.getView(), tower.infoLevel());
+
                     money = money - tower.getBuildCost();
-                    String setTextMoney = "MONEY : ";
-                    if (money < 10) setTextMoney = setTextMoney + "0";
-                    moneyLabel.setText(setTextMoney + money);
+                    updateMoney();
                 }
             }
             build = false;
         };
     }
 
-    public void updateMoney(Enemy enemy) {
-        money = money + enemy.getReward();
+    public void sellTower(AnchorPane anchorPane) {
+        for (int i = 0; i < getTowerList().size(); i++) {
+            int finalI = i;
+            getTowerList().get(i).getSell().setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    money = money + getTowerList().get(finalI).getSellPrice();
+                    updateMoney();
+                    anchorPane.getChildren().removeAll(getTowerList().get(finalI).getView(), getTowerList().get(finalI).infoLevel());
+                    getTowerList().remove(finalI);
+                }
+            });
+        }
+    }
+
+    public void upgradeTower() {
+        getTowerList().forEach(tower -> {
+            tower.getUpgradeItem().setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    if (getMoney() >= tower.getUpgradeCost()) {
+                        tower.upgradeTower();
+                        tower.setUpgrade();
+                        tower.getLabelLevel().setText("level " + tower.getTowerLevel());
+
+                        money = money - tower.getUpgradeCost();
+                        updateMoney();
+                    }
+                }
+            });
+        });
+
+    }
+
+    public void updateMoney() {
         String setTextMoney = "MONEY : ";
         if (money < 10) setTextMoney = setTextMoney + "0";
+        if (money < 0) setTextMoney = setTextMoney + "00";
         moneyLabel.setText(setTextMoney + money);
     }
 
-    public void updateMoney()
-    {
-        String setTextMoney = "MONEY : ";
-        if (money < 10) setTextMoney = setTextMoney + "0";
-        moneyLabel.setText(setTextMoney + money);
+    public void updateMoneyReward(Enemy enemy) {
+        money = money + enemy.getReward();
+        updateMoney();
     }
 }
