@@ -213,22 +213,23 @@ public abstract class Tower implements GameEntity
 
         if (!enemies.isEmpty()) {
 
-            attackTarget = enemies.get(0);
+            Enemy closetEnemy = enemies.get(0);
             for (int i = 0; i < enemies.size(); i++) {
                 double distance;
                 distance = enemies.get(i).distance(this);
-                if (distance < attackRange && distance < attackTarget.distance(this)) {
-                    attackTarget = enemies.get(i);
+                if (distance < attackRange && distance < closetEnemy.distance(this)) {
+                    closetEnemy = enemies.get(i);
                 }
             }
 
-            return attackTarget;
+            return closetEnemy;
         } else return null;
     }
 
     public String getInfo() {
-        return "Level1:\n" +
+        return "Level 1:\n" +
                 "AttackDamage: " + getAttackDamage() + "\n" +
+                "UpgradeCost: " + getUpgradeCost() + "\n" +
                 "Each level is doubled" + "\n" +
                 "AttackCooldown: " + getAttackCooldown() / 1e3 + "s\n" +
                 "BuildCost: " + getBuildCost() + "\n" +

@@ -46,10 +46,10 @@ public class MySubScene extends SubScene {
     }
 
     public void setInfo(String s) {
-        info.setFont(Font.font("Mongoose", 18));
+        info.setFont(Font.font("Mongoose", 15));
         info.setText(s);
         info.setLayoutX(30);
-        info.setLayoutY(55);
+        info.setLayoutY(60);
 
     }
     public void moveSubScene() {
