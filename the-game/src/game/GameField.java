@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 //should this class be abstract?
@@ -204,7 +205,7 @@ public class GameField
 
         if (lives <= 0) {
             music.getMediaBackground().stop();
-            music.getMediaGameOver().play();
+            //music.getMediaGameOver().play();
             animationTimer.stop();
             timer.stop();
             Menu.show();
