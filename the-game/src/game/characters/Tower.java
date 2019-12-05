@@ -228,9 +228,9 @@ public abstract class Tower implements GameEntity
 
     public String getInfo() {
         return "Level 1:\n" +
-                "AttackDamage: " + getAttackDamage() + "\n" +
+                "AttackDamage: " + getAttackDamage() + "x " + getTowerLevel() + "\n" +
                 "UpgradeCost: " + getUpgradeCost() + "\n" +
-                "Each level is doubled" + "\n" +
+                "SellPrice()" + getSellPrice() + "\n" +
                 "AttackCooldown: " + getAttackCooldown() / 1e3 + "s\n" +
                 "BuildCost: " + getBuildCost() + "\n" +
                 "AttackRange: " + getAttackRange() + "\n";
@@ -261,7 +261,7 @@ public abstract class Tower implements GameEntity
     }
 
     public void setUpgrade() {
-        setAttackDamage(getAttackDamage() * 2);
+        setAttackDamage(getAttackDamage() * getTowerLevel());
     }
 
     public void setContextMenu() {
