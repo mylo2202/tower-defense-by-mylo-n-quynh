@@ -4,12 +4,12 @@ import javafx.scene.image.ImageView;
 
 public interface GameEntity {
 
-    ImageView getView();
+    ImageView getTowerView();
 
-    void setView(ImageView view);
+    void setTowerView(ImageView towerView);
 
-    String getImageUrl();
+    String getTowerImgUrl();
 
-    void setImageUrl(String imageUrl);
+    void setTowerImgUrl(String towerImgUrl);
 }
 

@@ -1,6 +1,7 @@
 package game.characters;
 
 import game.GameField;
+import game.drawers.TileMap;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -9,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +27,14 @@ public abstract class Tower implements GameEntity
     private int attackRange;
     private long towerTimer = System.nanoTime();
 
-    protected String imageUrl;
+    protected String towerImgUrl;
     protected Image towerImage;
-    protected ImageView View;
+    protected ImageView towerView;
+    protected final String platformImgUrl = "/Image/Tower/platform.png";
+    protected final Image platformImage = new Image(this.getPlatformImgUrl(), TileMap.getGRID_SIZE(),
+            TileMap.getGRID_SIZE(),
+            false, true);
+    protected final ImageView platformView = new ImageView(this.getPlatformImage());
     private Label labelLevel;
     private ContextMenu contextMenu;
     private MenuItem upgradeItem;
@@ -40,7 +45,7 @@ public abstract class Tower implements GameEntity
 
     //platform image properties and methods maybe go here
 
-    public Tower() throws IOException {
+    public Tower() {
         this.towerLevel = 1;
         contextMenu = new ContextMenu();
         labelLevel = new Label("level " + towerLevel);
@@ -146,12 +151,12 @@ public abstract class Tower implements GameEntity
         this.attackTarget = attackTarget;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getTowerImgUrl() {
+        return towerImgUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setTowerImgUrl(String towerImgUrl) {
+        this.towerImgUrl = towerImgUrl;
     }
 
     public Image getTowerImage() {
@@ -162,12 +167,24 @@ public abstract class Tower implements GameEntity
         this.towerImage = towerImage;
     }
 
-    public ImageView getView() {
-        return View;
+    public ImageView getTowerView() {
+        return towerView;
     }
 
-    public void setView(ImageView view) {
-        this.View = view;
+    public void setTowerView(ImageView towerView) {
+        this.towerView = towerView;
+    }
+
+    public String getPlatformImgUrl() {
+        return platformImgUrl;
+    }
+
+    public Image getPlatformImage() {
+        return platformImage;
+    }
+
+    public ImageView getPlatformView() {
+        return platformView;
     }
 
     public Point2D getPos() {
@@ -181,17 +198,17 @@ public abstract class Tower implements GameEntity
     public void update(Enemy enemy) {
         if (enemy != null) {
 
-            double posEX = enemy.getView().getTranslateX();
-            double posEY = enemy.getView().getTranslateY();
+            double posEX = enemy.getTowerView().getTranslateX();
+            double posEY = enemy.getTowerView().getTranslateY();
             double distance = enemy.distance(this);
             if (distance <= attackRange) {
-                getView().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX())
+                getTowerView().setRotate(180 - Math.toDegrees(Math.atan2((posEX - getPos().getX())
                         , (posEY - getPos().getY()))));
             }
 
         } else {
 
-            getView().setRotate(0);
+            getTowerView().setRotate(0);
             infoLevel().setRotate(0);
         }
 
@@ -221,26 +238,17 @@ public abstract class Tower implements GameEntity
                 "BuildCost: " + getBuildCost() + "\n" +
                 "UpgradeCost: " + getBuildCost() + " + " +  getBuildCost()/4 + " x level\n" +
                 "SellPrice: " + getSellPrice() + "\n";
-
-
-
     }
 
     public void towerAttack(long now, GameField gameField, AnchorPane gamePane) {
         if (now - this.towerTimer >= this.attackCooldown * 1e6) {
-
-            /*gameField.getTowerList().forEach(tower -> {
-                //if (this instanceof Tower)
-
-            });*/
-
             if (!gameField.getEnemyList().isEmpty()
 
                     && this.targetEnemy(gameField.getEnemyList()).distance(this) <= this.getAttackRange()) {
 
                 this.createBullet(new Bullet(this));
 
-                gamePane.getChildren().add(this.getBullet().getView());
+                gamePane.getChildren().add(this.getBullet().getTowerView());
             }
 
             this.towerTimer = now;
@@ -253,11 +261,10 @@ public abstract class Tower implements GameEntity
     }
 
     public void setContextMenu() {
-        getView().setOnContextMenuRequested(event -> contextMenu.show(getView(), event.getScreenX(), event.getScreenY()));
+        getTowerView().setOnContextMenuRequested(event -> contextMenu.show(getTowerView(), event.getScreenX(), event.getScreenY()));
 
         contextMenu.getItems().addAll(upgradeItem, sell);
     }
-
 
     public Label getLabelLevel() {
         return labelLevel;
@@ -287,5 +294,3 @@ public abstract class Tower implements GameEntity
         return labelLevel;
     }
 }
-
-

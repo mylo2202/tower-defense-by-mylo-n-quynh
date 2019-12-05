@@ -9,9 +9,9 @@ import java.io.IOException;
 public class BossEnemy extends Enemy
 {
     public BossEnemy() throws IOException {
-        setImageUrl("/Image/Enemy/bossEnemy.png");
-        setEnemyImage(new Image(this.getImageUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
-        setView(new ImageView(this.getEnemyImage()));
+        setTowerImgUrl("/Image/Enemy/bossEnemy.png");
+        setEnemyImage(new Image(this.getTowerImgUrl(), getEnemyRoad().getGRID_SIZE(), getEnemyRoad().getGRID_SIZE(), false, true));
+        setTowerView(new ImageView(this.getEnemyImage()));
         setHitPoints(5000);
         setMoveDuration(54);
         setReward(50);

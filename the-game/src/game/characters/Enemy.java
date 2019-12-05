@@ -34,12 +34,12 @@ public abstract class Enemy implements GameEntity {
         this.enemyImage = enemyImage;
     }
 
-    public ImageView getView() {
+    public ImageView getTowerView() {
         return View;
     }
 
-    public void setView(ImageView view) {
-        this.View = view;
+    public void setTowerView(ImageView towerView) {
+        this.View = towerView;
         this.View.setTranslateX(enemyRoad.getSpawner().getX() - enemyRoad.getGRID_SIZE() / 2);
         this.View.setTranslateY(enemyRoad.getSpawner().getY() - enemyRoad.getGRID_SIZE() / 2);
     }
@@ -108,12 +108,12 @@ public abstract class Enemy implements GameEntity {
         this.damage = damage;
     }
 
-    public String getImageUrl() {
+    public String getTowerImgUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setTowerImgUrl(String towerImgUrl) {
+        this.imageUrl = towerImgUrl;
     }
 
     public Road getEnemyRoad() {
@@ -123,8 +123,8 @@ public abstract class Enemy implements GameEntity {
     public boolean hasReachedGoal()
     {
         //setReachedGoal(true);
-        return this.getView().getTranslateX() + this.getEnemyRoad().getGRID_SIZE() / 2 == this.getEnemyRoad().getGoal().getX() &&
-                this.getView().getTranslateY() + this.getEnemyRoad().getGRID_SIZE() / 2 == this.getEnemyRoad().getGoal().getY();
+        return this.getTowerView().getTranslateX() + this.getEnemyRoad().getGRID_SIZE() / 2 == this.getEnemyRoad().getGoal().getX() &&
+                this.getTowerView().getTranslateY() + this.getEnemyRoad().getGRID_SIZE() / 2 == this.getEnemyRoad().getGoal().getY();
     }
 
     public void takeDamage(int damage)      //reduces enemy's hit points and determines whether it is dead
@@ -179,16 +179,16 @@ public abstract class Enemy implements GameEntity {
     }
 
     public double distance(Tower tower) {
-        double posEX = getView().getTranslateX();
-        double posEY = getView().getTranslateY();
+        double posEX = getTowerView().getTranslateX();
+        double posEY = getTowerView().getTranslateY();
 
         return Math.sqrt(Math.pow(posEX - tower.getPos().getX(), 2) +
                 Math.pow(posEY - tower.getPos().getY(), 2));
     }
 
     public double distance(Bullet bullet) {
-        double posEX = getView().getTranslateX();
-        double posEY = getView().getTranslateY();
+        double posEX = getTowerView().getTranslateX();
+        double posEY = getTowerView().getTranslateY();
 
         return Math.sqrt(Math.pow(posEX - bullet.getPos().getX(), 2) +
                 Math.pow(posEY - bullet.getPos().getY(), 2));

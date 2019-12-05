@@ -7,12 +7,9 @@ import game.characters.Enemies.SmallerEnemy;
 import game.characters.Enemies.TankerEnemy;
 import game.characters.Enemy;
 import game.characters.Tower;
-import game.drawers.GameStage;
-import game.drawers.MenuGame;
 import game.drawers.MyLabel;
 import game.drawers.TileMap;
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -200,14 +197,14 @@ public class GameField
         return false;
     }
 
-    public void gameOver(AnimationTimer animationTimer, AnimationTimer timer, Stage game, Stage Menu) {
+    public void gameOver(AnimationTimer animationTimer, AnimationTimer timer, Stage game, Stage menu) {
 
         if (lives <= 0) {
             music.getMediaBackground().stop();
-            music.getMediaGameOver().play();
+            //music.getMediaGameOver().play();
             animationTimer.stop();
             timer.stop();
-            Menu.show();
+            menu.show();
             game.close();
             if (!getEnemyList().isEmpty()) {
                 getEnemyList().forEach(enemy -> {
@@ -249,20 +246,21 @@ public class GameField
                 eventPosX = mouseEvent.getSceneX();
                 eventPosY = mouseEvent.getSceneY();
 
-                int i = (int) eventPosY / map.getGRID_SIZE();
-                int j = (int) eventPosX / map.getGRID_SIZE();
+                int i = (int) eventPosY / TileMap.getGRID_SIZE();
+                int j = (int) eventPosX / TileMap.getGRID_SIZE();
 
                 if (i < map.getMAP_HEIGHT() && j < map.getMAP_WIDTH() && map.getGrid()[i][j] == 0) {
                     map.getGrid()[i][j] = 1;
                     towerList.add(tower);
-                    tower.getView().setTranslateX(j * map.getGRID_SIZE());
-                    tower.getView().setTranslateY(i * map.getGRID_SIZE());
-                    tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
-                    tower.infoLevel().setTranslateX(tower.getView().getTranslateX() + 25);
-                    tower.infoLevel().setTranslateY(tower.getView().getTranslateY() + 30);
-                    //  tower.infoLevel().setTranslateY(i * map.getGRID_SIZE()+40);
+                    tower.getTowerView().setTranslateX(j * TileMap.getGRID_SIZE());
+                    tower.getTowerView().setTranslateY(i * TileMap.getGRID_SIZE());
+                    tower.setPos(new Point2D(tower.getTowerView().getTranslateX(), tower.getTowerView().getTranslateY()));
+                    tower.infoLevel().setTranslateX(tower.getTowerView().getTranslateX() + 25);
+                    tower.infoLevel().setTranslateY(tower.getTowerView().getTranslateY() + TileMap.getGRID_SIZE() - 8);
+                    tower.getPlatformView().setTranslateX(j * TileMap.getGRID_SIZE());
+                    tower.getPlatformView().setTranslateY(i * TileMap.getGRID_SIZE());
 
-                    gamePane.getChildren().addAll(tower.getView(), tower.infoLevel());
+                    gamePane.getChildren().addAll(tower.getPlatformView() ,tower.getTowerView(), tower.infoLevel());
 
                     money = money - tower.getBuildCost();
                     updateMoney();
@@ -278,7 +276,9 @@ public class GameField
             getTowerList().get(i).getSell().setOnAction(event -> {
                 money = money + getTowerList().get(finalI).getSellPrice();
                 updateMoney();
-                anchorPane.getChildren().removeAll(getTowerList().get(finalI).getView(), getTowerList().get(finalI).infoLevel());
+                anchorPane.getChildren().removeAll(getTowerList().get(finalI).getPlatformView() ,
+                        getTowerList().get(finalI).getTowerView(),
+                        getTowerList().get(finalI).infoLevel());
                 getTowerList().remove(finalI);
             });
         }

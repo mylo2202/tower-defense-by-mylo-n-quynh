@@ -44,7 +44,7 @@ public class TileMap {
         }
     }
 
-    public int getGRID_SIZE() {
+    public static int getGRID_SIZE() {
         return GRID_SIZE;
     }
 

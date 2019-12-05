@@ -26,8 +26,8 @@ public class Bullet implements GameEntity {
 
     public Bullet(Tower tower, boolean sound) {
         view = new ImageView(new Image("/Image/Bullet/normalBullet.png", 80, 80, false, true));
-        view.setTranslateX(tower.getView().getTranslateX());
-        view.setTranslateY(tower.getView().getTranslateY());
+        view.setTranslateX(tower.getTowerView().getTranslateX());
+        view.setTranslateY(tower.getTowerView().getTranslateY());
         //   if (sound == true) music.getMediaBullet().play();
         pos = new Point2D(tower.getPos().getX(), tower.getPos().getY());
     }
@@ -41,8 +41,8 @@ public class Bullet implements GameEntity {
             view = new ImageView(new Image("/Image/Bullet/sniperBullet.png", 80, 80, false, true));
         else
             view = new ImageView(new Image("/Image/Bullet/normalBullet.png", 80, 80, false, true));
-        view.setTranslateX(tower.getView().getTranslateX());
-        view.setTranslateY(tower.getView().getTranslateY());
+        view.setTranslateX(tower.getTowerView().getTranslateX());
+        view.setTranslateY(tower.getTowerView().getTranslateY());
         pos = new Point2D(tower.getPos().getX(), tower.getPos().getY());
     }
 
@@ -103,45 +103,45 @@ public class Bullet implements GameEntity {
     }
 
     @Override
-    public ImageView getView() {
+    public ImageView getTowerView() {
         return view;
     }
 
     @Override
-    public void setView(ImageView view) {
-        this.view = view;
+    public void setTowerView(ImageView towerView) {
+        this.view = towerView;
     }
 
     @Override
-    public String getImageUrl() {
+    public String getTowerImgUrl() {
         return url;
     }
 
     @Override
-    public void setImageUrl(String imageUrl) {
-        this.url = imageUrl;
+    public void setTowerImgUrl(String towerImgUrl) {
+        this.url = towerImgUrl;
     }
 
     public void update(Enemy enemy) {
         if (enemy != null) {
-            double posEX = enemy.getView().getTranslateX();
-            double posEY = enemy.getView().getTranslateY();
+            double posEX = enemy.getTowerView().getTranslateX();
+            double posEY = enemy.getTowerView().getTranslateY();
 
             Point2D centerE = new Point2D(posEX + 5, posEY + 5);
 
             double angle = (Math.atan2(centerE.getX() - getPos().getX(), centerE.getY() - getPos().getY()));
-            getView().setTranslateX(getView().getTranslateX() + Math.sin(angle) * bulletSpeed);
-            getView().setTranslateY(getView().getTranslateY() + Math.cos(angle) * bulletSpeed);
+            getTowerView().setTranslateX(getTowerView().getTranslateX() + Math.sin(angle) * bulletSpeed);
+            getTowerView().setTranslateY(getTowerView().getTranslateY() + Math.cos(angle) * bulletSpeed);
             //  System.out.println(getView().getTranslateX() + Math.sin(angle) * bulletSpeed);
         }
     }
 
     public boolean isColliding(Enemy enemy) {
         if (enemy != null) {
-            double posEX = enemy.getView().getTranslateX();
-            double posEY = enemy.getView().getTranslateY();
-            double posX = getView().getTranslateX();
-            double posY = getView().getTranslateY();
+            double posEX = enemy.getTowerView().getTranslateX();
+            double posEY = enemy.getTowerView().getTranslateY();
+            double posX = getTowerView().getTranslateX();
+            double posY = getTowerView().getTranslateY();
             return posEX - 20 <= posX && posX <= posEX + 20 && posEY - 20 <= posY && posY <= posEY + 20;
            /* if (posEX >= posX && posX <= posEX - 40 && posEY <= posY && posY >= posEY + 40) return true;
             if (posEX <= posX && posX <= posEX + 40 && posEY >= posY && posY <= posEY - 40) return true;

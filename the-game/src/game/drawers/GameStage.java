@@ -130,7 +130,7 @@ public class GameStage {
     }
 
     public void gameLoop() {
-        gameField.getTowerList().forEach(tower -> tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()))
+        gameField.getTowerList().forEach(tower -> tower.setPos(new Point2D(tower.getTowerView().getTranslateX(), tower.getTowerView().getTranslateY()))
         );
 
         gameTimer = new AnimationTimer() {
@@ -148,17 +148,17 @@ public class GameStage {
 
                         //   Enemy enemy = tower.targetEnemy(gameField.getEnemyList());
 
-                        double range = Math.sqrt(Math.pow(tower.getBulletIndex(i).getView().getTranslateX() - tower.getBulletIndex(i).getPos().getX(), 2)
-                                + Math.pow(tower.getBulletIndex(i).getView().getTranslateY() - tower.getBulletIndex(i).getPos().getY(), 2));
+                        double range = Math.sqrt(Math.pow(tower.getBulletIndex(i).getTowerView().getTranslateX() - tower.getBulletIndex(i).getPos().getX(), 2)
+                                + Math.pow(tower.getBulletIndex(i).getTowerView().getTranslateY() - tower.getBulletIndex(i).getPos().getY(), 2));
                         if (range >= tower.getAttackRange() || gameField.getEnemyList().isEmpty()) {
                             //   System.out.println(bullet.getView().getTranslateX()+"     "+bullet.getView().getTranslateY());
 
-                            gamePane.getChildren().remove(tower.getBulletIndex(i).getView());
+                            gamePane.getChildren().remove(tower.getBulletIndex(i).getTowerView());
                             tower.getBulletList().remove(tower.getBulletIndex(i));
                             break;
                         }
                         if (!tower.getBulletList().isEmpty() && tower.getBulletIndex(i).isColliding(tower.targetEnemy(gameField.getEnemyList()))) {
-                            gamePane.getChildren().remove(tower.getBulletIndex(i).getView());
+                            gamePane.getChildren().remove(tower.getBulletIndex(i).getTowerView());
                             tower.getBulletList().remove(tower.getBulletIndex(i));
                             //System.out.println(tower.getBulletList().size());
                             tower.targetEnemy(gameField.getEnemyList()).removeHitPoints(tower.getAttackDamage());
@@ -181,7 +181,7 @@ public class GameStage {
 
                     for (int i = 0; i < gameField.getEnemyList().size(); i++) {
                         if (gameField.checkRemoveEnemy(i)) {
-                            gamePane.getChildren().remove(gameField.getEnemyList().get(i).getView());
+                            gamePane.getChildren().remove(gameField.getEnemyList().get(i).getTowerView());
                             gameField.removeEnemy(i);
                         }
                     }
@@ -229,7 +229,7 @@ public class GameStage {
                                 gameField.generateEnemy(gameField.getEnemyList(), difficulty);
                                 //System.out.println("size = " + gameField.getEnemyList().size());
                                 gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).enemyMove().play();
-                                gamePane.getChildren().add(gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getView());
+                                gamePane.getChildren().add(gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getTowerView());
                                 difficulty -= gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getLevel();
                                 //System.out.println("difficulty = " + difficulty);
                                 if (difficulty <= 0) {

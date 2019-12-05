@@ -1,6 +1,7 @@
 package game.characters.Towers;
 
 import game.characters.Tower;
+import game.drawers.TileMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -9,9 +10,9 @@ import java.io.IOException;
 public class MachineGunTower extends Tower {
     public MachineGunTower() throws IOException
     {
-        setImageUrl("/Image/Tower/machineGunTower.png");
-        setTowerImage(new Image(this.getImageUrl(), getTowerHill().getGRID_SIZE(), getTowerHill().getGRID_SIZE(), false, true));
-        setView(new ImageView(this.getTowerImage()));
+        setTowerImgUrl("/Image/Tower/machineGunTower.png");
+        setTowerImage(new Image(this.getTowerImgUrl(), TileMap.getGRID_SIZE(), TileMap.getGRID_SIZE(), false, true));
+        setTowerView(new ImageView(this.getTowerImage()));
         setAttackDamage(25);
         setAttackCooldown(250);
         setBuildCost(100);
