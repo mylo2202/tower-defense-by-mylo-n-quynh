@@ -1,14 +1,12 @@
 package game.characters;
 
 import game.GameField;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -214,11 +212,11 @@ public abstract class Tower implements GameEntity
         if (!enemies.isEmpty()) {
 
             Enemy closetEnemy = enemies.get(0);
-            for (int i = 0; i < enemies.size(); i++) {
+            for (Enemy enemy : enemies) {
                 double distance;
-                distance = enemies.get(i).distance(this);
+                distance = enemy.distance(this);
                 if (distance < attackRange && distance < closetEnemy.distance(this)) {
-                    closetEnemy = enemies.get(i);
+                    closetEnemy = enemy;
                 }
             }
 
@@ -228,12 +226,12 @@ public abstract class Tower implements GameEntity
 
     public String getInfo() {
         return "Level 1:\n" +
-                "AttackDamage: " + getAttackDamage() + "x " + getTowerLevel() + "\n" +
-                "UpgradeCost: " + getUpgradeCost() + "\n" +
-                "SellPrice()" + getSellPrice() + "\n" +
+                "AttackDamage: " + getAttackDamage() + " x level" + "\n" +
                 "AttackCooldown: " + getAttackCooldown() / 1e3 + "s\n" +
+                "AttackRange: " + getAttackRange() + "\n" +
                 "BuildCost: " + getBuildCost() + "\n" +
-                "AttackRange: " + getAttackRange() + "\n";
+                "UpgradeCost: " + getUpgradeCost() + "\n" +
+                "SellPrice: " + getSellPrice() + "\n";
 
 
 
@@ -265,14 +263,7 @@ public abstract class Tower implements GameEntity
     }
 
     public void setContextMenu() {
-        getView().setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-
-            @Override
-            public void handle(ContextMenuEvent event) {
-
-                contextMenu.show(getView(), event.getScreenX(), event.getScreenY());
-            }
-        });
+        getView().setOnContextMenuRequested(event -> contextMenu.show(getView(), event.getScreenX(), event.getScreenY()));
 
         contextMenu.getItems().addAll(upgradeItem, sell);
     }

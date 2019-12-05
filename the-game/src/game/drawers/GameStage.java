@@ -86,7 +86,7 @@ public class GameStage {
 
         life = new ImageView("/Image/UI/heart1.png");
         life.setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 80);
-        life.setLayoutY(128);
+        life.setLayoutY(134);
 
         gameField.getLife().setLayoutX(map.getGrid()[0].length * map.getSize() + (map.getSCREEN_WIDTH() - map.getGrid()[0].length * map.getSize()) / 2 - 40);
         gameField.getLife().setLayoutY(128);
@@ -123,10 +123,7 @@ public class GameStage {
     }
 
     public void gameLoop() {
-        gameField.getTowerList().forEach(tower -> {
-                    tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()));
-
-                }
+        gameField.getTowerList().forEach(tower -> tower.setPos(new Point2D(tower.getView().getTranslateX(), tower.getView().getTranslateY()))
         );
 
         gameTimer = new AnimationTimer() {
