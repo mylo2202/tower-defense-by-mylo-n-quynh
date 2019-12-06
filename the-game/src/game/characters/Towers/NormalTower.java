@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
-public class NormalTower extends Tower {
+public final class NormalTower extends Tower {
     public NormalTower() throws IOException
     {
         setTowerImgUrl("/Image/Tower/normalTower.png");

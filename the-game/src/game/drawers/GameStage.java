@@ -152,7 +152,6 @@ public class GameStage {
                                 + Math.pow(tower.getBulletIndex(i).getTowerView().getTranslateY() - tower.getBulletIndex(i).getPos().getY(), 2));
                         if (range >= tower.getAttackRange() || gameField.getEnemyList().isEmpty()) {
                             //   System.out.println(bullet.getView().getTranslateX()+"     "+bullet.getView().getTranslateY());
-
                             gamePane.getChildren().remove(tower.getBulletIndex(i).getTowerView());
                             tower.getBulletList().remove(tower.getBulletIndex(i));
                             break;
@@ -188,7 +187,7 @@ public class GameStage {
                 }
 
                 if (gameField.getEnemyList().isEmpty() && gameField.getLevel() > 0 && !play && gameField.hasGeneratedEnemy()) {
-                    gameField.setMoney(gameField.getMoney() + 200);
+                    gameField.setMoney(gameField.getMoney() + 200 + gameField.getLevel()*25);
                     gameField.updateMoney();
                     gameField.setGeneratedEnemy(false);
                     play = true;

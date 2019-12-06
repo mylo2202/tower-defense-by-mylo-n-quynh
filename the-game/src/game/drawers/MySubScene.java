@@ -72,15 +72,9 @@ public class MySubScene extends SubScene {
         myLabel.setLayoutY(10);
         myLabel.setLabelFont("src/Image/UI/AutourOne-Regular.otf", 13);
     }
-    /*public void setButtonBuild(){
-        build.setLayoutX(28);
-        build.setLayoutY(190);
-    }*/
 
     public AnchorPane getAnchorePane() {
         return (AnchorPane) this.getRoot();
     }
-   /* public MyButton getBuild(){
-        return build;
-    }*/
+
 }

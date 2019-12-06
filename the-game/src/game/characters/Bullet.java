@@ -143,10 +143,6 @@ public class Bullet implements GameEntity {
             double posX = getTowerView().getTranslateX();
             double posY = getTowerView().getTranslateY();
             return posEX - 20 <= posX && posX <= posEX + 20 && posEY - 20 <= posY && posY <= posEY + 20;
-           /* if (posEX >= posX && posX <= posEX - 40 && posEY <= posY && posY >= posEY + 40) return true;
-            if (posEX <= posX && posX <= posEX + 40 && posEY >= posY && posY <= posEY - 40) return true;
-            return posEX <= posX && posX <= posEX + 40 && posEY <= posY && posY >= posEY + 40;*/
-            //  return getView().getBoundsInParent().intersects(enemy.getView().getBoundsInParent());
         }
         return false;
 

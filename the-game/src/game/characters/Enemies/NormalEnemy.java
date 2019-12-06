@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
-public class NormalEnemy extends Enemy
+public final class NormalEnemy extends Enemy
 {
     public NormalEnemy() throws IOException {
         setTowerImgUrl("/Image/Enemy/normalEnemy.png");

@@ -12,4 +12,3 @@ public interface GameEntity {
 
     void setTowerImgUrl(String towerImgUrl);
 }
-

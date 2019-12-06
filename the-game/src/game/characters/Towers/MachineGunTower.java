@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
-public class MachineGunTower extends Tower {
+public final class MachineGunTower extends Tower {
     public MachineGunTower() throws IOException
     {
         setTowerImgUrl("/Image/Tower/machineGunTower.png");

@@ -69,6 +69,10 @@ public abstract class Tower implements GameEntity
         return bullet.get(bullet.size() - 1);
     }
 
+    public void setBullet(List<Bullet> bullet) {
+        this.bullet = bullet;
+    }
+
     public Bullet getBulletIndex(int i) {
         return bullet.get(i);
     }

@@ -233,6 +233,7 @@ public class GameField
             }
             if(checkRemoveEnemy(i))
             {
+                getEnemyList().set(i, null);
                 getEnemyList().remove(getEnemyList().get(i));
             }
 
