@@ -14,7 +14,7 @@ public final class TankerEnemy extends Enemy
         setEnemyImage(new Image(this.getTowerImgUrl(), TileMap.getGRID_SIZE(), TileMap.getGRID_SIZE(), false, true));
         setTowerView(new ImageView(this.getEnemyImage()));
         setHitPoints(1000);
-        setMoveDuration(45);
+        setMoveDuration(36);
         setReward(20);
         setLevel(10);
         setDamage(5);

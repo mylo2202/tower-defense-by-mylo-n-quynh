@@ -14,7 +14,7 @@ public final class NormalEnemy extends Enemy
         setEnemyImage(new Image(this.getTowerImgUrl(), TileMap.getGRID_SIZE(), TileMap.getGRID_SIZE(), false, true));
         setTowerView(new ImageView(this.getEnemyImage()));
         setHitPoints(200);
-        setMoveDuration(30);
+        setMoveDuration(24);
         setReward(10);
         setLevel(2);
         setDamage(2);

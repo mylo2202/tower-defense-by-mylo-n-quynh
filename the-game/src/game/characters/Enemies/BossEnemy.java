@@ -14,7 +14,7 @@ public final class BossEnemy extends Enemy
         setEnemyImage(new Image(this.getTowerImgUrl(), TileMap.getGRID_SIZE(), TileMap.getGRID_SIZE(), false, true));
         setTowerView(new ImageView(this.getEnemyImage()));
         setHitPoints(5000);
-        setMoveDuration(60);
+        setMoveDuration(54);
         setReward(50);
         setLevel(50);
         setDamage(20);

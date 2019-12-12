@@ -14,7 +14,7 @@ public final class SmallerEnemy extends Enemy
         setEnemyImage(new Image(this.getTowerImgUrl(), TileMap.getGRID_SIZE(), TileMap.getGRID_SIZE(), false, true));
         setTowerView(new ImageView(this.getEnemyImage()));
         setHitPoints(100);
-        setMoveDuration(15);
+        setMoveDuration(16);
         setReward(5);
         setLevel(1);
         setDamage(1);

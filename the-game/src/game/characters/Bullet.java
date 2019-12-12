@@ -57,7 +57,6 @@ public class Bullet implements GameEntity {
         return !isAlive();
     }
 
-
     public boolean isAlive() {
         return alive;
     }

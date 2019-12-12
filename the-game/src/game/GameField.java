@@ -12,6 +12,7 @@ import game.drawers.TileMap;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -240,6 +241,9 @@ public class GameField
 
     public EventHandler buildTower(AnchorPane gamePane, Tower tower) {
 
+        tower.getUpgradeMenuItem().setText("upgrade to level " +
+                (tower.getTowerLevel() + 1) + " (" + tower.getUpgradeCost() + ")");
+        tower.getSellMenuItem().setText("sell (" + tower.getSellPrice() + ")");
         return (EventHandler<MouseEvent>) mouseEvent -> {
             if (build && money >= tower.getBuildCost() && lives > 0) {
                 eventPosX = mouseEvent.getSceneX();
@@ -272,7 +276,7 @@ public class GameField
     public void sellTower(AnchorPane anchorPane) {
         for (int i = 0; i < getTowerList().size(); i++) {
             int finalI = i;
-            getTowerList().get(i).getSell().setOnAction(event -> {
+            getTowerList().get(i).getSellMenuItem().setOnAction(event -> {
                 money = money + getTowerList().get(finalI).getSellPrice();
                 updateMoney();
                 int x = (int) getTowerList().get(finalI).getTowerView().getTranslateX() / TileMap.getGRID_SIZE();
@@ -288,13 +292,14 @@ public class GameField
     }
 
     public void upgradeTower() {
-        getTowerList().forEach(tower -> tower.getUpgradeItem().setOnAction(event -> {
+        getTowerList().forEach(tower -> tower.getUpgradeMenuItem().setOnAction(event -> {
             if (getMoney() >= tower.getUpgradeCost()) {
                 tower.upgradeTower();
                 money = money - tower.getUpgradeCost();
                 updateMoney();
                 tower.setUpgrade();
-                //tower.getLabelLevel().setText("level " + tower.getTowerLevel());
+                tower.getUpgradeMenuItem().setText("upgrade to level " +
+                        (tower.getTowerLevel() + 1) + " (" + tower.getUpgradeCost() + ")");
             }
         }));
 

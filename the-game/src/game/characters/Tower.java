@@ -37,8 +37,8 @@ public abstract class Tower implements GameEntity
     protected final ImageView platformView = new ImageView(this.getPlatformImage());
     private Label labelLevel;
     private final ContextMenu contextMenu;
-    private MenuItem upgradeItem;
-    private MenuItem sell;
+    private MenuItem upgradeMenuItem;
+    private MenuItem sellMenuItem;
 
     private Point2D pos;
     private List<Bullet> bullet = new ArrayList<>();
@@ -49,8 +49,8 @@ public abstract class Tower implements GameEntity
         this.towerLevel = 1;
         contextMenu = new ContextMenu();
         labelLevel = new Label("level " + towerLevel);
-        upgradeItem = new MenuItem("upgrade");
-        sell = new MenuItem("sell");
+        upgradeMenuItem = new MenuItem("upgrade to level " + (this.towerLevel + 1) + " (" + getUpgradeCost() + ")");
+        sellMenuItem = new MenuItem("sell (" + getSellPrice() + ")");
     }
 
     public int getAttackCooldown() {
@@ -267,7 +267,7 @@ public abstract class Tower implements GameEntity
     public void setContextMenu() {
         getTowerView().setOnContextMenuRequested(event -> contextMenu.show(getTowerView(), event.getScreenX(), event.getScreenY()));
 
-        contextMenu.getItems().addAll(upgradeItem, sell);
+        contextMenu.getItems().addAll(upgradeMenuItem, sellMenuItem);
     }
 
     public Label getLabelLevel() {
@@ -278,20 +278,20 @@ public abstract class Tower implements GameEntity
         this.labelLevel = labelLevel;
     }
 
-    public MenuItem getUpgradeItem() {
-        return upgradeItem;
+    public MenuItem getUpgradeMenuItem() {
+        return upgradeMenuItem;
     }
 
-    public void setUpgradeItem(MenuItem upgradeItem) {
-        this.upgradeItem = upgradeItem;
+    public void setUpgradeMenuItem(MenuItem upgradeMenuItem) {
+        this.upgradeMenuItem = upgradeMenuItem;
     }
 
-    public MenuItem getSell() {
-        return sell;
+    public MenuItem getSellMenuItem() {
+        return sellMenuItem;
     }
 
-    public void setSell(MenuItem sell) {
-        this.sell = sell;
+    public void setSellMenuItem(MenuItem sellMenuItem) {
+        this.sellMenuItem = sellMenuItem;
     }
 
     public Label infoLevel() {
