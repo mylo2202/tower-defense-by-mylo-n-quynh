@@ -18,7 +18,7 @@ public class MenuGame {
 
     public static final int LOGO_Y = 60;
 
-    private MyBorderPane mainPane;
+    private final MyBorderPane mainPane;
     private Scene mainScene;
     private Stage mainStage;
     boolean setMusic = true;

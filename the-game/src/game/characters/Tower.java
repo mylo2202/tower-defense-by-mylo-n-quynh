@@ -36,7 +36,7 @@ public abstract class Tower implements GameEntity
             false, true);
     protected final ImageView platformView = new ImageView(this.getPlatformImage());
     private Label labelLevel;
-    private ContextMenu contextMenu;
+    private final ContextMenu contextMenu;
     private MenuItem upgradeItem;
     private MenuItem sell;
 

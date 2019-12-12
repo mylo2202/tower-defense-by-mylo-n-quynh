@@ -6,7 +6,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 public class MyBorderPane extends BorderPane {
-    private VBox vBox = new VBox();
+    private final VBox vBox = new VBox();
 
     public MyBorderPane() {
         super();

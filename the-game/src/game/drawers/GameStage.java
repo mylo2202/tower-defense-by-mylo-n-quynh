@@ -30,16 +30,16 @@ public class GameStage {
     private Stage gameStage;
     private Stage menuStage;
 
-
     private Image hammer;
     private ImageView life;
 
-    private TileMap map = new TileMap();
+    private final TileMap map = new TileMap();
     private MySubScene[] infoTower;
 
-    private GameField gameField = new GameField();
+    private final GameField gameField = new GameField();
     private Music music = gameField.getMusic();
     private boolean play = true;
+    private boolean finishedSpawningEnemies;
 
     public GameStage() throws IOException {
         initialiseStage();
@@ -66,7 +66,7 @@ public class GameStage {
         return gameStage;
     }
 
-    private EventHandler<MouseEvent> MouseReleased = new EventHandler<>() {
+    private final EventHandler<MouseEvent> MouseReleased = new EventHandler<>() {
 
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -186,7 +186,7 @@ public class GameStage {
                     }
                 }
 
-                if (gameField.getEnemyList().isEmpty() && gameField.getLevel() > 0 && !play && gameField.hasGeneratedEnemy()) {
+                if (gameField.getEnemyList().isEmpty() && gameField.getLevel() > 0 && !play && gameField.hasGeneratedEnemy() && finishedSpawningEnemies) {
                     gameField.setMoney(gameField.getMoney() + 200 + gameField.getLevel()*25);
                     gameField.updateMoney();
                     gameField.setGeneratedEnemy(false);
@@ -225,6 +225,7 @@ public class GameStage {
                         if (now - timer >= 0.25e9 && difficulty > 0) {
                             //System.out.println("looking good");
                             try {
+                                finishedSpawningEnemies = false;
                                 gameField.generateEnemy(gameField.getEnemyList(), difficulty);
                                 //System.out.println("size = " + gameField.getEnemyList().size());
                                 gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).enemyMove().play();
@@ -232,6 +233,7 @@ public class GameStage {
                                 difficulty -= gameField.getEnemyList().get(gameField.getEnemyList().size() - 1).getLevel();
                                 //System.out.println("difficulty = " + difficulty);
                                 if (difficulty <= 0) {
+                                    finishedSpawningEnemies = true;
                                     startTimer.stop();
                                 }
                             } catch (IOException e) {
@@ -277,13 +279,8 @@ public class GameStage {
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
 
-            try {
+            gameScene.setOnMouseClicked(gameField.buildTower(gamePane, new MachineGunTower()));
 
-                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, new MachineGunTower()));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             gameScene.setOnMouseReleased(MouseReleased);
 
         });
@@ -314,12 +311,7 @@ public class GameStage {
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
 
-            try {
-
-                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, new NormalTower()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            gameScene.setOnMouseClicked(gameField.buildTower(gamePane, new NormalTower()));
             gameScene.setOnMouseReleased(MouseReleased);
         });
         normal.setOnMouseEntered(action -> {
@@ -348,11 +340,7 @@ public class GameStage {
             if (music.isPlayMusic()) music.getMediaButton().play();
             gameField.setBuild(true);
             gameScene.setCursor(new ImageCursor(hammer));
-            try {
-                gameScene.setOnMouseClicked(gameField.buildTower(gamePane, new SniperTower()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            gameScene.setOnMouseClicked(gameField.buildTower(gamePane, new SniperTower()));
             gameScene.setOnMouseReleased(MouseReleased);
 
         });

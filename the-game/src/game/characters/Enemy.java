@@ -1,5 +1,6 @@
 package game.characters;
 
+import game.drawers.TileMap;
 import javafx.animation.PathTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,7 +25,7 @@ public abstract class Enemy implements GameEntity {
     protected Image enemyImage;
     protected ImageView View;
 
-    private Road enemyRoad = new Road();
+    private final Road enemyRoad = new Road();
 
     public Image getEnemyImage() {
         return enemyImage;
@@ -40,8 +41,8 @@ public abstract class Enemy implements GameEntity {
 
     public void setTowerView(ImageView towerView) {
         this.View = towerView;
-        this.View.setTranslateX(enemyRoad.getSpawner().getX() - enemyRoad.getGRID_SIZE() / 2);
-        this.View.setTranslateY(enemyRoad.getSpawner().getY() - enemyRoad.getGRID_SIZE() / 2);
+        this.View.setTranslateX(enemyRoad.getSpawner().getX() - TileMap.getGRID_SIZE() / 2);
+        this.View.setTranslateY(enemyRoad.getSpawner().getY() - TileMap.getGRID_SIZE() / 2);
     }
 
     public Enemy() throws IOException {
@@ -123,8 +124,8 @@ public abstract class Enemy implements GameEntity {
     public boolean hasReachedGoal()
     {
         //setReachedGoal(true);
-        return this.getTowerView().getTranslateX() + this.getEnemyRoad().getGRID_SIZE() / 2 == this.getEnemyRoad().getGoal().getX() &&
-                this.getTowerView().getTranslateY() + this.getEnemyRoad().getGRID_SIZE() / 2 == this.getEnemyRoad().getGoal().getY();
+        return this.getTowerView().getTranslateX() + TileMap.getGRID_SIZE() / 2 == this.getEnemyRoad().getGoal().getX() &&
+                this.getTowerView().getTranslateY() + TileMap.getGRID_SIZE() / 2 == this.getEnemyRoad().getGoal().getY();
     }
 
     public void takeDamage(int damage)      //reduces enemy's hit points and determines whether it is dead

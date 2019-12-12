@@ -12,10 +12,10 @@ import java.io.FileNotFoundException;
 public class MyButton extends Button {
     private final String FONT_PATH="src/Image/UI/AutourOne-Regular.otf";
 
-    private String BUTTON_PRESS_STYLE;
-    private String BUTTON_FREE_STYLE;
-    private int h;
-    private int w;
+    private final String BUTTON_PRESS_STYLE;
+    private final String BUTTON_FREE_STYLE;
+    private final int h;
+    private final int w;
     public MyButton (String text,int h,int w, String url){
         BUTTON_PRESS_STYLE = url;
         BUTTON_FREE_STYLE = url;

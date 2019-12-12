@@ -8,9 +8,9 @@ import javafx.stage.Stage;
 public class Settings {
     private final int WIDTH = 600;
     private final int HEIGHT = 400;
-    private AnchorPane settingsPane;
-    private Scene settingsScene;
-    private Stage settingsStage;
+    private final AnchorPane settingsPane;
+    private final Scene settingsScene;
+    private final Stage settingsStage;
     private Stage menuStage;
 
     public Settings() {

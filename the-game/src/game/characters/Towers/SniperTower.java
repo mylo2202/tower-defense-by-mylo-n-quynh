@@ -8,8 +8,7 @@ import javafx.scene.image.ImageView;
 import java.io.IOException;
 
 public final class SniperTower extends Tower {
-    public SniperTower() throws IOException
-    {
+    public SniperTower() {
         setTowerImgUrl("/Image/Tower/sniperTower.png");
         setTowerImage(new Image(this.getTowerImgUrl(), TileMap.getGRID_SIZE(), TileMap.getGRID_SIZE(), false, true));
         setTowerView(new ImageView(this.getTowerImage()));

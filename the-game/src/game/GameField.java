@@ -34,15 +34,15 @@ public class GameField
     private int money;
     private MyLabel moneyLabel;
     private double eventPosX, eventPosY;
-    TileMap map = new TileMap();
+    final TileMap map = new TileMap();
     private boolean build;
     private boolean generatedEnemy = false;
     private MyLabel life;
-    private MyLabel labelLevel;
+    private final MyLabel labelLevel;
     private int lives;
     private int level;
     //  ImageView gameOver = new ImageView(new Image("/Image/Enemy/gameOver.png"));
-    private Music music = new Music();
+    private final Music music = new Music();
 
     public GameField() throws IOException {
         enemyList = new ArrayList<>();
@@ -158,7 +158,7 @@ public class GameField
 
     public void generateEnemy(ArrayList<Enemy> enemyList, int difficulty) throws IOException {
         Random rand = new Random();
-        int randomNum = 0;
+        int randomNum;
         if (difficulty == 1)
         {
             enemyList.add(new SmallerEnemy());
@@ -207,9 +207,7 @@ public class GameField
             menu.show();
             game.close();
             if (!getEnemyList().isEmpty()) {
-                getEnemyList().forEach(enemy -> {
-                    enemy.enemyMove().stop();
-                });
+                getEnemyList().forEach(enemy -> enemy.enemyMove().stop());
             }
         }
     }
@@ -277,26 +275,28 @@ public class GameField
             getTowerList().get(i).getSell().setOnAction(event -> {
                 money = money + getTowerList().get(finalI).getSellPrice();
                 updateMoney();
+                int x = (int) getTowerList().get(finalI).getTowerView().getTranslateX() / TileMap.getGRID_SIZE();
+                int y = (int) getTowerList().get(finalI).getTowerView().getTranslateY() / TileMap.getGRID_SIZE();
+                map.getGrid()[y][x] = 0;
                 anchorPane.getChildren().removeAll(getTowerList().get(finalI).getPlatformView() ,
                         getTowerList().get(finalI).getTowerView(),
                         getTowerList().get(finalI).infoLevel());
+                getTowerList().set(finalI, null);
                 getTowerList().remove(finalI);
             });
         }
     }
 
     public void upgradeTower() {
-        getTowerList().forEach(tower -> {
-            tower.getUpgradeItem().setOnAction(event -> {
-                if (getMoney() >= tower.getUpgradeCost()) {
-                    tower.upgradeTower();
-                    money = money - tower.getUpgradeCost();
-                    updateMoney();
-                    tower.setUpgrade();
-                    //tower.getLabelLevel().setText("level " + tower.getTowerLevel());
-                }
-            });
-        });
+        getTowerList().forEach(tower -> tower.getUpgradeItem().setOnAction(event -> {
+            if (getMoney() >= tower.getUpgradeCost()) {
+                tower.upgradeTower();
+                money = money - tower.getUpgradeCost();
+                updateMoney();
+                tower.setUpgrade();
+                //tower.getLabelLevel().setText("level " + tower.getTowerLevel());
+            }
+        }));
 
     }
 

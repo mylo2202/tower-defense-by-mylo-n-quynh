@@ -8,8 +8,7 @@ import javafx.scene.image.ImageView;
 import java.io.IOException;
 
 public final class MachineGunTower extends Tower {
-    public MachineGunTower() throws IOException
-    {
+    public MachineGunTower() {
         setTowerImgUrl("/Image/Tower/machineGunTower.png");
         setTowerImage(new Image(this.getTowerImgUrl(), TileMap.getGRID_SIZE(), TileMap.getGRID_SIZE(), false, true));
         setTowerView(new ImageView(this.getTowerImage()));

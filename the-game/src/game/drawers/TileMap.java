@@ -14,7 +14,7 @@ public class TileMap {
     protected static final int SCREEN_WIDTH = 1280;
     protected static final int MAP_HEIGHT = 9;
     protected static final int MAP_WIDTH = 12;
-    private int[][] grid;
+    private final int[][] grid;
 
 
     public TileMap() throws IOException {

@@ -18,12 +18,12 @@ public class MySubScene extends SubScene {
     private static final double HEIGHT = (TileMap.SCREEN_WIDTH - TileMap.MAP_WIDTH * TileMap.GRID_SIZE) * 3 / 4;
     private static final double POSX = TileMap.SCREEN_WIDTH;
     private static final double POSY = 300;
-    private MyLabel myLabel = new MyLabel("");
-    private Label info = new Label("");
+    private final MyLabel myLabel = new MyLabel("");
+    private final Label info = new Label("");
     private boolean isHidden;
 
 
-    public MySubScene(String s) throws IOException {
+    public MySubScene(String s) {
         super(new AnchorPane(), WIDTH, HEIGHT);
         setMyLabel(s);
         //   setButtonBuild();
@@ -73,7 +73,7 @@ public class MySubScene extends SubScene {
         myLabel.setLabelFont("src/Image/UI/AutourOne-Regular.otf", 13);
     }
 
-    public AnchorPane getAnchorePane() {
+    public AnchorPane getAnchorPane() {
         return (AnchorPane) this.getRoot();
     }
 

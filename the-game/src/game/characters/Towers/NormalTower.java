@@ -8,8 +8,7 @@ import javafx.scene.image.ImageView;
 import java.io.IOException;
 
 public final class NormalTower extends Tower {
-    public NormalTower() throws IOException
-    {
+    public NormalTower() {
         setTowerImgUrl("/Image/Tower/normalTower.png");
         setTowerImage(new Image(this.getTowerImgUrl(), TileMap.getGRID_SIZE(), TileMap.getGRID_SIZE(), false, true));
         setTowerView(new ImageView(getTowerImage()));

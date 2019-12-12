@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Road extends TileMap {
-    private ArrayList<Point2D> road = new ArrayList<>();
-    private Point2D spawner = new Point2D(0, GRID_SIZE*1.5);
-    private Point2D goal = new Point2D(GRID_SIZE*MAP_WIDTH, SCREEN_HEIGHT - GRID_SIZE*1.5);
+    private final ArrayList<Point2D> road = new ArrayList<>();
+    private final Point2D spawner = new Point2D(0, GRID_SIZE*1.5);
+    private final Point2D goal = new Point2D(GRID_SIZE*MAP_WIDTH, SCREEN_HEIGHT - GRID_SIZE*1.5);
 
     public Road() throws IOException {
         super();
